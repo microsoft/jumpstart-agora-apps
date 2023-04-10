@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+  <h1>Confirm your order</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Item</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for item in cart %}
+      <tr>
+        <th>{{ item['id'] }}</th>
+        <td>{{ item['quantity'] }}</td>
+        <td>{{ item['name'] }}</td>
+        <td>{{ item['price'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <!-- <button type="button" class="btn btn-primary btn-lg float-right">Place Order</button> -->
+  <a href="{{ url_for('checkout') }}" class="btn btn-success" type="submit">Place Order</a>
+</div>
+
+
+{% include 'item.html' %}
+
+{% endblock %}
+
+
