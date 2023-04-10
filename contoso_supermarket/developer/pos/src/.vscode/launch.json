@@ -1,0 +1,50 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Flask (0.11.x or later)",
+      "type": "python",
+      "request": "launch",
+      "module": "flask",
+      "env": {
+        "FLASK_APP": "app.py",
+        "SQL_HOST": "",
+        "SQL_USERNAME": "",
+        "SQL_PASSWORD": "",
+        "SQL_DATABASE": "",
+        "HEAD_TITLE" : "Hello World",
+        "CAMERAS_ENABLED" : "False",
+        "CAMERAS_BASEURL" : "",
+        "NEW_CATEGORY" : "True"
+      },
+      "args": [
+        "run",
+        "--no-debugger",
+        "--no-reload"
+      ]
+    },
+    {
+      "name": "Python: Current File",
+      "type": "python",
+      "request": "launch",
+      "program": "${file}",
+      "env": {
+        "FLASK_ENV": "development"
+      }
+    },
+    {
+      "name": "Python: Attach",
+      "type": "python",
+      "request": "attach",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "${workspaceFolder}",
+      "port": 3000,
+      "secret": "my_secret",
+      "host": "localhost"
+    }
+  ]
+}

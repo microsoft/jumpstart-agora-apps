@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+</br></br>
+<h1>Video Feed</h1>
+<div class="row align-items-start">
+
+    <div class="col">
+        <img src="{{ url_for('video_feed') }}" style="height:480; width:640px">
+    </div>
+    <div class="col">People at the store: <div id="peopleCount"> {{ count }} </div></div>
+
+</div>
+{% endblock %}

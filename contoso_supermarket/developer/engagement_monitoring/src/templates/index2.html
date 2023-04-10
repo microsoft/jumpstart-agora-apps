@@ -1,0 +1,365 @@
+<html>
+
+<head>
+   <title>{{ head_title }}</title>
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="preconnect" href="https://fonts.gstatic.com">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+   <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}">
+   <link rel="stylesheet" href="{{ url_for('static',filename='css/jquery-ui.css') }}">
+   <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+   <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+   <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+   <script src="{{ url_for('static',filename='js/jquery-ui.min.js') }}"></script>
+   <script src="{{ url_for('static',filename='js/index.js') }}"></script>
+</head>
+
+<body>
+
+   <!-- ============================== ALERT SECTION START ============================== -->
+   <!-- <div class="alert alert-success" style="z-index:1" id="success-alert">
+      <button type="button" class="close" data-dismiss="alert">x</button>
+      <strong>Success! </strong> Product purchased.
+   </div>
+   <div class="alert alert-danger" style="z-index:1" id="error-alert">
+      <button type="button" class="close" data-dismiss="alert">x</button>
+      <strong>Error! </strong> Failed to commit purchase transaction.
+   </div> -->
+
+   <!-- ============================== MAIN SECTION START ============================== -->
+   <section id="mainSection">
+      <div class="row mx-0">
+         <!-- ============================== CAMERAS SECTION START ============================== -->
+         {% if cameras_enabled %}
+         <div id="cameraArea" class="col-md-3 px-1">
+            <div class="row">
+            <img class="imgVideo" src="{{ url_for('video_feed', feed='1.mkv') }}">
+            </div>
+            <div class="row">
+            <img class="imgVideo" src="{{ url_for('video_feed', feed='2.mkv') }}">
+            </div>
+            <div class="row">
+            <img class="imgVideo" src="{{ url_for('video_feed', feed='3.mkv') }}">
+            </div>
+            <div class="row">
+            <img class="imgVideo" src="{{ url_for('video_feed', feed='4.mkv') }}">
+            </div>
+         </div>
+         {% endif %}
+         <!-- ============================== PRODUCT AREA START ============================== -->
+         <div id="productArea" class="col-md-9 px-1">
+            <div class="row" style="background-color: #2d7eda; margin-left:5px; margin-bottom: 3px">
+               <div clas="col-md-4">
+                  <img src="{{ url_for('static',filename='img/contoso.png') }}"/>
+               </div>
+               <div clas="col-md-8">
+                  <h3 class="titleH3">{{ head_title }}</h3>
+               </div>
+            </div>
+            <div class="product-area">
+               <div class="accesories">
+                  <div class="item-area">
+                     <div class="item-top-area top-area">
+                        <div class="input-group">
+                           <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fa fa-search"></i></span>
+                           </div>
+                           <input id="monId" class="form-control" type="text" placeholder="Name or code or category"
+                              virtual-keyboard>
+                        </div>
+                        <div class="input-group">
+                           <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fa fa-barcode"></i></span>
+                           </div>
+                           <input class="form-control" type="text" placeholder="Barcode">
+                        </div>
+                        <div class="edit-icon">
+                           <button class="btn fa-btn" type="button" data-toggle="modal" data-target="#addItemBox"><i
+                                 class="fa fa-plus"></i></button>
+                        </div>
+                     </div>
+                     <div class="mob-btns">
+                        <button class="btn btn-green" type="button">Category</button>
+                        <button class="btn btn-green active-btn ml-auto float-right" type="button">Product</button>
+                     </div>
+                     <div class="item-area-box row mx-0">
+                        <div class="col-6 col-md-3 px-1">
+                           <div class="item-box mt-0 text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $0.50</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(1)" src="{{ url_for('static',filename='img/product1.jpg') }}"
+                                    class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Red Apple</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box mt-0 text-center " data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $1</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(2)" src="{{ url_for('static',filename='img/product2.jpg') }}"
+                                    class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Banana</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box mt-md-0 text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $1.50</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(11)"
+                                    src="{{ url_for('static',filename='img/product11.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Strawberry</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box mt-md-0 text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $0.75</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(13)"
+                                    src="{{ url_for('static',filename='img/product13.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Lemon</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $0.80</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(10)"
+                                    src="{{ url_for('static',filename='img/product10.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Tomato</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $2.50</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(8)" src="{{ url_for('static',filename='img/product8.jpg') }}"
+                                    class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Red bell pepper</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $0.90</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(9)" src="{{ url_for('static',filename='img/product9.jpg') }}"
+                                    class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Lettuce</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $1.50</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(3)" src="{{ url_for('static',filename='img/product3.jpg') }}"
+                                    class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Avocado</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $2.40</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(6)" src="{{ url_for('static',filename='img/product6.jpg') }}"
+                                    class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Orange juice</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $1.30</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(5)" src="{{ url_for('static',filename='img/product5.jpg') }}"
+                                    class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Milk</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $2.45</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(12)"
+                                    src="{{ url_for('static',filename='img/product12.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Eggs</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $1.35</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(14)"
+                                    src="{{ url_for('static',filename='img/product14.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Yogurt</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $15.00</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(15)"
+                                    src="{{ url_for('static',filename='img/product15.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Wood helicopter</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $6.30</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(16)"
+                                    src="{{ url_for('static',filename='img/product16.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Magnetic letters</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $17.99</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(17)"
+                                    src="{{ url_for('static',filename='img/product17.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Baseball bat</b></span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-6 col-md-3 px-1 ">
+                           <div class="item-box text-center" data-toggle="modal" data-target="#productBox">
+                              <div class="txt-box">
+                                 <span>Price $8.10</span>
+                              </div>
+                              <div class="img-box">
+                                 <img onclick="addPurchase(18)"
+                                    src="{{ url_for('static',filename='img/product18.jpg') }}" class="img-fluid" alt="">
+                              </div>
+                              <div class="txt-box item-name">
+                                 <span><b>Baseball</b></span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="side-indicator">
+                     <button class="btn active-btn mt-0" type="button">All</button>
+                     <button class="btn btn-7" type="button">Fruits</button>
+                     <button class="btn btn-7" type="button">Vegetables</button>
+                     <button class="btn btn-7" type="button">Meat/Seafood</button>
+                     <button class="btn btn-7" type="button">Condiments</button>
+                     <button class="btn btn-7" type="button">Beverages</button>
+                     <button class="btn btn-7" type="button">Snacks</button>
+                     <button class="btn btn-7" type="button">Bread/Grains</button>
+                     <button class="btn btn-7" type="button">Dairy</button>
+                     <button class="btn btn-7" type="button">Frozen Food</button>
+                     <button class="btn btn-7" type="button">Canned Goods</button>
+                     <button class="btn btn-7" type="button">Snacks</button>
+                     <button class="btn btn-7" type="button">Body Care</button>
+                     <button class="btn btn-7" type="button">Beauty</button>
+                     <button class="btn btn-7" type="button">Others</button>
+                     <button class="btn btn-8" type="button">Toys</button>
+                     <button class="btn btn-8" type="button">Video Games</button>
+                  </div>
+               </div>
+            </div>
+            <div class="bottom-area-btns">
+               <button class="btn btn-1 calculator-btn" type="button"><i class="fa fa-calculator"></i>
+                  Calculator</button>
+               <button class="btn btn-green" type="button" data-toggle="modal" data-target="#"><i
+                     class="fa fa-keyboard-o"></i> Keyboard</button>
+               <button class="btn btn-3" type="button" data-toggle="modal" data-target="#holdSaleModal"><i
+                     class="fa fa-folder-open"></i> Hold Sales</button>
+               <button class="btn btn-4" type="button" data-toggle="modal" data-target="#"><i
+                     class="fa fa-times-circle"></i> Cancel</button>
+               <button class="btn btn-yellow" type="button" data-toggle="modal" data-target="#holdBox"><i
+                     class="fa fa-hand-rock-o"></i> Hold</button>
+               <button class="btn btn-6" type="button" data-toggle="modal" data-target="#paymentModal"><i
+                     class="fa fa-credit-card"></i> Payment</button>
+               <button class="btn btn-7" type="button" data-toggle="modal" data-target="#holdBox"><i
+                     class="fa fa-hand-rock-o"></i> Hold</button>
+            </div>
+            <div class="top-area-btns d-none d-xl-block">
+               <div class="right-part">
+                  <button class="btn btn-green" type="button" data-toggle="modal" data-target="#allSaleModal"><i
+                        class="fa fa-history"></i> <span>Your all sales</span></button>
+                  <button class="btn btn-green" type="button"><i class="fa fa-tachometer"></i>
+                     <span>Dashboard</span></button>
+                  <button class="btn btn-green" type="button"><i class="fa fa-sign-out"></i>
+                     <span>Logout</span></button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+</body>
+
+</html>
