@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: mqtt-broker
+  name: mqtt-broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mqtt-broker
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mqtt-broker
+    spec:
+      containers:
+        - image: charrisagoracr.azurecr.io/mqtt-broker:latest
+          name: mqtt-broker
+          ports:
+            - containerPort: 1883
+          imagePullPolicy: Always
+          resources: {}
+      imagePullSecrets:
+        - name: charrisagoracr
+      restartPolicy: Always

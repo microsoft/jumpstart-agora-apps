@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sensor-monitor.fullname" . }}-broker
+  labels:
+    io.kompose.service: mqtt-broker
+  {{- include "sensor-monitor.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.broker.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: mqtt-broker
+    {{- include "sensor-monitor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mqtt-broker
+      {{- include "sensor-monitor.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.broker.mqttBroker.image.repository }}:{{ .Values.broker.mqttBroker.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.broker.mqttBroker.imagePullPolicy }}
+        name: mqtt-broker
+        ports:
+        - containerPort: 1883
+        resources: {}
+      imagePullSecrets:
+      - name: charrisagoracr
+      restartPolicy: Always

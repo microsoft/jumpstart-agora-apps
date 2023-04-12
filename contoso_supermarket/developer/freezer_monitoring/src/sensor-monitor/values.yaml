@@ -1,0 +1,20 @@
+broker:
+  mqttBroker:
+    image:
+      repository: charrisagoracr.azurecr.io/mqtt-broker
+      tag: latest
+    imagePullPolicy: Always
+  ports:
+  - name: mqtt-broker
+    port: 1883
+    targetPort: 1883
+  replicas: 1
+  type: NodePort
+kubernetesClusterDomain: cluster.local
+simulator:
+  mqttSimulator:
+    image:
+      repository: charrisagoracr.azurecr.io/mqtt-simulator
+      tag: latest
+    imagePullPolicy: Always
+  replicas: 1

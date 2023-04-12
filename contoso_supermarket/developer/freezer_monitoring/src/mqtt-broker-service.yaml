@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: mqtt-broker
+  name: mqtt-broker
+spec:
+  ports:
+    - name: "1883"
+      port: 1883
+      targetPort: 1883
+  selector:
+    io.kompose.service: mqtt-broker
+status:
+  loadBalancer: {}

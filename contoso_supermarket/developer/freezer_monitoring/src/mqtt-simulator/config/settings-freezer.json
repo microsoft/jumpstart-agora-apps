@@ -1,0 +1,45 @@
+{
+    "BROKER_URL": "homeassistant.local",
+    "BROKER_PORT": 1883,
+    "TOPICS": [
+        {
+            "TYPE": "multiple",
+            "PREFIX": "freezer",
+            "RANGE_START": 2,
+            "RANGE_END": 10,
+            "TIME_INTERVAL": 5,
+            "RETAIN_PROBABILITY": 0.25,
+            "DATA": [
+                {
+                    "NAME": "humidity",
+                    "TYPE": "float",
+                    "MIN_VALUE": 20,
+                    "MAX_VALUE": 100,
+                    "MAX_STEP": 0.2
+                },
+                {
+                    "NAME": "temp",
+                    "TYPE": "float",
+                    "MIN_VALUE": 0,
+                    "MAX_VALUE": 50,
+                    "MAX_STEP": 0.2
+                }
+            ]
+        },
+        {
+            "TYPE": "single",
+            "PREFIX": "alerts/2",
+            "TIME_INTERVAL": 60,
+            "RETAIN_PROBABILITY": 0,
+            "DATA": [
+                {
+                    "NAME": "alertType",
+                    "TYPE": "int",
+                    "MIN_VALUE": 1,
+                    "MAX_VALUE": 4,
+                    "MAX_STEP": 3
+                }
+            ]
+        }
+    ]
+}
