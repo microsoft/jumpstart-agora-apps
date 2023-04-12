@@ -1,0 +1,115 @@
+#Creat a Contoso Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: contosopos
+---
+# Create Contoso Supermarket Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: contosopos
+  namespace: contosopos
+  labels:
+    app: contosopos
+spec:
+  selector:
+    app: contosopos
+  ports:
+  - name: http
+    port: 5000
+    targetPort: 5000
+  type: LoadBalancer
+---  
+# Create Contoso Supermarket Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contosopos
+  namespace: contosopos
+  labels:
+    app: contosopos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contosopos
+  template:
+    metadata:
+      labels:
+        app: contosopos
+    spec:
+      containers:
+        - name: contosopos
+          image: azurearcjumpstart.azurecr.io/contosopos:latest
+          env:
+            - name: SQL_HOST
+              value: "contosodb"
+            - name: SQL_USERNAME
+              value: "postgres"
+            - name: SQL_PASSWORD
+              value: "admin123"
+            - name: SQL_DATABASE
+              value: "contoso"
+            - name: HEAD_TITLE
+              value : "Contoso Supermarket"
+            - name: CAMERAS_ENABLED
+              value: "False"
+            - name: CAMERAS_BASEURL
+              value: ""
+            - name: NEW_CATEGORY
+              value: "True"
+            - name: STORE_ID
+              value: "1"
+          ports:
+            - containerPort: 5000
+---
+# Create PostgreSQL Database Container with local storage
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contosodb
+  namespace: contosopos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contosodb
+  template:
+    metadata:
+      labels:
+        app: contosodb
+    spec:
+      containers:
+      - name: contosodb
+        image: postgres:15.0
+        env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: admin123
+        - name: POSTGRES_DB
+          value: contoso
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+          - name: postgresql-vol
+            mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgresql-vol
+          hostPath:
+            path: /var/postgresql-data
+---
+# Postgre SQL Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: contosodb
+  namespace: contosopos
+spec:
+  selector:
+    app: contosodb
+  ports:
+  - name: postgresql
+    port: 5432
+    targetPort: 5432
