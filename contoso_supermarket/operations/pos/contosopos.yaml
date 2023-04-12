@@ -1,4 +1,4 @@
-#Creat a Contoso Namespace
+#Create a Contoso Namespace
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: contosopos
-          image: azurearcjumpstart.azurecr.io/contosopos:latest
+          image: jumpstartagora.azurecr.io/contoso-supermarket/pos:latest
           env:
             - name: SQL_HOST
               value: "contosodb"

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: cloudsync
-        image: XXXX.azurecr.io/cloudsync:latest
+        image: jumpstartagora.azurecr.io/contoso-supermarket/pos-cloudsync:latest
         env:
         - name: SQL_HOST
           value: "contosodb"
