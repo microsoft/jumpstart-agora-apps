@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: cloudsync
-        image: jumpstartagora.azurecr.io/contoso-supermarket/pos-cloudsync:latest
+        image: bcacr.azurecr.io/pgcloudsync:latest
         env:
         - name: SQL_HOST
           value: "contosodb"
@@ -27,3 +27,11 @@ spec:
           value: "contoso"
         - name: SYNCINTERVAL
           value: '120'
+        - name: COSMOSENDPOINT
+          value: 'https://contosoorders.documents.azure.com:443/'
+        - name: COSMOSKEY
+          value: 'NrJGO76SDqfd5UZ8RTFhT0m44Az3JI583f5KHU8A81s72O7UBH1VyS91yozTAiI6XjOVBmixRPS0ACDbzmsLuA=='
+        - name: COSMOSDB
+          value: 'orders'
+        - name: COSMOSCONTAINER
+          value: 'orders'                              

@@ -1,8 +1,7 @@
-import mysql.connector
 from azure.cosmos import CosmosClient
 import time
 import os
-import psycog2
+import psycopg2
 
 
 sync_interval = 120 #In seconds
@@ -33,7 +32,7 @@ container = database.get_container_client(container_name)
 
 while True:
     # Get all records with cloudSynced = 0
-    query = "SELECT * FROM Orders WHERE cloudSynced = 0"
+    query = "SELECT * FROM contoso.Orders WHERE cloudSynced = 0"
     cursor.execute(query)
     rows = cursor.fetchall()
 
@@ -47,7 +46,7 @@ while True:
             'cloudSynced': True
         }
         container.upsert_item(document)
-        query = "UPDATE Orders SET cloudSynced = 1 WHERE orderID = " + str(row[0])
+        query = "UPDATE contoso.Orders SET cloudSynced = 1 WHERE orderID = " + str(row[0])
         print("Order ID:",row[0],"synced to cloud")
         cursor.execute(query)
         cnxn.commit()
