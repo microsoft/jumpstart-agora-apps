@@ -2,7 +2,7 @@
 from importlib import import_module
 import os
 import cv2
-from flask import Flask, render_template, Response, request, session, redirect, url_for
+from flask import Flask, render_template, Response, request, session, redirect, url_for, jsonify
 from flask_session import Session
 import secrets
 from sqlConnector import SqlConnector
@@ -16,8 +16,7 @@ app.secret_key = secrets.token_hex(16)
 app.config["SESSION_PERMANENT"] = False
 app.config['SESSION_TYPE'] = "filesystem"
 Session(app)
-#storeid = 1
-storeid = os.environ.get('STORE_ID')
+storeid = os.environ.get('STORE_ID', 1)
 dbconfig = {
     "host": os.environ.get('SQL_HOST'),
     "user": os.environ.get('SQL_USERNAME'),
@@ -30,6 +29,7 @@ dbconfig = {
 }
 
 conn = psycopg2.connect(**dbconfig)
+conn.autocommit= True # allows connection to recover on an error
 cursor = conn.cursor()
 
 @app.route('/')
@@ -47,16 +47,17 @@ def index():
     if os.environ.get('NEW_CATEGORY'):
         new_category = os.environ.get('NEW_CATEGORY') == 'True'
 
-    query = "SELECT * FROM contoso.products ORDER BY productId"
+    query = "SELECT productid, name, description, price, stock, photopath FROM contoso.products ORDER BY productId"
     productlist = []
     cursor.execute(query)
     for item in cursor.fetchall():
         productlist.append({
-        'produtctid': item[0],
+        'productid': item[0],
         'name': item[1],
-        'price': item[2],
-        'currentInventory': item[3],
-        'photolocation': item[4]
+        'description': item[2],
+        'price': item[3],
+        'stock': item[4],
+        'photopath': item[5]
     })
     #cursor.close()
 
@@ -68,14 +69,16 @@ def inventory():
     try:
         cur = conn.cursor()
         inventorylist = []
-        query = "SELECT * from contoso.products"
+        query = "SELECT productid, name, description, price, stock, photopath from contoso.products ORDER BY productId"
         cur.execute(query)
         for item in cur.fetchall():
             inventorylist.append({
                 'id': item[0],
                 'name': item[1],
-                'price': item[2],
-                'currentInventory': item[3]
+                'description': item[2],
+                'price': item[3],
+                'stock': item[4],
+                'photopath': item[5]
             })
         cur.close()
         #conn.close()
@@ -137,30 +140,31 @@ def add_to_cart():
         'id': product_id,
         'quantity': quantity,
         'name': product_name,
-        'price': product_price
+        'price': float(product_price) # ensures that the price is a float
     }
-
     # Add the item to the shopping cart session
     if 'cart' not in session:
         session['cart'] = []
-    session['cart'].append(item)
+    
+    item_found = False
+    # Check if the item is already in the cart
+    for existing_item in session['cart']:
+        # If it is, increment the quantity
+        if existing_item['id'] == item['id']:
+            existing_item['quantity'] += 1
+            item_found = True
 
-    # Redirect back to the homepage
-    return redirect('/')
+    # If not, add it to the cart
+    if not item_found:
+        session['cart'].append(item)
+
+    return jsonify(session['cart'])
 
 @app.route('/cart')
 def cart():
     # Get the cart data from the session
-    summary = {}
     cart = session.get('cart', [])
-    for item in cart:
-        id = item['id']
-        quantity = item['quantity']
-        if id in summary:
-            summary[id] += quantity
-        else:
-            summary[id] = quantity
-    # print (summary)
+
     # Render the shopping cart template with the cart data
     return render_template('cart.html', cart=cart)
 
@@ -169,7 +173,6 @@ def checkout():
 
     cur = conn.cursor()
     cart = session.get('cart', [])
-    #orderDate = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     orderDate = datetime.now()
     jsoncart = json.dumps(cart)
     query = "INSERT INTO contoso.Orders (orderDate, orderdetails, storeId) VALUES ('{}', '{}', {}) returning orderId".format(orderDate, jsoncart, storeid)
@@ -177,8 +180,7 @@ def checkout():
     ordernumber = cur.fetchone()[0]
     conn.commit()
     cur.close()
-    #cnx.close()
-    session.clear()
+    session.clear() # clears the cart
     return render_template('checkout.html', ordernumber=ordernumber)
 
 @app.route('/addPurchase',methods = ['POST'])

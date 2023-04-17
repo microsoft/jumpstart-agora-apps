@@ -1,14 +1,13 @@
-<div class="row row-cols-1 row-cols-md-4 g-4">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
     {% for product in productlist %}
     <div class="col">
-        <div class="card text-center h-100" style="width: 17rem;">
-          <div class="card-title"><h5></br>{{ product.name }}</h5></div>
-          <img  src="{{ product.photolocation }}" height="280px" width="280px" class="card-img-top" alt="...">
-          <div class="card-body text-center">
-            <h5 class="card-title tex">Price: {{ product.price }}</h5>
-          </div>
-          <div class="card-footer">
-            <a href="#" class="btn btn-primary add-to-cart" id="liveAlertBtn" onclick="alert('Item Added to Cart', 'success')"  data-product-id="{{ product.produtctid }}" data-product-name="{{ product.name }}" data-product-price="{{ product.price }}"   data-product="{{ product.produtctid }} ">Add to order</a>
+        <div class="card p-3 shadow h-100 d-flex flex-col border-grey">
+          <img  src="{{ product.photopath }}" class="card-img-top" alt="{{product.name}}">
+          <div class="mt-auto">
+            <div class="h5 mb-2">{{ product.name }}</div>
+            <div class="fs-6 mb-2">{{ product.description }}</div>
+            <div class="h3 mb-3">${{ "%.2f" | format(product.price) }}</div>
+            <a href="#" class="btn add-to-cart w-100 bg-green text-white fw-normal shadow-sm" id="liveAlertBtn" onclick="alert('Item Added to Cart', 'success')"  data-product-id="{{ product.produtctid }}" data-product-name="{{ product.name }}" data-product-price="{{ product.price }}"   data-product="{{ product.produtctid }} ">Add to order</a>
           </div>
         </div>
       </div>
