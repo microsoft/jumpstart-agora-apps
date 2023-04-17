@@ -34,4 +34,4 @@ spec:
         - name: COSMOSDB
           value: ''
         - name: COSMOSCONTAINER
-          value: ''                              
+          value: ''                               
