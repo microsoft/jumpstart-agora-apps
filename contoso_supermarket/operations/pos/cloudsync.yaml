@@ -28,10 +28,10 @@ spec:
         - name: SYNCINTERVAL
           value: '120'
         - name: COSMOSENDPOINT
-          value: 'https://agoracontoso.documents.azure.com:443/'
+          value: ''
         - name: COSMOSKEY
-          value: 'mdtLnBw3dgNLlFQ3QM0QIWdReZlAzs2ZnsSBM4SS6bYM5PlaShXlRQczpW8XMszkaV1BxvluyOM4ACDbZgmVJw=='
+          value: ''
         - name: COSMOSDB
-          value: 'Orders'
+          value: ''
         - name: COSMOSCONTAINER
-          value: 'Orders'                               
+          value: ''                               
