@@ -1,14 +1,16 @@
-import {
-    createBrowserRouter,
-    RouterProvider,
-} from "react-router-dom";
-import ManagerPortal from "./pages/ManagerPortal";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import MonitoringPage from "./pages/MonitoringPage";
 import { GlobalProvider } from "./providers/GlobalContext";
+import ProductsPage from "./pages/ProductsPage";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <ManagerPortal />,
+        element: <MonitoringPage />,
+    },
+    {
+        path: "/products",
+        element: <ProductsPage />,
     },
 ]);
 

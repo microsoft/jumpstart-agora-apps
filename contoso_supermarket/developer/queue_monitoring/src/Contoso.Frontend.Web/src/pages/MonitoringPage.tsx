@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import Header from "../components/header/Header";
 import ReportCard from "../components/card/ReportCard";
 
-function ManagerPortal() {
+function MonitoringPage() {
     const { getCheckoutHistory, checkoutHistory } = useGlobalContext();
 
     //initial data load
@@ -106,4 +106,4 @@ function ManagerPortal() {
     );
 }
 
-export default ManagerPortal;
+export default MonitoringPage;

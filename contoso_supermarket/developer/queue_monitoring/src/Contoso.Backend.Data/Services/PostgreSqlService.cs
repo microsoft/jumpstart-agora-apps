@@ -158,5 +158,76 @@ namespace Contoso.Backend.Data.Services
 
             return ret;
         }
+
+        public async Task<List<Product>> GetProducts()
+        {
+            using var con = new NpgsqlConnection(_connectionString);
+            await con.OpenAsync();
+            var sql = @"SELECT productid, name, description, price, stock, photopath FROM contoso.products ORDER BY productid;";
+            await using var cmd = new NpgsqlCommand(sql, con);
+
+            List<Product> ret = new();
+
+            NpgsqlDataReader res = cmd.ExecuteReader();
+
+            while (res.Read())
+            {
+                Product item = new()
+                {
+                    Id = res.GetInt32(0),
+                    Name = res.GetString(1),
+                    Description = res.GetString(2),
+                    Price = res.GetDouble(3),
+                    Stock = res.GetInt32(4),
+                    PhotoPath = res.GetString(5),
+                };
+                ret.Add(item);
+            }
+
+            await con.CloseAsync();
+
+            return ret;
+        }
+
+        public async Task UpdateProducts(List<Product> products)
+        {
+            await using var con = new NpgsqlConnection(_connectionString);
+            var tempTableName = "temptable";
+
+            await con.OpenAsync();
+            var sql = @$"CREATE TEMP TABLE {tempTableName}(productId SERIAL PRIMARY KEY, name text, description text, price numeric, stock int, photopath text, category text);";
+            var cmd = new NpgsqlCommand(sql, con);
+            await cmd.ExecuteNonQueryAsync();
+            using var importer = con.BeginBinaryImport(
+                       $"COPY {tempTableName} (productid, name, description, price, stock, photopath) FROM STDIN (FORMAT binary)");
+
+            foreach (var element in products)
+            {
+                await importer.StartRowAsync();
+                await importer.WriteAsync(element.Id, NpgsqlDbType.Integer);
+                await importer.WriteAsync(element.Name, NpgsqlDbType.Varchar);
+                await importer.WriteAsync(element.Description, NpgsqlDbType.Varchar);
+                await importer.WriteAsync(element.Price, NpgsqlDbType.Numeric);
+                await importer.WriteAsync(element.Stock, NpgsqlDbType.Integer);
+                await importer.WriteAsync(element.PhotoPath, NpgsqlDbType.Varchar);
+            }
+
+            await importer.CompleteAsync();
+            await importer.CloseAsync();
+            
+            var merge = @$"
+                MERGE INTO contoso.products p
+                USING {tempTableName} t
+                ON t.productid = p.productid
+                WHEN NOT MATCHED THEN
+                    INSERT VALUES(t.productid, t.name, t.description, t.price, t.stock, t.photopath)
+                WHEN MATCHED THEN
+                    UPDATE SET name = t.name, description = t.description, price = t.price, stock = t.stock, photopath = t.photopath
+                ;";
+            var cmdMerge = new NpgsqlCommand(merge, con);
+            await cmdMerge.ExecuteNonQueryAsync();
+            await con.CloseAsync();
+            return;
+        }
     }
 }

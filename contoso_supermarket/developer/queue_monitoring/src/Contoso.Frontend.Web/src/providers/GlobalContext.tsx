@@ -1,12 +1,12 @@
 import * as React from "react";
 import { createContext, useCallback, useContext, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import dayjs from "dayjs";
 
 export enum CheckoutType {
     Standard = 1,
     Express = 2,
-    SelfService = 3
+    SelfService = 3,
 }
 
 export interface CheckoutHistory {
@@ -17,42 +17,105 @@ export interface CheckoutHistory {
     averageWaitTimeSeconds: number;
 }
 
+export interface Product {
+    id: number;
+    name: string;
+    price: number;
+    description: string;
+    photoPath: string;
+    stock: number;
+}
+
 export interface GlobalContextInterface {
+    //checkout history
     checkoutHistory: CheckoutHistory[];
     getCheckoutHistory?: (startDate?: Date, endDate?: Date) => void;
     checkoutHistoryLoading: boolean;
+
+    //products
+    products: Product[];
+    getProducts?: () => void;
+    updateProducts?: (products: Product[]) => void;
+    productsLoading: boolean;
 }
 
 export const GlobalContext = createContext<GlobalContextInterface>({
     checkoutHistory: [],
-    checkoutHistoryLoading: false
+    products: [],
+    productsLoading: false,
+    checkoutHistoryLoading: false,
 });
 
-export const GlobalProvider = ({ children }: { children: React.ReactNode; }) => {
+export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     const [checkoutHistory, setCheckoutHistory] = useState<CheckoutHistory[]>([]);
     const [checkoutHistoryLoading, setCheckoutHistoryLoading] = useState<boolean>(false);
+
+    const [products, setProducts] = useState<Product[]>([]);
+    const [productsLoading, setProductsLoading] = useState<boolean>(false);
 
     const getCheckoutHistory = useCallback((startDate?: Date, endDate?: Date) => {
         setCheckoutHistoryLoading(true);
         //get checkoutHistory
         axios
-            .get(`/api/checkoutHistory${(!!startDate || !!endDate ? "?" : "")}${(!!startDate ? "startDate=" + startDate.toISOString() : "")}${(!!endDate ? "endDate=" + endDate.toISOString() : "")}`)
+            .get(
+                `/api/checkoutHistory${!!startDate || !!endDate ? "?" : ""}${
+                    !!startDate ? "startDate=" + startDate.toISOString() : ""
+                }${!!endDate ? "endDate=" + endDate.toISOString() : ""}`
+            )
             .then((ret) => {
                 setCheckoutHistory((results) => {
-                    const oldResults = results?.filter(r => !ret.data.some((newR: CheckoutHistory) => newR.checkoutId === r.checkoutId && newR.timestamp === r.timestamp)) ?? [];
-                    return oldResults.concat(ret.data).sort((a, b) => dayjs(b.timestamp).isAfter(dayjs(a.timestamp)) ? 1 : -1);
+                    const oldResults =
+                        results?.filter(
+                            (r) =>
+                                !ret.data.some(
+                                    (newR: CheckoutHistory) =>
+                                        newR.checkoutId === r.checkoutId && newR.timestamp === r.timestamp
+                                )
+                        ) ?? [];
+                    return oldResults
+                        .concat(ret.data)
+                        .sort((a, b) => (dayjs(b.timestamp).isAfter(dayjs(a.timestamp)) ? 1 : -1));
                 });
-            }).finally(() => {
+            })
+            .finally(() => {
                 setCheckoutHistoryLoading(false);
             });
     }, []);
 
+    const getProducts = useCallback(() => {
+        setProductsLoading(true);
+        //get products
+        axios
+            .get(`/api/products`)
+            .then((ret) => {
+                setProducts(ret.data);
+            })
+            .finally(() => {
+                setProductsLoading(false);
+            });
+    }, []);
+
+    const updateProducts = useCallback((products: Product[]) => {
+        //update products
+        axios.post(`/api/products`, JSON.stringify(products), {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }, []);
+
     return (
-        <GlobalContext.Provider value={{
-            checkoutHistory: checkoutHistory,
-            checkoutHistoryLoading: checkoutHistoryLoading,
-            getCheckoutHistory: getCheckoutHistory
-        }}>
+        <GlobalContext.Provider
+            value={{
+                checkoutHistory: checkoutHistory,
+                checkoutHistoryLoading: checkoutHistoryLoading,
+                getCheckoutHistory: getCheckoutHistory,
+                products: products,
+                productsLoading: productsLoading,
+                getProducts: getProducts,
+                updateProducts: updateProducts,
+            }}
+        >
             {children}
         </GlobalContext.Provider>
     );

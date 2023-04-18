@@ -30,4 +30,19 @@ app.MapGet("api/checkoutHistory", async (PostgreSqlService postgreSqlService, Da
 .WithName("GetCheckoutHistory")
 .WithOpenApi();
 
+app.MapGet("api/products", async (PostgreSqlService postgreSqlService) =>
+{
+    List<Product> products = await postgreSqlService.GetProducts();
+    return products;
+})
+.WithName("GetProducts")
+.WithOpenApi();
+
+app.MapPost("api/products", async (PostgreSqlService postgreSqlService, List<Product> products) =>
+{
+    await postgreSqlService.UpdateProducts(products);
+})
+.WithName("UpdateProducts")
+.WithOpenApi();
+
 app.Run();
