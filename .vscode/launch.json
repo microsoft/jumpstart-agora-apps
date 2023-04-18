@@ -20,10 +20,6 @@
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "ASPNETCORE_URLS": "https://localhost:4000/"
-            },
-            "launchBrowser": {
-                "enabled": true,
-                
             }
         },
         {
@@ -55,6 +51,11 @@
                 "--no-reload",
                 "--debug"
             ],
+            "serverReadyAction":{
+                "pattern": "Running on http://127.0.0.1:([0-9]+)",
+                "uriFormat": "http://127.0.0.1:%s",
+                "action": "openExternally"
+            },
             "jinja": true,
             "justMyCode": true
         }
