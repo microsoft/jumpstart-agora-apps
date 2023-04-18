@@ -2,7 +2,6 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import './App.css';
 import ManagerPortal from "./pages/ManagerPortal";
 import { GlobalProvider } from "./providers/GlobalContext";
 

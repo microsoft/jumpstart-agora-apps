@@ -1,0 +1,44 @@
+// Override default variables before the import
+$enable-rounded: true;
+
+$body-bg: #f0f0f0;
+
+$theme-colors: (
+    "primary": #51b60d,
+    "secondary": #313131,
+    "secondary-light": #3e3e3e,
+    "purple": #e810e0,
+    "yellow": #f5f73e,
+    "cyan": #2be6e6,
+);
+
+$font-size-base: 1rem;
+$headings-font-weight: 500;
+
+$h1-font-size: $font-size-base * 2;
+$h2-font-size: $font-size-base * 1.8;
+$h3-font-size: $font-size-base * 1.6;
+$h4-font-size: $font-size-base * 1.4;
+$h5-font-size: $font-size-base * 1.2;
+$h6-font-size: $font-size-base * 1;
+$h7-font-size: $font-size-base * 0.8;
+$h8-font-size: $font-size-base * 0.6;
+$h9-font-size: $font-size-base * 0.4;
+$h10-font-size: $font-size-base * 0.2;
+
+$font-sizes: (
+  1: $h1-font-size,
+  2: $h2-font-size,
+  3: $h3-font-size,
+  4: $h4-font-size,
+  5: $h5-font-size,
+  6: $h6-font-size,
+  7: $h7-font-size,
+  8: $h8-font-size,
+  9: $h9-font-size,
+  10: $h10-font-size
+);
+
+
+// Import Bootstrap and its default variables
+@import "~bootstrap/scss/bootstrap.scss";
