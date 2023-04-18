@@ -1,6 +1,6 @@
 import React from "react";
 import { IconAlert, IconLogo, IconProfile, bgWood } from "../../images";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Header() {
     //get the location from react router
@@ -23,9 +23,9 @@ function Header() {
             style={{ backgroundImage: `url(${bgWood})` }}
         >
             <div className="container-fluid">
-                <a className="navbar-brand p-3" href="{{ url_for('index') }}">
+                <Link className="navbar-brand p-3" to="/">
                     <IconLogo className="d-inline-block align-top" />
-                </a>
+                </Link>
                 <button
                     className="navbar-toggler"
                     type="button"
@@ -42,19 +42,19 @@ function Header() {
                         <div className="text-white fs-2 fw-normal">Managers Control Center</div>
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <a className={getNavClasses("/")} href="/">
+                                <Link className={getNavClasses("/")} to="/">
                                     Monitoring
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-item ms-4">
-                                <a className={getNavClasses("/products")} href="/products">
+                                <Link className={getNavClasses("/products")} to="/products">
                                     Products
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-item ms-4">
-                                <a className={getNavClasses("/live-View")} href="/live-view">
+                                <Link className={getNavClasses("/live-View")} to="/live-view">
                                     Live View
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>

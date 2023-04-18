@@ -29,11 +29,34 @@ const formatXAxis = (tickItem: string | number | Date) => {
     return dayjs(tickItem).format("hh.mm A");
 };
 
+const CustomTooltip = (props: TooltipProps<any, string>) => {
+    const { active, payload, label } = props;
+
+    if (active && payload && payload.length) {
+        const formattedDate = dayjs(label).format("MM/DD/YYYY HH:mm A");
+        return (
+            <div className="bg-white p-3">
+                <div className="d-flex justify-content-between fs-7">
+                    <span>Timestamp:</span>
+                    <span className="ps-3">{formattedDate}</span>
+                </div>
+                {payload.map((item) => (
+                    <div key={item.name} className="d-flex justify-content-between fs-7">
+                        <span>{item.name}:</span>
+                        <span>{item.value} mins</span>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+    return null;
+};
+
 const aggregateData = (checkoutHistory: CheckoutHistory[]): AggregatedDataItem[] => {
     if (checkoutHistory.length === 0) {
         return [];
     }
-    const aggregatedData: AggregatedDataItem[] = [];
+    const aggregatedData = new Map<string, AggregatedDataItem>();
     const fiveMinutesInMs = 5 * 60 * 1000;
 
     // Find the first and last timestamp in the data
@@ -53,39 +76,22 @@ const aggregateData = (checkoutHistory: CheckoutHistory[]): AggregatedDataItem[]
         currentTimestamp += fiveMinutesInMs
     ) {
         const fiveMinuteTimestamp = Math.floor(currentTimestamp / fiveMinutesInMs) * fiveMinutesInMs;
-        let aggregatedDataItem = aggregatedData.find(
-            (item) => item.timestamp === new Date(fiveMinuteTimestamp).toISOString()
-        );
-
-        if (!aggregatedDataItem) {
-            aggregatedDataItem = {
-                timestamp: new Date(fiveMinuteTimestamp).toISOString(),
+        const timestampISO = new Date(fiveMinuteTimestamp).toISOString();
+        if (!aggregatedData.has(timestampISO)) {
+            aggregatedData.set(timestampISO, {
+                timestamp: timestampISO,
                 selfCheckoutWaitTime: 0,
                 expressCheckoutWaitTime: 0,
                 standardCheckoutWaitTime: 0,
-            };
-            aggregatedData.push(aggregatedDataItem);
+            });
         }
     }
 
     checkoutHistory.forEach((checkout) => {
         const timestamp = new Date(checkout.timestamp).getTime();
         const fiveMinuteTimestamp = Math.floor(timestamp / fiveMinutesInMs) * fiveMinutesInMs;
-        let aggregatedDataItem = aggregatedData.find(
-            (item) => item.timestamp === new Date(fiveMinuteTimestamp).toISOString()
-        );
-
-        if (!aggregatedDataItem) {
-            // Handle the case where aggregatedDataItem is undefined
-            // For example, you could create a new AggregatedDataItem object and add it to the array
-            aggregatedDataItem = {
-                timestamp: new Date(fiveMinuteTimestamp).toISOString(),
-                selfCheckoutWaitTime: 0,
-                expressCheckoutWaitTime: 0,
-                standardCheckoutWaitTime: 0,
-            };
-            aggregatedData.push(aggregatedDataItem);
-        }
+        const timestampISO = new Date(fiveMinuteTimestamp).toISOString();
+        const aggregatedDataItem = aggregatedData.get(timestampISO)!;
 
         switch (checkout.checkoutType) {
             case CheckoutType.SelfService:
@@ -100,7 +106,7 @@ const aggregateData = (checkoutHistory: CheckoutHistory[]): AggregatedDataItem[]
         }
     });
 
-    return aggregatedData;
+    return Array.from(aggregatedData.values());
 };
 
 interface WaitTimeGraphProps {
@@ -114,29 +120,6 @@ function WaitTimeGraph(props: WaitTimeGraphProps) {
         const agg = aggregateData(props.checkoutHistory);
         setAggregatedCheckoutHistory(agg);
     }, [props.checkoutHistory]);
-
-    const CustomTooltip = (props: TooltipProps<any, string>) => {
-        const { active, payload, label } = props;
-
-        if (active && payload && payload.length) {
-            const formattedDate = dayjs(label).format("MM/DD/YYYY HH:mm A");
-            return (
-                <div className="bg-white p-3">
-                    <div className="d-flex justify-content-between fs-7">
-                        <span>Timestamp:</span>
-                        <span className="ps-3">{formattedDate}</span>
-                    </div>
-                    {payload.map((item) => (
-                        <div key={item.name} className="d-flex justify-content-between fs-7">
-                            <span>{item.name}:</span>
-                            <span>{item.value} mins</span>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-        return null;
-    };
 
     return (
         <ResponsiveContainer width="99%" height="99%">
