@@ -39,7 +39,7 @@ function Header() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <div className="me-auto mb-2 mb-lg-0">
-                        <div className="text-white fs-1 fw-normal">Managers Control Center</div>
+                        <div className="text-white fs-2 fw-normal">Managers Control Center</div>
                         <ul className="navbar-nav">
                             <li className="nav-item">
                                 <a className={getNavClasses("/")} href="/">

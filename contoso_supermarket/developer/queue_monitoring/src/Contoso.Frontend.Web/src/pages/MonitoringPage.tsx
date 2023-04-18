@@ -60,10 +60,12 @@ function MonitoringPage() {
         <>
             <Header />
             <div className="flex flex-col py-4 px-8 px-sm-8 container">
-                <h1 className="text-primary mb-2">Checkout Queue Monitoring</h1>
+                <h1 className="text-primary mb-2 fs-2">Checkout Queue Monitoring</h1>
                 <div className="flex flex-col mb-4">
                     <div className="text-primary h4 mb-1">Checkout Heatmap</div>
-                    <div className="w-100 h-25 bg-secondary" />
+                    <div className="w-100 h-25 bg-secondary rounded ratio ratio-4x1" >
+                        
+                    </div>
                 </div>
 
                 <div className="row">

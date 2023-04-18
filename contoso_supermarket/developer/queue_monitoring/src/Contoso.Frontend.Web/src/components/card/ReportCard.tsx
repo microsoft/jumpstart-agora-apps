@@ -13,7 +13,7 @@ interface ReportCardProps {
 function ReportCard(props: ReportCardProps) {
     return (
         <div className={"bg-secondary rounded p-3 " + props.className}>
-            <div className="row pb-4">
+            <div className="row pb-5">
                 <div className="col text-white h6 mb-1">{props.title}</div>
                 <div className="col text-white display-6 fw-bold text-end">{props.value ?? 0}</div>
             </div>
