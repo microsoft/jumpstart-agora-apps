@@ -26,10 +26,8 @@ body {
 .border-none {
     border-color: #f0f0f0 !important;
 }
-
-/* table overrides */
-[contentEditable="true"] {
-    /* background-color: #FFF!; */
+.rounded{
+    border-radius: 0.25rem !important;
 }
 
 /* button reset */

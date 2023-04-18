@@ -1,14 +1,58 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
+<h1 class="fs-2 text-green">Thank you for your order!</h1>
+<p>
+    We have received your order and are processing it as quickly as possible. You will receive a confirmation email with
+    your order details shortly.
+</p>
+<p>
+    <strong>If we cannot supply some items, they will be refunded automatically.</strong><br />
+    Payment will be finalized on the day you receive your order. You will only be charged for what you have been
+    supplied.
+</p>
 
+<h4 class="text-green">Your order details</h4>
+<div class="mb-3">Order Number: <b>#{{ ordernumber }}</b></div>
 
-  <h1>Thank you!</h1>
-  <h2> Your order has been placed!</br></h2>
-  Order Number: <b>#{{ ordernumber }}</b>
+<div class="rounded border border border-grey rounded bg-white overflow-hidden">
+    <table class="table m-0">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Item</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider border-grey">
+            {% for item in order %}
+            <tr class="border-top border-bottom border-1 fs-5">
+                <td>{{ item['id'] }}</td>
+                <td>{{ item['name'] }}</td>
+                <td>{{ item['quantity'] }}</td>
+                <td>${{ "%.2f" | format (item['price']) }}</td>
+                <td>${{ "%.2f" | format (item['quantity'] * item['price']) }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="border-none fw-medium fs-5">
+                <td colspan="3"></td>
+                <td>Total</td>
+                <td id="cart-total"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="d-flex mt-3">
+    <a href="javascript:window.print();" class="btn bg-green text-white px-5 shadow ms-auto" type="submit">Print</a>
+</div>
 
-  
+<script>
+    // Update the order total on page load
+    var items = "{% if order %}{{ order|tojson }}{% else %}[]{% endif %}";
+    var cart = JSON.parse(items);
+    var cartTotal = cart.map((item) => item.price * item.quantity).reduce((a, b) => a + b, 0);
+    $("#cart-total").text("$" + cartTotal.toFixed(2));
+</script>
 
 {% endblock %}
-
-

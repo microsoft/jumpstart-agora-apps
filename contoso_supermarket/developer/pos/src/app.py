@@ -173,15 +173,21 @@ def checkout():
 
     cur = conn.cursor()
     cart = session.get('cart', [])
-    orderDate = datetime.now()
-    jsoncart = json.dumps(cart)
-    query = "INSERT INTO contoso.Orders (orderDate, orderdetails, storeId) VALUES ('{}', '{}', {}) returning orderId".format(orderDate, jsoncart, storeid)
-    cur.execute(query)
-    ordernumber = cur.fetchone()[0]
-    conn.commit()
-    cur.close()
-    session.clear() # clears the cart
-    return render_template('checkout.html', ordernumber=ordernumber)
+
+    # only create order if the cart isn't empty
+    if(len(cart) == 0):
+        return redirect(url_for('index'))
+    else:
+        order = cart.copy() # stores a copy of the cart for the checkout page summary
+        orderDate = datetime.now()
+        jsoncart = json.dumps(cart)
+        query = "INSERT INTO contoso.Orders (orderDate, orderdetails, storeId) VALUES ('{}', '{}', {}) returning orderId".format(orderDate, jsoncart, storeid)
+        cur.execute(query)
+        ordernumber = cur.fetchone()[0]
+        conn.commit()
+        cur.close()
+        session.clear() # clears the cart
+        return render_template('checkout.html', ordernumber=ordernumber, order=order)
 
 @app.route('/addPurchase',methods = ['POST'])
 def addPurchase():
