@@ -4,6 +4,7 @@ import { CheckoutType, useGlobalContext } from "../providers/GlobalContext";
 import dayjs from "dayjs";
 import Header from "../components/header/Header";
 import ReportCard from "../components/card/ReportCard";
+import HeatMapCard from "../components/card/HeatMapCard";
 
 function MonitoringPage() {
     const { getCheckoutHistory, checkoutHistory } = useGlobalContext();
@@ -18,7 +19,23 @@ function MonitoringPage() {
         (acc, curr) => (dayjs(curr.timestamp).isAfter(dayjs(acc)) ? curr.timestamp : acc),
         checkoutHistory[0]?.timestamp
     );
+
+    //get new checkout data every minute
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            if (!!latestTimestamp.length) {
+                getCheckoutHistory && getCheckoutHistory(new Date(latestTimestamp));
+            }
+        }, 60000);
+
+        // Clear interval on component unmount
+        return () => clearInterval(intervalId);
+    }, [latestTimestamp]);
+
     const latestCheckoutHistory = checkoutHistory?.filter((history) => history.timestamp === latestTimestamp);
+    const latestCheckoutHistoryOrderedByType = latestCheckoutHistory.sort(
+        (a, b) => a.checkoutType - b.checkoutType || a.checkoutId - b.checkoutId
+    );
 
     const totalPeople = latestCheckoutHistory?.reduce((acc, curr) => acc + curr.queueLength, 0) ?? 0;
 
@@ -63,9 +80,7 @@ function MonitoringPage() {
                 <h1 className="text-primary mb-2 fs-2">Checkout Queue Monitoring</h1>
                 <div className="flex flex-col mb-4">
                     <div className="text-primary h4 mb-1">Checkout Heatmap</div>
-                    <div className="w-100 h-25 bg-secondary rounded ratio ratio-4x1" >
-                        
-                    </div>
+                    <HeatMapCard className="" checkoutHistory={latestCheckoutHistoryOrderedByType} />
                 </div>
 
                 <div className="row">
