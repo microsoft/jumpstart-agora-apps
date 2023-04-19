@@ -5,14 +5,15 @@ import { ExpressCheckout, HeatMap, SelfCheckout, StandardCheckout } from "../../
 interface HeatMapCardProps {
     className?: string;
     checkoutHistory: CheckoutHistory[];
+    isLoading: boolean;
 }
 
 const getCheckoutImage = (checkoutType: CheckoutType) => {
     switch (checkoutType) {
         case CheckoutType.Standard:
-            return <StandardCheckout className="mw-100" style={{ width: "60%" }} />;
+            return <StandardCheckout className="mw-100" style={{ width: "70%" }} />;
         case CheckoutType.Express:
-            return <ExpressCheckout className="mw-100" style={{ width: "80%" }} />;
+            return <ExpressCheckout className="mw-100" style={{ width: "90%" }} />;
         case CheckoutType.SelfService:
             return <SelfCheckout className="mw-100" style={{ width: "50%" }} />;
     }
@@ -37,24 +38,25 @@ function HeatMapCard(props: HeatMapCardProps) {
                     return (
                         <div key={item.checkoutId} className="col d-flex flex-column">
                             <div className="flex-grow-1 d-flex align-items-center row">
-                                <div className="col-3 d-flex flex-column position-relative h-100">
-                                    {Array(item.queueLength)
-                                        .fill(0)
-                                        .map((x, i) => {
-                                            return (
-                                                <img
-                                                    key={i}
-                                                    src={HeatMap}
-                                                    style={{
-                                                        position: "absolute",
-                                                        left: `calc(${Math.floor(Math.random() * 100)}%)`,
-                                                        top: `${Math.floor(Math.random() * 90)}%`,
-                                                    }}
-                                                />
-                                            );
-                                        })}
+                                <div className="col-4 d-flex flex-column position-relative h-100">
+                                    {!props.isLoading &&
+                                        Array(item.queueLength)
+                                            .fill(0)
+                                            .map((x, i) => {
+                                                return (
+                                                    <img
+                                                        key={i}
+                                                        src={HeatMap}
+                                                        style={{
+                                                            position: "absolute",
+                                                            left: `calc(${Math.floor(Math.random() * 100)}%)`,
+                                                            top: `${Math.floor(Math.random() * 90)}%`,
+                                                        }}
+                                                    />
+                                                );
+                                            })}
                                 </div>
-                                <div className="col-9 text-end">{getCheckoutImage(item.checkoutType)}</div>
+                                <div className="col-8 text-end">{getCheckoutImage(item.checkoutType)}</div>
                             </div>
                             <div
                                 className={

@@ -7,7 +7,7 @@ import ReportCard from "../components/card/ReportCard";
 import HeatMapCard from "../components/card/HeatMapCard";
 
 function MonitoringPage() {
-    const { getCheckoutHistory, checkoutHistory } = useGlobalContext();
+    const { getCheckoutHistory, checkoutHistory, checkoutHistoryLoading } = useGlobalContext();
 
     //initial data load
     useEffect(() => {
@@ -33,9 +33,7 @@ function MonitoringPage() {
     }, [latestTimestamp]);
 
     const latestCheckoutHistory = checkoutHistory?.filter((history) => history.timestamp === latestTimestamp);
-    const latestCheckoutHistoryOrderedByType = latestCheckoutHistory.sort(
-        (a, b) => a.checkoutType - b.checkoutType || a.checkoutId - b.checkoutId
-    );
+    const latestCheckoutHistoryOrderedByType = latestCheckoutHistory.sort((a, b) => a.checkoutId - b.checkoutId);
 
     const totalPeople = latestCheckoutHistory?.reduce((acc, curr) => acc + curr.queueLength, 0) ?? 0;
 
@@ -80,7 +78,11 @@ function MonitoringPage() {
                 <h1 className="text-primary mb-2 fs-2">Checkout Queue Monitoring</h1>
                 <div className="flex flex-col mb-4">
                     <div className="text-primary h4 mb-1">Checkout Heatmap</div>
-                    <HeatMapCard className="" checkoutHistory={latestCheckoutHistoryOrderedByType} />
+                    <HeatMapCard
+                        className=""
+                        isLoading={checkoutHistoryLoading}
+                        checkoutHistory={latestCheckoutHistoryOrderedByType}
+                    />
                 </div>
 
                 <div className="row">

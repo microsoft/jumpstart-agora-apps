@@ -2,6 +2,7 @@ import * as React from "react";
 import { createContext, useCallback, useContext, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 export enum CheckoutType {
     Standard = 1,
@@ -97,11 +98,18 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
 
     const updateProducts = useCallback((products: Product[]) => {
         //update products
-        axios.post(`/api/products`, JSON.stringify(products), {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        axios
+            .post(`/api/prodfucts`, JSON.stringify(products), {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then(() => {
+                toast.success("Products updated successfully...");
+            })
+            .catch(() => {
+                toast.error("Failed to update products...");
+            });
     }, []);
 
     return (

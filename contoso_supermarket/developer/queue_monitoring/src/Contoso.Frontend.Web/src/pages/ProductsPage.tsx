@@ -51,13 +51,13 @@ function ProductsPage() {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th scope="col" className="col-1">
+                            <th scope="col" className="col-1 text-center">
                                 ID
                             </th>
-                            <th scope="col" className="col-4">
+                            <th scope="col" className="col-4 text-center">
                                 Name
                             </th>
-                            <th scope="col" className="col-4">
+                            <th scope="col" className="col-4 text-center">
                                 Description
                             </th>
                             <th scope="col" className="col-2 text-center">
@@ -72,8 +72,8 @@ function ProductsPage() {
                         {productList.map((item: Product) => {
                             return (
                                 <tr key={item.id} className="border-grey border-2 fs-5">
-                                    <td className="col-1">{item.id}</td>
-                                    <td className="col-4">
+                                    <td className="col-1 text-center">{item.id}</td>
+                                    <td className="col-4 text-center">
                                         <div className="input-group flex-nowrap">
                                             <input
                                                 className="form-control"
@@ -83,7 +83,7 @@ function ProductsPage() {
                                             />
                                         </div>
                                     </td>
-                                    <td className="col-4">
+                                    <td className="col-4 text-center">
                                         <div className="input-group flex-nowrap">
                                             <textarea
                                                 className="form-control"

@@ -18,27 +18,27 @@
     <table class="table m-0">
         <thead>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Item</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Unit Price</th>
-                <th scope="col">Subtotal</th>
+                <th scope="col" class="text-center">ID</th>
+                <th scope="col" class="text-center">Item</th>
+                <th scope="col" class="text-center">Quantity</th>
+                <th scope="col" class="text-center">Unit Price</th>
+                <th scope="col" class="text-center">Subtotal</th>
             </tr>
         </thead>
         <tbody class="table-group-divider border-grey">
             {% for item in order %}
             <tr class="border-top border-bottom border-1 fs-5">
-                <td>{{ item['id'] }}</td>
-                <td>{{ item['name'] }}</td>
-                <td>{{ item['quantity'] }}</td>
-                <td>${{ "%.2f" | format (item['price']) }}</td>
-                <td>${{ "%.2f" | format (item['quantity'] * item['price']) }}</td>
+                <td class="text-center">{{ item['id'] }}</td>
+                <td class="text-center">{{ item['name'] }}</td>
+                <td class="text-center">{{ item['quantity'] }}</td>
+                <td class="text-center">${{ "%.2f" | format (item['price']) }}</td>
+                <td class="text-center">${{ "%.2f" | format (item['quantity'] * item['price']) }}</td>
             </tr>
             {% endfor %}
             <tr class="border-none fw-medium fs-5">
-                <td colspan="3"></td>
-                <td>Total</td>
-                <td id="cart-total"></td>
+                <td colspan="3" class="text-center"></td>
+                <td class="text-center">Total</td>
+                <td id="cart-total" class="text-center"></td>
             </tr>
         </tbody>
     </table>
