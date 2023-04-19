@@ -77,7 +77,7 @@ function MonitoringPage() {
             <div className="flex flex-col py-4 px-8 px-sm-8 container">
                 <h1 className="text-primary mb-2 fs-2">Checkout Queue Monitoring</h1>
                 <div className="flex flex-col mb-4">
-                    <div className="text-primary h4 mb-1">Checkout Heatmap</div>
+                    <div className="text-primary h4 mb-3">Checkout Heatmap</div>
                     <HeatMapCard
                         className=""
                         isLoading={checkoutHistoryLoading}
