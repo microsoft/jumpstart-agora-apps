@@ -1,6 +1,10 @@
+{% if config['HOLIDAY_BANNER'] == 'True' %}
+    {% set image_path = 'static/img/wood_hh.png' %}
+{% else %}
+    {% set image_path = 'static/img/wood.png' %}
+{% endif %}
 
-
-<nav class="navbar sticky-top navbar-expand-lg px-4" data-bs-theme="light" style="background-image: url('static/img/wood.png');">
+<nav class="navbar sticky-top navbar-expand-lg px-4" data-bs-theme="light" style="background-image: url('{{ image_path }}');">
     <div class="container-fluid">
       <a class="navbar-brand p-3" href="{{ url_for('index') }}">
         <img src="static/img/contoso.svg"  class="d-inline-block align-top" alt="">
@@ -49,3 +53,4 @@
   $("#cart-count").text(itemCount)
   $("#cart-value").text("$" + cartTotal.toFixed(2))
 </script>
+

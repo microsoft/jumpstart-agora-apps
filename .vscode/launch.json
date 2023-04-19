@@ -16,7 +16,7 @@
             "serverReadyAction": {
                 "action": "openExternally",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-                "uriFormat": "%s/swagger/index.html",
+                "uriFormat": "%s/swagger/index.html"
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
@@ -29,10 +29,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring/src/Contoso.Frontend.Web/",
             "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run-script",
-                "start"
-            ],
+            "runtimeArgs": ["run-script", "start"],
             "env": {
                 "BACKEND_API_URL": "https://localhost:4000/"
             }
@@ -44,15 +41,11 @@
             "module": "flask",
             "env": {
                 "FLASK_APP": "${workspaceFolder}/contoso_supermarket/developer/pos/src/app.py",
-                "FLASK_DEBUG": "1"
+                "FLASK_DEBUG": "1",
+                "HOLIDAY_BANNER": "True"
             },
-            "args": [
-                "run",
-                "--no-debugger",
-                "--no-reload",
-                "--debug"
-            ],
-            "serverReadyAction":{
+            "args": ["run", "--no-debugger", "--no-reload", "--debug"],
+            "serverReadyAction": {
                 "pattern": "Running on http://127.0.0.1:([0-9]+)",
                 "uriFormat": "http://127.0.0.1:%s",
                 "action": "openExternally"
