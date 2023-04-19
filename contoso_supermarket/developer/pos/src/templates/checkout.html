@@ -49,7 +49,7 @@
 
 <script>
     // Update the order total on page load
-    var items = "{% if order %}{{ order|tojson }}{% else %}[]{% endif %}";
+    var items = '{% if order %}{{ order|tojson }}{% else %}[]{% endif %}';
     var cart = JSON.parse(items);
     var cartTotal = cart.map((item) => item.price * item.quantity).reduce((a, b) => a + b, 0);
     $("#cart-total").text("$" + cartTotal.toFixed(2));
