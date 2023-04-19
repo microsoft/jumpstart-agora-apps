@@ -79,7 +79,7 @@ function MonitoringPage() {
                 <div className="flex flex-col mb-4">
                     <div className="text-primary h4 mb-3">Checkout Heatmap</div>
                     <HeatMapCard
-                        className=""
+                        className="bg-secondary rounded p-3"
                         isLoading={checkoutHistoryLoading}
                         checkoutHistory={latestCheckoutHistoryOrderedByType}
                     />

@@ -32,7 +32,7 @@ const getCheckoutColorClass = (checkoutType: CheckoutType) => {
 
 function HeatMapCard(props: HeatMapCardProps) {
     return (
-        <div className={"bg-secondary rounded p-3 " + props.className}>
+        <div className={"" + props.className}>
             <div className="row">
                 {props.checkoutHistory.map((item) => {
                     return (
