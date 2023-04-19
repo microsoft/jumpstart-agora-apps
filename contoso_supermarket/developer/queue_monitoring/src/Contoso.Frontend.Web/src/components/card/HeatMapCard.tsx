@@ -10,11 +10,11 @@ interface HeatMapCardProps {
 const getCheckoutImage = (checkoutType: CheckoutType) => {
     switch (checkoutType) {
         case CheckoutType.Standard:
-            return <img src={StandardCheckout} className="mw-100" style={{ width: "60%" }} />;
+            return <StandardCheckout className="mw-100" style={{ width: "60%" }} />;
         case CheckoutType.Express:
-            return <img src={ExpressCheckout} className="mw-100" style={{ width: "80%" }} />;
+            return <ExpressCheckout className="mw-100" style={{ width: "80%" }} />;
         case CheckoutType.SelfService:
-            return <img src={SelfCheckout} className="mw-100" style={{ width: "50%" }} />;
+            return <SelfCheckout className="mw-100" style={{ width: "50%" }} />;
     }
 };
 
@@ -37,14 +37,24 @@ function HeatMapCard(props: HeatMapCardProps) {
                     return (
                         <div key={item.checkoutId} className="col d-flex flex-column">
                             <div className="flex-grow-1 d-flex align-items-center row">
-                                <div className="col-3 d-flex flex-column justify-content-between h-100">
+                                <div className="col-3 d-flex flex-column position-relative h-100">
                                     {Array(item.queueLength)
                                         .fill(0)
                                         .map((x, i) => {
-                                            return <img key={i} src={HeatMap} />;
+                                            return (
+                                                <img
+                                                    key={i}
+                                                    src={HeatMap}
+                                                    style={{
+                                                        position: "absolute",
+                                                        left: `calc(${Math.floor(Math.random() * 100)}%)`,
+                                                        top: `${Math.floor(Math.random() * 90)}%`,
+                                                    }}
+                                                />
+                                            );
                                         })}
                                 </div>
-                                <div className="col-9">{getCheckoutImage(item.checkoutType)}</div>
+                                <div className="col-9 text-end">{getCheckoutImage(item.checkoutType)}</div>
                             </div>
                             <div
                                 className={
