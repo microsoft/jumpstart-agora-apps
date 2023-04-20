@@ -200,6 +200,18 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
   `az iot hub generate-sas-token --device-id chicagoFreezer1 --hub-name charris-iot1 --duration (60*60*24*365) --query sas -o tsv`
 
 
+# mqtt2prom 
+
+[mqtt2prometheus on GitHub](https://github.com/hikhvar/mqtt2prometheus)
+
+## Create ConfigMap volume for mqtt2prom config
+`mkdir C:\Ag\developer\freezer_monitoring\config`
+`copy mqtt2prom/config.yaml C:\Ag\developer\freezer_monitoring\config\config.yaml`
+
+`kubectl create configmap mqtt2prom-config --from-file=C:\Ag\developer\freezer_monitoring\config\config.yaml`
+
+## Create Secret volume for MQTT secrets 
+`kubectl create secret generic mqtt2prom-config-secret --from-literal=MQTT2PROM_MQTT_USER=supersecret --from-literal=MQTT2PROM_MQTT_PASSWORD=topsecret`
 
 
 Elevated PowerShell

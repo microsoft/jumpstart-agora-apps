@@ -50,12 +50,15 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
+          envFrom:
+          - sedretRef:
+            name: mqtt2prom-config-secret
           volumeMounts:
-          - name: mqtt2prom-config-secret-volume
-            mountPath: /data/config.yaml
+          - name: mqtt2prom-config-volume-mount
+            mountPath: config.yaml
             subPath: config.yaml
             readOnly: true
       volumes:
-      - name: mqtt2prom-config-secret-volume
-        secret:
-          secretName: mqtt2prom-config-secret
+      - name: mqtt2prom-config-volume
+        configMap:
+          name: mqtt2prom-config
