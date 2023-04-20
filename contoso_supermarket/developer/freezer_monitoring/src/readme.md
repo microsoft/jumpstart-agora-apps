@@ -31,6 +31,55 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 
 - The simulator is currently configured to send messages to the broker on port 1883. The broker is configured to send messages to the IoT Hub on port 8883. If you change the port in the simulator, you must also change the port in the broker.
 
+## Setup
+1. Create a service principal to access the MCR registry - from local machine
+
+    ```powershell
+    $mcr_sub = "2554f64d-0419-4e39-8121-5e01270578ea"
+    $mcr_rg = "charris-agora"
+    $mcr_name = "charrisagoracr"
+    $mcr_url = "charrisagoracr.azurecr.io"
+    $sp_name = "charris-iot1"
+
+    $sp = az ad sp create-for-rbac `
+        --name $sp_name `
+        --role Contributor `
+        --scopes /subscriptions/$mcr_sub/resourcegroups/$mcr_rg/providers/Microsoft.ContainerRegistry/registries/$mcr_name | convertfrom-json
+    
+    $sp
+    ```
+    #### Note: See OneNote for output with appId, password, tenant
+    
+2. From Client VM - *foreach cluster* - Create a secret in the cluster to store the service principal credentials for the MCR registry
+
+    ```powershell
+    # Get variables from above first
+    # then...
+    $spAppId = "[App Id from SP created above]"
+    $spPassword = "[Password from SP created above]"
+
+    kubectl create secret docker-registry $mcr_name `
+        --namespace default `
+        --docker-server $mcr_url `
+        --docker-username $spAppId `
+        --docker-password $spPassword
+    ```
+
+3. Set up volumes and secrets for mqtt2prom
+    ## mqtt2prom 
+
+    [mqtt2prometheus on GitHub](https://github.com/hikhvar/mqtt2prometheus)
+
+    - Create ConfigMap volume for mqtt2prom config
+        `mkdir C:\Ag\developer\freezer_monitoring\config`
+        `copy mqtt2prom/config.yaml C:\Ag\developer\freezer_monitoring\config\config.yaml`
+
+        `kubectl create configmap mqtt2prom-config --from-file=C:\Ag\developer\freezer_monitoring\config\config.yaml`
+
+    - SKIP IF BROKER HAS NO PASSWORD!! Create Secret volume for MQTT secrets 
+        ### username and password can be found in ./mqtt-broker/
+        `kubectl create secret generic mqtt2prom-config-secret --from-literal=MQTT2PROM_MQTT_USER=supersecret --from-literal=MQTT2PROM_MQTT_PASSWORD=topsecret`
+
 ## Installing with Helm
 
 `helm upgrade sensor-monitor sensor-monitor --version 1.0.0`
@@ -78,6 +127,9 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 
 - start the simulator
     `docker build -t js/mqtt-simulator:latest .\mqtt-simulator\.; .\mqtt-simulator\Dockerrun.ps1`
+
+- start the mqtt2prom
+    `docker build -t js/mqtt2prom:latest .\mqtt2prom\.; .\mqtt2prom\Dockerrun.ps1`
 
 - install mosquitto client
     `apt install mosquitto -y`
@@ -199,19 +251,6 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
   - foreach device: update remote_password in mqtt-broker/mosquitto.conf
   `az iot hub generate-sas-token --device-id chicagoFreezer1 --hub-name charris-iot1 --duration (60*60*24*365) --query sas -o tsv`
 
-
-# mqtt2prom 
-
-[mqtt2prometheus on GitHub](https://github.com/hikhvar/mqtt2prometheus)
-
-## Create ConfigMap volume for mqtt2prom config
-`mkdir C:\Ag\developer\freezer_monitoring\config`
-`copy mqtt2prom/config.yaml C:\Ag\developer\freezer_monitoring\config\config.yaml`
-
-`kubectl create configmap mqtt2prom-config --from-file=C:\Ag\developer\freezer_monitoring\config\config.yaml`
-
-## Create Secret volume for MQTT secrets 
-`kubectl create secret generic mqtt2prom-config-secret --from-literal=MQTT2PROM_MQTT_USER=supersecret --from-literal=MQTT2PROM_MQTT_PASSWORD=topsecret`
 
 
 Elevated PowerShell

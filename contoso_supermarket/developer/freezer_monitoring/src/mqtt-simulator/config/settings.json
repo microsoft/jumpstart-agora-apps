@@ -1,8 +1,8 @@
 {
   "BROKER_URL": "sensor-monitor-broker.default.svc.cluster.local",
   "BROKER_PORT": 1883,
-  "MQTT_USERNAME": "sensor123",
-  "MQTT_PASSWORD": "sensor123",
+  "MQTT_USERNAME": "",
+  "MQTT_PASSWORD": "",
   "TOPICS": [
     {
       "TYPE": "single",

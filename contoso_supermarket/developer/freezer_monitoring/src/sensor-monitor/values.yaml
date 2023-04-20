@@ -18,10 +18,15 @@ simulator:
       tag: latest
     imagePullPolicy: Always
   replicas: 1
-metricsExporter:
+mqtt2prom:
   mqtt2prom:
     image:
       repository: ghcr.io/hikhvar/mqtt2prometheus
       tag: latest
     imagePullPolicy: Always
+  ports:
+  - name: mqtt2prom
+    port: 9641
+    targetPort: 9641
   replicas: 1
+  type: LoadBalancer
