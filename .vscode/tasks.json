@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring/src/Contoso.Backend.Data/Contoso.Backend.Data.csproj",
+                "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_backend/src/Contoso.Backend.Data.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring/src/Contoso.Backend.Data/Contoso.Backend.Data.csproj",
+                "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_backend/src/Contoso.Backend.Data.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring/src/Contoso.Backend.Data/Contoso.Backend.Data.csproj"
+                "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_backend/src/Contoso.Backend.Data.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

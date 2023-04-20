@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Contoso.Backend.Data",
+            "name": "queue_monitoring_backend",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring/src/Contoso.Backend.Data/bin/Debug/net7.0/Contoso.Backend.Data.dll",
+            "program": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_backend/src/bin/Debug/net7.0/Contoso.Backend.Data.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring/src/Contoso.Backend.Data",
+            "cwd": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_backend/src/",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -24,10 +24,10 @@
             }
         },
         {
-            "name": "Contoso.Frontend.Web",
+            "name": "queue_monitoring_frontend",
             "type": "node",
             "request": "launch",
-            "cwd": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring/src/Contoso.Frontend.Web/",
+            "cwd": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_frontend/src/src",
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run-script", "start"],
             "env": {
@@ -57,7 +57,7 @@
     "compounds": [
         {
             "name": "AllProjects",
-            "configurations": ["Contoso.Frontend.Web", "Contoso.Backend.Data", "pos"]
+            "configurations": ["queue_monitoring_frontend", "queue_monitoring_backend", "pos"]
         }
     ]
 }
