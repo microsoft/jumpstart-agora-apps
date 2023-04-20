@@ -1,0 +1,190 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod download
+    # you may remove this if you don't need go generate
+    - go generate ./...
+release:
+  prerelease: auto
+builds:
+- env:
+    - CGO_ENABLED=0
+  main: cmd/mqtt2prometheus.go
+  # GOOS list to build for.
+  # For more info refer to: https://golang.org/doc/install/source#environment
+  # Defaults are darwin and linux.
+  goos:
+    - linux
+    - darwin
+    - freebsd
+    - windows
+
+  # GOARCH to build for.
+  # For more info refer to: https://golang.org/doc/install/source#environment
+  # Defaults are 386 and amd64.
+  goarch:
+    - amd64
+    - arm
+    - arm64
+    - 386
+
+  # GOARM to build for when GOARCH is arm.
+  # For more info refer to: https://golang.org/doc/install/source#environment
+  # Default is only 6.
+  goarm:
+    - 5
+    - 6
+    - 7
+
+  # GOMIPS and GOMIPS64 to build when GOARCH is mips, mips64, mipsle or mips64le.
+  # For more info refer to: https://golang.org/doc/install/source#environment
+  # Default is empty.
+  gomips:
+    - hardfloat
+    - softfloat
+archives:
+- replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+    - '^ci:'
+
+nfpms:
+  - id: default
+    vendor: Christoph Petrausch
+    homepage: https://github.com/hikhvar/mqtt2prometheus
+    description: This exporter translates from MQTT topics to prometheus metrics.
+    license: MIT License
+    formats:
+      - deb
+      - rpm
+      - apk
+    conflicts:
+      - prometheus-mqtt-exporter
+    bindir: /usr/bin
+    contents:
+      # Simple config file
+      - src: config.yaml.dist
+        dst: /etc/mqtt2prometheus/config.yaml
+        type: config
+      - src: ./systemd/mqtt2prometheus.service
+        dst: /etc/systemd/system/mqtt2prometheus.service
+        type: config
+      - src: ./systemd/mqtt2prometheus
+        dst: /etc/default/mqtt2prometheus
+        type: config
+
+
+dockers:
+
+  - dockerfile: release/Dockerfile.scratch
+    goos: linux
+    goarch: amd64
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/amd64"
+    image_templates:
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-amd64"
+      - "hikhvar/mqtt2prometheus:latest-amd64"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-amd64"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-amd64"
+
+  - dockerfile: release/Dockerfile.scratch
+    goos: linux
+    goarch: arm64
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm64"
+    image_templates:
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-arm64"
+      - "hikhvar/mqtt2prometheus:latest-arm64"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-arm64"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-arm64"
+
+
+  - dockerfile: release/Dockerfile.scratch
+    goos: linux
+    goarch: arm
+    goarm: 6
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm/v6"
+    image_templates:
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-arm6"
+      - "hikhvar/mqtt2prometheus:latest-arm6"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-arm6"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-arm6"
+
+  - dockerfile: release/Dockerfile.scratch
+    goos: linux
+    goarch: arm
+    goarm: 7
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm/v7"
+    image_templates:
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-arm7"
+      - "hikhvar/mqtt2prometheus:latest-arm7"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-arm7"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-arm7"
+
+  - dockerfile: release/Dockerfile.scratch
+    goos: linux
+    goarch: 386
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/386"
+    image_templates:
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-386"
+      - "hikhvar/mqtt2prometheus:latest-386"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-386"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-386"
+
+docker_manifests:
+  # Docker Registry
+  - name_template: hikhvar/mqtt2prometheus:{{ .Tag }}
+    image_templates:
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-amd64"
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-arm64"
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-arm6"
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-arm7"
+      - "hikhvar/mqtt2prometheus:{{ .Tag }}-386"
+
+  - name_template: hikhvar/mqtt2prometheus:latest
+    image_templates:
+      - "hikhvar/mqtt2prometheus:latest-amd64"
+      - "hikhvar/mqtt2prometheus:latest-arm64"
+      - "hikhvar/mqtt2prometheus:latest-arm6"
+      - "hikhvar/mqtt2prometheus:latest-arm7"
+      - "hikhvar/mqtt2prometheus:latest-386"
+
+  # Github Registry
+  - name_template: ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}
+    image_templates:
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-amd64"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-arm64"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-arm6"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-arm7"
+      - "ghcr.io/hikhvar/mqtt2prometheus:{{ .Tag }}-386"
+
+  - name_template: ghcr.io/hikhvar/mqtt2prometheus:latest
+    image_templates:
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-amd64"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-arm64"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-arm6"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-arm7"
+      - "ghcr.io/hikhvar/mqtt2prometheus:latest-386"

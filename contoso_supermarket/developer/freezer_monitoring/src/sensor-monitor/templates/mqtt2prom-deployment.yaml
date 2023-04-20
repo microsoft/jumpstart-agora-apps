@@ -1,0 +1,61 @@
+# Source: /templates/mqtt2prom-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sensor-monitor.fullname" . }}-mqtt2prom
+  labels:
+    io.kompose.service: mqtt2prom
+    {{- include "sensor-monitor.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.simulator.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: mqtt2prom
+    {{- include "sensor-monitor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mqtt2prom
+      {{- include "sensor-monitor.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - args:
+          - -config
+          - /data/config.yaml
+          - -log-level
+          - debug
+          name: mqtt2prom
+          image: "ghcr.io/hikhvar/mqtt2prometheus:v0.1.7"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 9641
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: 
+          #     port: http
+          #   initialDelaySeconds: 45
+          #   periodSeconds: 30
+          # readinessProbe:
+          #   httpGet:
+          #     path: 
+          #     port: http
+          #   initialDelaySeconds: 45
+          #   periodSeconds: 10
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+          - name: mqtt2prom-config-secret-volume
+            mountPath: /data/config.yaml
+            subPath: config.yaml
+            readOnly: true
+      volumes:
+      - name: mqtt2prom-config-secret-volume
+        secret:
+          secretName: mqtt2prom-config-secret

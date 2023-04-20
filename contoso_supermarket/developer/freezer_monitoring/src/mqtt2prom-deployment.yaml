@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: mqtt2prom
+  name: mqtt2prom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mqtt2prom
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mqtt2prom
+      annotations:
+        configmap.revision: "1"
+    spec:
+      containers:
+      - image: "ghcr.io/hikhvar/mqtt2prometheus:v0.1.7"
+        name: mqtt2prom
+        ports:
+        - name: http
+          containerPort: 9641
+          protocol: TCP
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        envFrom:
+        - secretRef:
+            name: broker-secret
+        volumeMounts:
+        - name: mqtt2prom-config-volume
+          mountPath: config.yaml
+          subPath: config.yaml
+          readOnly: true
+      volumes:
+      - name: mqtt2prom-config-volume
+        configMap:
+          name: mqtt2prom-config
+
+      imagePullSecrets:
+      - name: charrisagoracr
+      restartPolicy: Always
