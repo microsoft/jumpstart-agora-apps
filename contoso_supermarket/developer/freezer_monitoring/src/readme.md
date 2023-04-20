@@ -31,6 +31,14 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 
 - The simulator is currently configured to send messages to the broker on port 1883. The broker is configured to send messages to the IoT Hub on port 8883. If you change the port in the simulator, you must also change the port in the broker.
 
+## Installing with Helm
+
+`helm upgrade sensor-monitor sensor-monitor --version 1.0.0`
+
+### Upgrade
+
+`helm upgrade sensor-monitor sensor-monitor --version 1.0.1`
+
 ## Resources
 
 - [Mosquitto MQTT broker to IoT Hub/IoT Edge](http://busbyland.com/mosquitto-mqtt-broker-to-iot-hub-iot-edge/)

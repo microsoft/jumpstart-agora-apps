@@ -5,10 +5,11 @@ metadata:
     io.kompose.service: mqtt-broker
   name: mqtt-broker
 spec:
+  type: LoadBalancer
   ports:
-    - name: "1883"
-      port: 1883
-      targetPort: 1883
+  - name: "1883"
+    port: 1883
+    targetPort: 1883
   selector:
     io.kompose.service: mqtt-broker
 status:

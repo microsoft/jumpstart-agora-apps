@@ -9,12 +9,19 @@ broker:
     port: 1883
     targetPort: 1883
   replicas: 1
-  type: NodePort
+  type: LoadBalancer
 kubernetesClusterDomain: cluster.local
 simulator:
   mqttSimulator:
     image:
       repository: charrisagoracr.azurecr.io/mqtt-simulator
+      tag: latest
+    imagePullPolicy: Always
+  replicas: 1
+metricsExporter:
+  mqtt2prom:
+    image:
+      repository: ghcr.io/hikhvar/mqtt2prometheus
       tag: latest
     imagePullPolicy: Always
   replicas: 1
