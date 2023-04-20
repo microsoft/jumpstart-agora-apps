@@ -51,7 +51,7 @@ spec:
               cpu: 100m
               memory: 128Mi
           envFrom:
-          - sedretRef:
+          - secretRef:
             name: mqtt2prom-config-secret
           volumeMounts:
           - name: mqtt2prom-config-volume-mount
