@@ -99,7 +99,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
     const updateProducts = useCallback((products: Product[]) => {
         //update products
         axios
-            .post(`/api/prodfucts`, JSON.stringify(products), {
+            .post(`/api/products`, JSON.stringify(products), {
                 headers: {
                     "Content-Type": "application/json",
                 },
