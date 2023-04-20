@@ -5,7 +5,6 @@ import cv2
 from flask import Flask, render_template, Response, request, session, redirect, url_for
 from flask_session import Session
 import secrets
-from sqlConnector import SqlConnector
 import psycopg2
 import json
 from datetime import datetime

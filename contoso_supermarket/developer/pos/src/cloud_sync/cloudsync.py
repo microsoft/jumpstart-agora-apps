@@ -1,11 +1,14 @@
-import mysql.connector
 from azure.cosmos import CosmosClient
 import time
 import os
-import psycog2
+import psycopg2
+import datetime
+import logging
 
 
 sync_interval = 120 #In seconds
+os.environ.get('SYNCINTERVAL')
+now = datetime.datetime.now()
 
 # PostgreSQL connection settings
 dbconfig = {
@@ -33,7 +36,7 @@ container = database.get_container_client(container_name)
 
 while True:
     # Get all records with cloudSynced = 0
-    query = "SELECT * FROM Orders WHERE cloudSynced = 0"
+    query = "SELECT * FROM contoso.Orders WHERE cloudSynced = 0"
     cursor.execute(query)
     rows = cursor.fetchall()
 
@@ -47,10 +50,12 @@ while True:
             'cloudSynced': True
         }
         container.upsert_item(document)
-        query = "UPDATE Orders SET cloudSynced = 1 WHERE orderID = " + str(row[0])
-        print("Order ID:",row[0],"synced to cloud")
+        query = "UPDATE contoso.Orders SET cloudSynced = 1 WHERE orderID = " + str(row[0])
+        #print("Order ID:",row[0],"synced to cloud")
+        logging.info("Order ID:",row[0],"synced to cloud")
         cursor.execute(query)
         cnxn.commit()
 
     # Wait for 2 minutes before syncing again
+    logging.info(now.strftime("%Y-%m-%d %H:%M:%S") + ": All records synced to CosmosDB." )
     time.sleep(sync_interval)
