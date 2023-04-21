@@ -12,4 +12,8 @@ helm install --set cosmos.access_key="<Cosmos DB Access Key>" -n "<Namespace>" -
 | cosmos.database | The Cosmos DB Database Name | Yes | "" |
 | cosmos.container | The Cosmos DB Container Name | Yes | "" |
 | cosmos.access_key | The Cosmos DB Access Key | Yes |  |
-
+| point-of-sale.title | The title of the point of sale website | No | "Contoso Supermarket" |
+| point-of-sale.cameras-enabled | Flag to enable cameras | No | "False" |
+| point-of-sale.cameras-url | The base URL for the camera feed, required if point-of-sale.cameras-enabled is "True" | No | "" |
+| point-of-sale.new-category |  | No | "True" |
+| point-of-sale.store-id | The ID of the store | No | 1 |

@@ -49,14 +49,14 @@ spec:
             - name: SQL_DATABASE
               value: "contoso"
             - name: HEAD_TITLE
-              value : "Contoso Supermarket"
+              value : {{ .Values.point-of-sale.title }}
             - name: CAMERAS_ENABLED
-              value: "False"
+              value: {{ .Values.point-of-sale.cameras-enabled }}
             - name: CAMERAS_BASEURL
-              value: ""
+              value: {{ .Values.point-of-sale.cameras-url }}
             - name: NEW_CATEGORY
-              value: "True"
+              value: {{ .Values.point-of-sale.new-category }}
             - name: STORE_ID
-              value: "1"
+              value: {{ .Values.point-of-sale.store-id }}
           ports:
             - containerPort: 5000
