@@ -1,0 +1,8 @@
+postgres:
+  username: "postgres"
+  password: "admin123"
+
+cosmos:
+  endpoint: ""
+  database: ""
+  container: ""

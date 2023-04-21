@@ -1,25 +1,31 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: init-db
-  namespace: contosopos
+  name: {{ .Release.Name }}-init-db
+  namespace: {{ .Release.Namespace }}
 spec:
   template:
     metadata:
-      name: init-db
+      name: {{ .Release.Name }}-init-db
     spec:
       containers:
       - name: contosodb
         image: postgres:15.0
         env:
         - name: PGHOST
-          value: contosodb
+          value: {{ .Release.Name }}-contosodb
         - name: POSTGRES_USER
-          value: postgres
+          value: {{ .Values.postgres.username }}
         - name: POSTGRES_PASSWORD
-          value: admin123
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: POSTGRES_PASSWORD
         - name: PGPASSWORD
-          value: admin123          
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: POSTGRES_PASSWORD        
         - name: POSTGRES_DB
           value: contoso
         command:
