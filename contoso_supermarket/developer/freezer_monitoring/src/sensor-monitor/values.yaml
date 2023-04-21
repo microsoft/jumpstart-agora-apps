@@ -25,7 +25,7 @@ mqtt2prom:
       tag: latest
     imagePullPolicy: Always
   ports:
-  - name: mqtt2prom
+  - name: mqtt2prom-agora-metrics
     port: 9641
     targetPort: 9641
   replicas: 1

@@ -41,6 +41,7 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
     $mcr_url = "charrisagoracr.azurecr.io"
     $sp_name = "charris-iot1"
 
+    # don't do this part if the SP already exists
     $sp = az ad sp create-for-rbac `
         --name $sp_name `
         --role Contributor `
@@ -82,7 +83,7 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 
 ## Installing with Helm
 
-`helm upgrade sensor-monitor sensor-monitor --version 1.0.0`
+`helm install sensor-monitor sensor-monitor --version 1.0.0`
 
 ### Upgrade
 
@@ -93,6 +94,15 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 `helm uninstall sensor-monitor`
 
 ## Install Additional Prometheus monitoring config
+
+1. Install additional scrape config
+```
+helm repo update
+
+helm upgrade -n observability prometheus prometheus-community/kube-prometheus-stack -f ./mqtt2prom/prometheus-additional-scrape-config.yaml --set alertmanager.enabled=false,grafana.enabled=false,prometheus.service.type=LoadBalancer,web.enable-lifecycle=true
+```
+
+2. you're done - there is no step 2 :)
 
 ```
 $monitoringNamespace = "observability"
