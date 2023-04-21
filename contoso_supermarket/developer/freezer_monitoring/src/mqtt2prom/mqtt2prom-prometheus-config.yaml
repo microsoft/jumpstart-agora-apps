@@ -1,0 +1,5 @@
+prometheus:
+  additionalScrapeConfigs:
+  - job_name: "freezer-monitor"
+    static_configs:
+    - targets: ["sensor-monitor-mqttprom.default.svc.cluster.local:9641"]

@@ -88,6 +88,20 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 
 `helm upgrade sensor-monitor sensor-monitor --version 1.0.1`
 
+### Uninstall
+
+`helm uninstall sensor-monitor`
+
+## Install Additional Prometheus monitoring config
+
+```
+$monitoringNamespace = "observability"
+
+helm upgrade prometheus prometheus-community/kube-prometheus-stack --set alertmanager.enabled=false,grafana.enabled=false,prometheus.service.type=LoadBalancer,web.enable-lifecycle=true --namespace $monitoringNamespace --create-namespace --values C:\git\jumpstart-agora-apps\contoso_supermarket\developer\freezer_monitoring\src\mqtt2prom\mqtt2prom-prometheus-config.yaml
+
+curl -Method POST 172.20.1.31:9090/-/reload
+``` 
+
 ## Resources
 
 - [Mosquitto MQTT broker to IoT Hub/IoT Edge](http://busbyland.com/mosquitto-mqtt-broker-to-iot-hub-iot-edge/)
