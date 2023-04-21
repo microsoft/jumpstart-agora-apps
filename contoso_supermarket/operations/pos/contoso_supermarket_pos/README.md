@@ -4,7 +4,8 @@
 helm install --set cosmos.access_key="<Cosmos DB Access Key>" -n "<Namespace>" --create-namespace <Deployment Name> .
 
 ## Setable Values
-| Value Name | Description | Required to be set | Default
+| Value Name | Description | Required to be set | Default |
+| --- | --- | --- | --- |
 | postgres.username | The username to use when intilizaing the Postgres DB | No | "postgres" |
 | postgres.password | The password to use when intilizaing the Postgres DB | No |  "admin123"
 | cosmos.endpoint | The Cosmos DB Endpoint URL | Yes | "" |
