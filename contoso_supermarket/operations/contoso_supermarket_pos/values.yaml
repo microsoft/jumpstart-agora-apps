@@ -1,0 +1,13 @@
+timezone: "Pacific Standard Time"
+
+postgres:
+  username: "postgres"
+  password: "admin123"
+  database: "contoso"
+
+point_of_sale:
+  title: "Contoso Supermarket"
+  cameras_enabled: "False"
+  cameras_url: ""
+  new_category: "True"
+  store_id: 1

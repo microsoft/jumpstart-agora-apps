@@ -27,17 +27,17 @@ spec:
               name: {{ .Release.Name }}-secrets
               key: POSTGRES_PASSWORD     
         - name: SQL_DATABASE
-          value: "contoso"
+          value: {{ .Values.postgres.database }}
         - name: SYNCINTERVAL
           value: '120'
         - name: COSMOSENDPOINT
-          value: {{ .Values.cosmos.endpoint }}
+          value: {{ required "A valid Cosmos container is required! (Set cosmos.endpoint)" .Values.cosmos.endpoint }}
         - name: COSMOSKEY
           valueFrom:
             secretKeyRef:
               name: {{ .Release.Name }}-secrets
               key: COSMOS_KEY     
         - name: COSMOSDB
-          value: {{ .Values.cosmos.database }}
+          value: {{ required "A valid Cosmos container is required! (Set cosmos.database)" .Values.cosmos.database }}
         - name: COSMOSCONTAINER
-          value: {{ .Values.cosmos.container }}
+          value: {{ required "A valid Cosmos container is required! (Set cosmos.container)" .Values.cosmos.container }}

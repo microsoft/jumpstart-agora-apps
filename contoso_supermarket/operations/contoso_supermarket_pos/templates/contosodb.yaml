@@ -44,9 +44,9 @@ spec:
         ports:
         - containerPort: 5432
         volumeMounts:
-          - name: postgresql-vol
+          - name: {{ .Release.Name }}-postgresql-vol
             mountPath: /var/lib/postgresql/data
       volumes:
-        - name: postgresql-vol
+        - name: {{ .Release.Name }}-postgresql-vol
           hostPath:
             path: /var/postgresql-data
