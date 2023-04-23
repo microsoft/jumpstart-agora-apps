@@ -8,7 +8,7 @@ var Configuration = builder.Configuration;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton(new PostgreSqlService(Configuration.GetConnectionString("PostgresDb")));
+builder.Services.AddSingleton(new PostgreSqlService($"Host={Configuration["SQL_HOST"]};Username={Configuration["SQL_USERNAME"]};Password={Configuration["SQL_PASSWORD"]};Database={Configuration["SQL_DATABASE"]}"));
 builder.Services.AddHostedService<TimedHostedService>();
 
 var app = builder.Build();
