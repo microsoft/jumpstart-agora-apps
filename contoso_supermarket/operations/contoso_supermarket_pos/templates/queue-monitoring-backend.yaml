@@ -44,7 +44,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-secrets
-                  key: POSTGRES_PASSWORD      
+                  key: POSTGRES_PASSWORD
+            - name: SQL_DATABASE
+              value: {{ .Values.postgres.database }}
             - name: TIMEZONE
               value: {{ .Values.timezone }}
             - name: ASPNETCORE_URLS
