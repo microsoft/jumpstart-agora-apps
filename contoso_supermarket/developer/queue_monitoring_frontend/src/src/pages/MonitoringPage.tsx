@@ -60,16 +60,12 @@ function MonitoringPage() {
 
     const avgWaitTime = (expressAvgWaitTime + standardAvgWaitTime + selfServiceAvgWaitTime) / 3;
 
-    //format number to x decimal points
-    const formatNumber = (num: number, minDigits?: number, maxDigits?: number) => {
-        if (isNaN(num)) {
-            return 0;
-        }
-        return num.toLocaleString(dayjs.locale(), {
-            minimumFractionDigits: minDigits ?? 0,
-            maximumFractionDigits: maxDigits ?? 1,
-        });
-    };
+    const totalStandardCheckouts =
+        latestCheckoutHistory?.filter((history) => history.checkoutType === CheckoutType.Standard).length ?? 0;
+    const totalExpressCheckouts =
+        latestCheckoutHistory?.filter((history) => history.checkoutType === CheckoutType.Express).length ?? 0;
+    const totalSelfServiceCheckouts =
+        latestCheckoutHistory?.filter((history) => history.checkoutType === CheckoutType.SelfService).length ?? 0;
 
     return (
         <>
@@ -95,6 +91,9 @@ function MonitoringPage() {
                                 standardValue={standardPeople}
                                 expressValue={expressPeople}
                                 selfServiceValue={selfServicePeople}
+                                expressThreshold={totalStandardCheckouts * 4}
+                                standardThreshold={totalExpressCheckouts * 4}
+                                selfServiceThreshold={totalSelfServiceCheckouts * 4}
                             />
                         </div>
                     </div>
@@ -103,11 +102,14 @@ function MonitoringPage() {
                             <div className="text-primary h4 mb-3">Wait Time Report</div>
                             <ReportCard
                                 title="Average Wait Time"
-                                value={formatNumber(avgWaitTime)}
+                                value={avgWaitTime}
                                 unit="mins"
-                                standardValue={formatNumber(standardAvgWaitTime)}
-                                expressValue={formatNumber(expressAvgWaitTime)}
-                                selfServiceValue={formatNumber(selfServiceAvgWaitTime)}
+                                standardValue={standardAvgWaitTime}
+                                expressValue={expressAvgWaitTime}
+                                selfServiceValue={selfServiceAvgWaitTime}
+                                standardThreshold={(totalStandardCheckouts * 60 * 1) / 60}
+                                expressThreshold={(totalSelfServiceCheckouts * 60 * 0.5) / 60}
+                                selfServiceThreshold={(totalSelfServiceCheckouts * 60 * 0.7) / 60}
                             />
                         </div>
                     </div>
