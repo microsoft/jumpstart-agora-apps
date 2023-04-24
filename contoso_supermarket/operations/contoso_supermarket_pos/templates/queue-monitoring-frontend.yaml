@@ -12,7 +12,7 @@ spec:
   ports:
   - name: http
     port: 80
-    targetPort: 80
+    targetPort: 8080
   type: LoadBalancer
 ---
 # Create Contoso Supermarket Deployment
@@ -40,4 +40,4 @@ spec:
             - name: BACKEND_API_URL
               value: "http://{{ .Release.Name }}-queue-monitoring-backend:4000/"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
