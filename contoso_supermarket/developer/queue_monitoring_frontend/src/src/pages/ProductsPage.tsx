@@ -9,7 +9,7 @@ function ProductsPage() {
     const [productList, setProductList] = React.useState<Product[]>([]);
     const [openSaveModal, setOpenSaveModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-    const [deleteId, setDeleteId] = React.useState<number | undefined>();
+    const [deletedProductId, setDeletedProductId] = React.useState<number | undefined>();
 
     //initial data load
     useEffect(() => {
@@ -32,10 +32,10 @@ function ProductsPage() {
     };
 
     const onDeleteProduct = useCallback(() => {
-        if (deleteProduct && deleteId) {
-            deleteProduct(deleteId);
+        if (deleteProduct && deletedProductId) {
+            deleteProduct(deletedProductId);
         }
-    }, [deleteId, deleteProduct]);
+    }, [deletedProductId, deleteProduct]);
 
     return (
         <>
@@ -133,7 +133,7 @@ function ProductsPage() {
                                         <button
                                             className="btn-delete-product border-0 bg-transparent"
                                             onClick={() => {
-                                                setDeleteId(item.id);
+                                                setDeletedProductId(item.id);
                                                 setOpenDeleteModal(true);
                                             }}
                                         >

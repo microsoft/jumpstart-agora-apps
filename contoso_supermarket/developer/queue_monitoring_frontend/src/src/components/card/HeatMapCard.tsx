@@ -15,7 +15,7 @@ const getCheckoutImage = (checkoutType: CheckoutType) => {
         case CheckoutType.Express:
             return <ExpressCheckout className="mw-100" style={{ width: "90%" }} />;
         case CheckoutType.SelfService:
-            return <SelfCheckout className="mw-100" style={{ width: "50%" }} />;
+            return <SelfCheckout className="mw-100" style={{ width: "50%"}} />;
     }
 };
 
@@ -44,15 +44,19 @@ function HeatMapCard(props: HeatMapCardProps) {
                                             .fill(0)
                                             .map((x, i) => {
                                                 return (
-                                                    <img
+                                                    <div
                                                         key={i}
-                                                        src={HeatMap}
                                                         style={{
                                                             position: "absolute",
+                                                            background: "#08dde5",
+                                                            border: "1px white solid",
+                                                            height: "1.25rem",
+                                                            width: "1.25rem",
+                                                            borderRadius: "100%",
                                                             left: `calc(${Math.floor(Math.random() * 100)}%)`,
                                                             top: `${Math.floor(Math.random() * 90)}%`,
                                                         }}
-                                                    />
+                                                    ></div>
                                                 );
                                             })}
                                 </div>

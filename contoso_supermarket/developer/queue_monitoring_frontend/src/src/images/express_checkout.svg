@@ -1,1 +1,48 @@
-<?xml version="1.0" encoding="UTF-8"?><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86.83 93.15"><g id="Group_559"><g id="Group_558"><rect id="Rectangle_6583" x=".48" y=".72" width="42.68" height="92.1" style="fill:#fff;"/><path id="Path_2595" d="m42.91,92.57H.73V.97h42.18v91.6ZM43.41.47H.23v92.6h43.18V.47Z" style="fill:#010101;"/><rect id="Rectangle_6584" x=".48" y="41.2" width="42.68" height="37.25" style="fill:#fff;"/><path id="Path_2596" d="m42.91,78.2H.73v-36.75h42.18v36.75Zm.5-37.25H.23v37.75h43.18v-37.75Z" style="fill:#010101;"/><rect id="Rectangle_6585" x="17.64" y="48.7" width="21.35" height="22.25" style="fill:#fff;"/><path id="Path_2597" d="m38.74,70.7h-20.85v-21.75h20.85v21.75Zm.5-22.26h-21.85v22.76h21.85v-22.76Z" style="fill:#010101;"/><rect id="Rectangle_6586" x=".48" y="44.04" width="10.43" height="31.56" style="fill:#fff;"/><path id="Path_2598" d="m10.65,75.36H.73v-31.06h9.92v31.06Zm.5-31.56H.23v32.06h10.92v-32.06Z" style="fill:#010101;"/><rect id="Rectangle_6587" x="5.68" y="45.6" width="4.18" height="28.46" style="fill:#fff;"/><path id="Path_2599" d="m9.61,73.81h-3.68v-27.96h3.68v27.96h0Zm.5-28.46h-4.68v28.96h4.68v-28.96Z" style="fill:#010101;"/><line id="Line_51" x1="3.66" y1="44" x2="3.66" y2="75.65" style="fill:none; stroke:#010101; stroke-width:.5px;"/><rect id="Rectangle_6588" x="19.11" y="51.08" width="11.56" height="17.16" style="fill:#fff;"/><path id="Path_2600" d="m30.42,67.99h-11.06v-16.66h11.06v16.66Zm.5-17.16h-12.06v17.66h12.06v-17.66Z" style="fill:#010101;"/><rect id="Rectangle_6589" x=".49" y=".63" width="2.6" height="40.37" style="fill:#fff;"/><rect id="Rectangle_6590" x=".49" y=".63" width="2.6" height="40.37" style="fill:none; stroke:#010101; stroke-width:.5px;"/><rect id="Rectangle_6591" x="40.55" y=".63" width="2.6" height="40.37" style="fill:#fff;"/><rect id="Rectangle_6592" x="40.55" y=".63" width="2.6" height="40.37" style="fill:none; stroke:#010101; stroke-width:.5px;"/><rect id="Rectangle_6593" x="43.14" y=".5" width="43.18" height="34" style="fill:#fff;"/><rect id="Rectangle_6594" x="43.14" y=".5" width="43.18" height="34" style="fill:none; stroke:#010101; stroke-width:.5px;"/><rect id="Rectangle_6595" x="51.46" y="25.23" width="26.55" height="6.26" style="fill:#fff;"/><path id="Path_2601" d="m77.76,31.25h-26.05v-5.76h26.05v5.76Zm.5-6.26h-27.05v6.76h27.05v-6.76Z" style="fill:#010101;"/><path id="Path_2602" d="m65.52,21.08c0,1.72-1.4,3.12-3.12,3.12s-3.12-1.4-3.12-3.12,1.4-3.12,3.12-3.12h0c1.72,0,3.12,1.4,3.12,3.12" style="fill:#fff;"/><path id="Path_2603" d="m65.52,21.08c0,1.72-1.4,3.12-3.12,3.12s-3.12-1.4-3.12-3.12,1.4-3.12,3.12-3.12h0c1.72,0,3.12,1.4,3.12,3.12Z" style="fill:none; stroke:#010101; stroke-width:.5px;"/><rect id="Rectangle_6596" x="44.63" y="21.06" width="36.5" height="3.12" transform="translate(-3.34 13.67) rotate(-12.09)" style="fill:#fff;"/><rect id="Rectangle_6597" x="44.63" y="21.06" width="36.5" height="3.12" transform="translate(-3.34 13.67) rotate(-12.09)" style="fill:none; stroke:#010101; stroke-miterlimit:4; stroke-width:.5px;"/><path id="Path_2604" d="m82.42,25.26c-1.01,0-1.83-.82-1.83-1.83s.82-1.83,1.83-1.83,1.83.82,1.83,1.83h0c0,1.01-.82,1.83-1.83,1.83" style="fill:#fff;"/><path id="Path_2605" d="m82.42,21.84c.87,0,1.58.71,1.58,1.58s-.71,1.58-1.58,1.58-1.58-.71-1.58-1.58h0c0-.87.71-1.58,1.58-1.58m0-.5c-1.15,0-2.08.93-2.08,2.08s.93,2.08,2.08,2.08,2.08-.93,2.08-2.08h0c0-1.15-.93-2.08-2.08-2.08" style="fill:#010101;"/><rect id="Rectangle_6598" x="43.15" y="12.5" width="42.63" height="1.34" style="fill:#fff;"/><rect id="Rectangle_6599" x="43.15" y="12.5" width="42.63" height="1.34" style="fill:none; stroke:#010101; stroke-width:.5px;"/><path id="Path_2606" d="m86.33.5v34h-43.18l.05,58.15-42.41-.15L.5.63l85.84-.13h-.01Z" style="fill:none; stroke:#010101;"/></g></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 109 117.9">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke: #000;
+      }
+
+      .cls-1, .cls-3 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        stroke-miterlimit: 10;
+        stroke-width: 1px;
+      }
+
+      .cls-3 {
+        fill: #fff;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <g id="express">
+    <polygon id="Rectangle_7577-2" data-name="Rectangle 7577-2" class="cls-3" points="55 116.9 55 44 1 44 1 1 108 1 108 116.9 55 116.9"/>
+    <rect class="cls-1" x="93.29" y="57.65" width="14.81" height="37"/>
+    <rect class="cls-1" x="95.1" y="60.9" width="5.1" height="30"/>
+    <rect class="cls-1" x="62.37" y="62.15" width="26.74" height="28"/>
+    <rect class="cls-1" x="73.1" y="65.15" width="14" height="22"/>
+    <g>
+      <line class="cls-1" x1="55.6" y1="101.15" x2="107.6" y2="101.15"/>
+      <line class="cls-1" x1="56.1" y1="51.15" x2="108.1" y2="51.15"/>
+    </g>
+    <line class="cls-1" x1="102.6" y1="94.65" x2="102.6" y2="57.65"/>
+    <line class="cls-1" x1="104.6" y1="51" x2="104.6" y2="1.09"/>
+    <line class="cls-1" x1="58.09" y1="51.03" x2="58.09" y2="1.13"/>
+    <line class="cls-1" x1="55.43" y1="50.6" x2="55.43" y2=".7"/>
+    <line class="cls-1" x1="55" y1="17.65" x2="2" y2="17.65"/>
+    <rect class="cls-1" x="12" y="31" width="32" height="9"/>
+    <path class="cls-1" d="m25,23c0-1.66,1.34-3,3-3s3,1.34,3,3"/>
+    <rect class="cls-2" x="27.22" y="1.68" width="3.46" height="46" transform="translate(2.06 51.58) rotate(-85.47)"/>
+    <circle class="cls-1" cx="7" cy="31" r="3"/>
+  </g>
+</svg>
