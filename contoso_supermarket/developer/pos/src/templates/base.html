@@ -16,13 +16,16 @@
 
   <body>
     {% include 'navbar.html' %}
-    <div class="container py-5">
+    <div class="container py-5 flex-fill">
       <div id="liveAlertPlaceholder"></div>
 
         {% block content %}
 
         {% endblock %}
     </div>  
+
+    {% include 'footer.html' %}
+
   <script src="static/js/alerts.js"></script>
   </body>
 </html>
