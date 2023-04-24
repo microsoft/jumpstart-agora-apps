@@ -31,55 +31,6 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 
 - The simulator is currently configured to send messages to the broker on port 1883. The broker is configured to send messages to the IoT Hub on port 8883. If you change the port in the simulator, you must also change the port in the broker.
 
-## Setup
-1. Create a service principal to access the MCR registry - from local machine
-
-    ```powershell
-    $mcr_sub = "2554f64d-0419-4e39-8121-5e01270578ea"
-    $mcr_rg = "charris-agora"
-    $mcr_name = "charrisagoracr"
-    $mcr_url = "charrisagoracr.azurecr.io"
-    $sp_name = "charris-iot1"
-
-    # don't do this part if the SP already exists
-    $sp = az ad sp create-for-rbac `
-        --name $sp_name `
-        --role Contributor `
-        --scopes /subscriptions/$mcr_sub/resourcegroups/$mcr_rg/providers/Microsoft.ContainerRegistry/registries/$mcr_name | convertfrom-json
-    
-    $sp
-    ```
-    #### Note: See OneNote for output with appId, password, tenant
-    
-2. From Client VM - *foreach cluster* - Create a secret in the cluster to store the service principal credentials for the MCR registry
-
-    ```powershell
-    # Get variables from above first
-    # then...
-    $spAppId = "[App Id from SP created above]"
-    $spPassword = "[Password from SP created above]"
-
-    kubectl create secret docker-registry $mcr_name `
-        --namespace default `
-        --docker-server $mcr_url `
-        --docker-username $spAppId `
-        --docker-password $spPassword
-    ```
-
-3. Set up volumes and secrets for mqtt2prom
-    ## mqtt2prom 
-
-    [mqtt2prometheus on GitHub](https://github.com/hikhvar/mqtt2prometheus)
-
-    - Create ConfigMap volume for mqtt2prom config
-        `mkdir C:\Ag\developer\freezer_monitoring\config`
-        `copy mqtt2prom/config.yaml C:\Ag\developer\freezer_monitoring\config\config.yaml`
-
-        `kubectl create configmap mqtt2prom-config --from-file=C:\Ag\developer\freezer_monitoring\config\config.yaml`
-
-    - SKIP IF BROKER HAS NO PASSWORD!! Create Secret volume for MQTT secrets 
-        ### username and password can be found in ./mqtt-broker/
-        `kubectl create secret generic mqtt2prom-config-secret --from-literal=MQTT2PROM_MQTT_USER=supersecret --from-literal=MQTT2PROM_MQTT_PASSWORD=topsecret`
 
 ## Installing with Helm
 
@@ -103,32 +54,6 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 ```
 
 2. you're done - there is no step 2 :)
-
-```
-$monitoringNamespace = "observability"
-
-helm upgrade prometheus prometheus-community/kube-prometheus-stack --set alertmanager.enabled=false,grafana.enabled=false,prometheus.service.type=LoadBalancer,web.enable-lifecycle=true --namespace $monitoringNamespace --create-namespace --values C:\git\jumpstart-agora-apps\contoso_supermarket\developer\freezer_monitoring\src\mqtt2prom\mqtt2prom-prometheus-config.yaml
-
-curl -Method POST 172.20.1.31:9090/-/reload
-``` 
-
-## Resources
-
-- [Mosquitto MQTT broker to IoT Hub/IoT Edge](http://busbyland.com/mosquitto-mqtt-broker-to-iot-hub-iot-edge/)
-- https://mosquitto.org/man/mosquitto-conf-5.html
-- [Quickstart creates an Azure IoT Edge device on Linux | Microsoft Learn](https://learn.microsoft.com/azure/iot-edge/quickstart-linux?view=iotedge-1.4&viewFallbackFrom=iotedge-2020-11)
-- [Quickstart - Send telemetry to Azure IoT Hub (CLI) quickstart | Microsoft Learn](https://learn.microsoft.com/azure/iot-hub/quickstart-send-telemetry-cli)
-
-## Tools
-- [IoT Explorer](https://github.com/Azure/azure-iot-explorer/releases)
-    
-    Lets you explore devices and their messages in Azure IoT Hub.
-
-- [MQTT Explorer](http://mqtt-explorer.com/)
-    
-    Lets you explore devices and their messages in a local MQTT broker.
-
-
 
 ## Local testing process of the broker and simulator
 
@@ -192,31 +117,8 @@ curl -Method POST 172.20.1.31:9090/-/reload
 - monitor what's coming into IoT hub
     `az iot hub monitor-events --output table --device-id myEdgeDevice --hub-name charris-iot1 --output json`
 
-## Local AKS EE deployment
 
-1. tag the images for ACR
-
-    ```shell
-    docker tag js/mqtt-broker jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker
-    docker tag js/mqtt-simulator jumpstartagora.azurecr.io/contoso-supermarket/mqtt-simulator
-    ```
-
-    ### Updated naming conventions for jumpstart
-    
-    - jumpstartagora.azurecr.io/contoso-supermarket/<SERVICE-NAME>. For example:
-        
-        `docker tag js/mqtt-broker jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker`
-
-    - Please use hyphens and not underscore. In the case of the pos service, no need since it's only one word.
-        
-        `docker tag js/pos jumpstartagora.azurecr.io/contoso-supermarket/pos` 
-    
-    - The "latest" tag is the default. In case you want to test various versions, please tag it accordingly. For example:
-
-        `jumpstartagora.azurecr.io/contoso-supermarket/freezer-monitor:0.1.1`
-
-
-2. Push images to MCR
+## Push images to MCR
     ```shell
     docker push jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker
     docker push jumpstartagora.azurecr.io/contoso-supermarket/mqtt-simulator
@@ -225,40 +127,13 @@ curl -Method POST 172.20.1.31:9090/-/reload
     ### Local AKS EE deployment - All-in-one commands for convenience
     
     ```shell
-    docker build -t js/mqtt-broker .\mqtt-broker\.; docker tag js/mqtt-broker jumpstartagora.azurecr.io/contoso-supermarket ; docker push jumpstartagora.azurecr.io/contoso-supermarket
-    kubectl rollout restart deployment mqtt-broker
+    docker build -t js/mqtt-broker .\mqtt-broker\.; docker tag js/mqtt-broker jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker ; docker push jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker
     
     docker build -t js/mqtt-simulator .\mqtt-simulator\.; docker tag js/mqtt-simulator jumpstartagora.azurecr.io/contoso-supermarket/mqtt-simulator ; docker push jumpstartagora.azurecr.io/contoso-supermarket/mqtt-simulator
-    kubectl rollout restart deployment mqtt-simulator
     ```
 
-3. Create a service principal to access the MCR registry
 
-    ```powershell
-    $mcr_sub = "2554f64d-0419-4e39-8121-5e01270578ea"
-    $mcr_rg = "charris-agora"
-    $mcr_name = "charrisagoracr"
-    $mcr_url = "charrisagoracr.azurecr.io"
-    $sp_name = "charris-iot1"
-
-    $sp = az ad sp create-for-rbac `
-        --name $sp_name `
-        --role Contributor `
-        --scopes /subscriptions/$mcr_sub/resourcegroups/$mcr_rg/providers/Microsoft.ContainerRegistry/registries/$mcr_name | convertfrom-json
-    ```
-    #### Note: See OneNote for output with appId, password, tenant
-    
-4. Create a secret in the cluster to store the service principal credentials for the ACR registry
-
-    ```powershell
-    kubectl create secret docker-registry $mcr_name `
-        --namespace default `
-        --docker-server $mcr_url `
-        --docker-username $sp.appId `
-        --docker-password $sp.password
-
-
-## Azure Setup
+## Azure IoT Setup
 
 1. https://techcommunity.microsoft.com/t5/internet-of-things-blog/mosquitto-client-tools-and-azure-iot-hub-the-beginning-of/ba-p/2824717
 2. 
@@ -276,7 +151,6 @@ curl -Method POST 172.20.1.31:9090/-/reload
   `az iot hub generate-sas-token --device-id chicagoFreezer1 --hub-name charris-iot1 --duration (60*60*24*365) --query sas -o tsv`
 
 
-
 Elevated PowerShell
     1. Install AzureIoTEdge
 
@@ -287,17 +161,29 @@ Elevated PowerShell
     Start-Process -Wait msiexec -ArgumentList "/i","$([io.Path]::Combine($env:TEMP, 'AzureIoTEdge.msi'))","/qn"
     ```
 
-### Debug mqtt-broker
+# Troubleshooting tips
 
-`apk update`
-`apk add nano`
+1. To restart Prometheus and have it reload it's config
 
+    `curl -Method POST 172.20.1.31:9090/-/reload`
 
-## Local Registry Deployment
-2. deploy the images to the local registry
+2. To install nano in a container
 
-    ```powershell
-    kubectl apply -f .\mqtt-broker-pod.yaml
-    kubectl apply -f .\mqtt-broker-service.yaml
-    kubectl apply -f .\mqtt-simulator-pod.yaml
-    ```
+    `apt-get update && apt-get install nano`
+
+## Resources
+
+- [Mosquitto MQTT broker to IoT Hub/IoT Edge](http://busbyland.com/mosquitto-mqtt-broker-to-iot-hub-iot-edge/)
+- https://mosquitto.org/man/mosquitto-conf-5.html
+- [Quickstart creates an Azure IoT Edge device on Linux | Microsoft Learn](https://learn.microsoft.com/azure/iot-edge/quickstart-linux?view=iotedge-1.4&viewFallbackFrom=iotedge-2020-11)
+- [Quickstart - Send telemetry to Azure IoT Hub (CLI) quickstart | Microsoft Learn](https://learn.microsoft.com/azure/iot-hub/quickstart-send-telemetry-cli)
+
+## Tools
+- [IoT Explorer](https://github.com/Azure/azure-iot-explorer/releases)
+    
+    Lets you explore devices and their messages in Azure IoT Hub.
+
+- [MQTT Explorer](http://mqtt-explorer.com/)
+    
+    Lets you explore devices and their messages in a local MQTT broker.
+

@@ -47,21 +47,6 @@
           "MAX_STEP": 5
         }
       ]
-    },
-    {
-      "TYPE": "single",
-      "PREFIX": "devices/myEdgeDevice/messages/events/alerts/2",
-      "TIME_INTERVAL": 60,
-      "RETAIN_PROBABILITY": 0,
-      "DATA": [
-        {
-          "NAME": "alertType",
-          "TYPE": "int",
-          "MIN_VALUE": 1,
-          "MAX_VALUE": 4,
-          "MAX_STEP": 3
-        }
-      ]
     }
   ]
 }
