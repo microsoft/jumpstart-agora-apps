@@ -45,4 +45,11 @@ app.MapPost("api/products", async (PostgreSqlService postgreSqlService, List<Pro
 .WithName("UpdateProducts")
 .WithOpenApi();
 
+app.MapDelete("api/products/{productId}", async (PostgreSqlService postgreSqlService, int productId) =>
+{
+    await postgreSqlService.DeleteProduct(productId);
+})
+.WithName("DeleteProduct")
+.WithOpenApi();
+
 app.Run();

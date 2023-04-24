@@ -37,6 +37,7 @@ export interface GlobalContextInterface {
     products: Product[];
     getProducts?: () => void;
     updateProducts?: (products: Product[]) => void;
+    deleteProduct?: (productId: number) => void;
     productsLoading: boolean;
 }
 
@@ -112,6 +113,19 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
             });
     }, []);
 
+    const deleteProduct = useCallback((productId: number) => {
+        //delete product
+        axios
+            .delete(`/api/products/${productId}`)
+            .then(() => {
+                setProducts((x) => x.filter((item) => item.id !== productId));
+                toast.success(`Product '${productId}' was deleted successfully...`);
+            })
+            .catch(() => {
+                toast.error("Failed to delete product...");
+            });
+    }, []);
+
     return (
         <GlobalContext.Provider
             value={{
@@ -122,6 +136,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
                 productsLoading: productsLoading,
                 getProducts: getProducts,
                 updateProducts: updateProducts,
+                deleteProduct: deleteProduct,
             }}
         >
             {children}
