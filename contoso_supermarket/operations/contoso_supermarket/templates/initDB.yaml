@@ -12,7 +12,6 @@ metadata:
   name: {{ .Release.Name }}-init-db
   namespace: {{ .Release.Namespace }}
 spec:
-  ttlSecondsAfterFinished: 3600 # Keep the job around for 1 hour
   template:
     metadata:
       name: {{ .Release.Name }}-init-db
