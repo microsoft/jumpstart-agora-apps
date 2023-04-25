@@ -19,13 +19,13 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 
     mqtt-simulator/settings.json: 
         
-        "devices/ChicagoFreezer1/messages/events/freezer"
-    
+        "devices/freezer1/messages/events/environmentSensor"
+    `
     then you must also add:
 
     mqtt-broker/ mosquitto.conf:
     
-        topic devices/ChicagoFreezer1/messages/events/freezer out 1
+        topic devices/freezer1/messages/events/environmentSensor out 1
 
 - SAS Tokens need to be renewed periodically. Currently, you must run the `az iot hub generate-sas-token` command to get a new token and then update the mosquitto.conf file. This is a manual process that will be automated in the future.
 
@@ -60,13 +60,13 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 - get a sas token - expires every 60 minutes by default but can be overridden with the `--duration` parameter
 
     ```powershell
-    ((az iot hub generate-sas-token -g charris-iot1 -d chicagoFreezer2 --duration $(60*20*24*365) -n charris-iot1 -o json) | convertfrom-json).sas | set-clipboard
+    ((az iot hub generate-sas-token -g charris-iot1 -d freezer2 --duration $(60*20*24*365) -n charris-iot1 -o json) | convertfrom-json).sas | set-clipboard
     ```
 
 - update the mosquitto.conf file with the new token
 
     ```bash
-    sed -i 's/SharedAccessSignature sr=charris-iot1.azure-devices.net%2FchicagoFreezer2&sig=.*&se=.*&skn=iothubowner/SharedAccessSignature sr=charris-iot1.azure-devices.net%2FchicagoFreezer2&sig=REPLACE_WITH_NEW_TOKEN&se=REPLACE_WITH_NEW_TOKEN&skn=iothubowner/g' mqtt-broker/mosquitto.conf
+    sed -i 's/SharedAccessSignature sr=charris-iot1.azure-devices.net%2Ffreezer2&sig=.*&se=.*&skn=iothubowner/SharedAccessSignature sr=charris-iot1.azure-devices.net%2Ffreezer2&sig=REPLACE_WITH_NEW_TOKEN&se=REPLACE_WITH_NEW_TOKEN&skn=iothubowner/g' mqtt-broker/mosquitto.conf
     ```
 
 - from the freezer_monitoring\src folder
@@ -91,12 +91,12 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 - update the mosquitto.conf file with the new device name
 
     ```bash
-    sed -i 's/devices\/chicagoFreezer2\/messages\/events\/freezer/devices\/chicagoFreezer2\/messages\/events\/freezer/g' mqtt-broker/mosquitto.conf
+    sed -i 's/devices\/freezer2\/messages\/events\/freezer/devices\/freezer2\/messages\/events\/freezer/g' mqtt-broker/mosquitto.conf
     ```
 - update the settings.json file with the new device name
 
     ```bash
-    sed -i 's/devices\/chicagoFreezer2\/messages\/events\/freezer/devices\/chicagoFreezer2\/messages\/events\/freezer/g' mqtt-simulator/settings.json
+    sed -i 's/devices\/freezer2\/messages\/events\/freezer/devices\/freezer2\/messages\/events\/freezer/g' mqtt-simulator/settings.json
     ```
 
 
@@ -109,7 +109,7 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
     ```shell
     export sas_token=$(az iot hub generate-sas-token -g charris-iot1 -d myEdgeDevice --duration $(60*20*24*365) -n charris-iot1 -o json | jq -r '.sas')
 
-    mosquitto_pub -t "devices/myEdgeDevice/messages/events/freezer" -i "myEdgeDevice" -u "charris-iot1.azure-devices.net/myEdgeDevice/?api-version=2020-09-30" -P $sas_token -h "charris-iot1.azure-devices.net" -V mqttv311 -p 8883 --cafile Baltimore.pem -m 'My Awesome Message' -d
+    mosquitto_pub -t "devices/myEdgeDevice/messages/events/environmentSensor" -i "myEdgeDevice" -u "charris-iot1.azure-devices.net/myEdgeDevice/?api-version=2020-09-30" -P $sas_token -h "charris-iot1.azure-devices.net" -V mqttv311 -p 8883 --cafile Baltimore.pem -m 'My Awesome Message' -d
     ```
 
 ### View the messages in IoT Hub
@@ -148,7 +148,7 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
    1. `az iot hub device-identity connection-string show --device-id $DEVICE --hub-name $HUB_NAME`
 10. Configure Broker to send to IoT Hub
   - foreach device: update remote_password in mqtt-broker/mosquitto.conf
-  `az iot hub generate-sas-token --device-id chicagoFreezer1 --hub-name charris-iot1 --duration (60*60*24*365) --query sas -o tsv`
+  `az iot hub generate-sas-token --device-id freezer1 --hub-name charris-iot1 --duration (60*60*24*365) --query sas -o tsv`
 
 
 Elevated PowerShell

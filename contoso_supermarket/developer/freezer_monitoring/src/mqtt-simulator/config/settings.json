@@ -7,7 +7,7 @@
     {
       "TYPE": "single",
       "PREFIX": "devices/freezer1/messages/events/environmentSensor",
-      "TIME_INTERVAL": 15,
+      "TIME_INTERVAL": 5,
       "RETAIN_PROBABILITY": 0.5,
       "DATA": [
         {
@@ -16,7 +16,15 @@
           "MIN_VALUE": -10,
           "MAX_VALUE": 25,
           "MAX_STEP": 2
-        },
+        }
+      ]
+    },
+    {
+      "TYPE": "single",
+      "PREFIX": "devices/freezer1/messages/events/environmentSensor",
+      "TIME_INTERVAL": 5,
+      "RETAIN_PROBABILITY": 0.5,
+      "DATA": [
         {
           "NAME": "Humidity(%)",
           "TYPE": "int",
@@ -29,7 +37,7 @@
     {
       "TYPE": "single",
       "PREFIX": "devices/freezer2/messages/events/environmentSensor",
-      "TIME_INTERVAL": 15,
+      "TIME_INTERVAL": 5,
       "RETAIN_PROBABILITY": 0.25,
       "DATA": [
         {
@@ -38,7 +46,15 @@
           "MIN_VALUE": -20,
           "MAX_VALUE": 50,
           "MAX_STEP": 20
-        },
+        }
+      ]
+    },
+    {
+      "TYPE": "single",
+      "PREFIX": "devices/freezer2/messages/events/environmentSensor",
+      "TIME_INTERVAL": 5,
+      "RETAIN_PROBABILITY": 0.25,
+      "DATA": [
         {
           "NAME": "Humidity(%)",
           "TYPE": "int",
