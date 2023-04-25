@@ -50,9 +50,6 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-          # envFrom:
-          # - secretRef:
-          #     name: mqtt2prom-config-secret
           volumeMounts:
           - name: mqtt2prom-config-volume
             mountPath: data/config.yaml
