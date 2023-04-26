@@ -14,6 +14,7 @@ spec:
   template:
     metadata:
       labels:
+        version: 1.0.14
         io.kompose.service: mqtt-simulator
       {{- include "sensor-monitor.selectorLabels" . | nindent 8 }}
     spec:
@@ -25,11 +26,13 @@ spec:
           | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.simulator.mqttSimulator.imagePullPolicy }}
         name: mqtt-simulator
+        args: 
+          - "--file"
+          - "/jumpstart/settings.json"
         resources: {}
         volumeMounts:
         - name: mqtt-simulator-config-volume
-          mountPath: jumpstart-config.json
-          subPath: jumpstart-config.json
+          mountPath: /jumpstart
           readOnly: true
 
       volumes:

@@ -139,8 +139,8 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 2. 
 3. Ignore following...
 4. `$LOCATION = "eastus"`
-5. `$RESOURCE_GROUP_NAME = "charris-iot1"`
-6. `$HUB_NAME = $RESOURCE_GROUP_NAME`
+5. `$RESOURCE_GROUP_NAME = "charris-js-ag-41-rg"`
+6. `$HUB_NAME = "Ag-IotHub-9148c"`
 7. `az group create --location $location --name $RESOURCE_GROUP_NAME`
 8. foreach $DEVICE in $DEVICES
     `az iot hub device-identity create --device-id $DEVICE --edge-enabled --hub-name $HUB_NAME`
@@ -148,7 +148,7 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
    1. `az iot hub device-identity connection-string show --device-id $DEVICE --hub-name $HUB_NAME`
 10. Configure Broker to send to IoT Hub
   - foreach device: update remote_password in mqtt-broker/mosquitto.conf
-  `az iot hub generate-sas-token --device-id freezer1 --hub-name charris-iot1 --duration (60*60*24*365) --query sas -o tsv`
+  `az iot hub generate-sas-token --device-id $DEVICE --hub-name $HUB_NAME --duration (60*60*24*365) --query sas -o tsv`
 
 
 Elevated PowerShell
@@ -170,6 +170,10 @@ Elevated PowerShell
 2. To install nano in a container
 
     `apt-get update && apt-get install nano`
+
+3. To manually update a configmap after changing a local config file for testing
+
+    `kubectl create configmap mqtt-broker-config --from-file=$mqttbrokerConfigPath --dry-run=client -o yaml | kubectl apply -f -`
 
 ## Resources
 

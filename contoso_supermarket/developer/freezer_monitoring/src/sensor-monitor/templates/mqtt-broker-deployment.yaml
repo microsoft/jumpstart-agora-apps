@@ -14,6 +14,7 @@ spec:
   template:
     metadata:
       labels:
+        version: 1.0.15
         io.kompose.service: mqtt-broker
       {{- include "sensor-monitor.selectorLabels" . | nindent 8 }}
     spec:
@@ -25,13 +26,15 @@ spec:
           | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.broker.mqttBroker.imagePullPolicy }}
         name: mqtt-broker
+        args: 
+          - "-c"
+          - "/jumpstart/mosquitto.conf"
         ports:
         - containerPort: 1883
         resources: {}
         volumeMounts:
         - name: mqtt-broker-config-volume
-          mountPath: jumpstart-config.conf
-          subPath: jumpstart-config.conf
+          mountPath: /jumpstart
           readOnly: true
 
       volumes:

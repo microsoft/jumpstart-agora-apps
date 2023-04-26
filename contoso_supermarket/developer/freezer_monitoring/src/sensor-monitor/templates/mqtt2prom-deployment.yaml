@@ -21,7 +21,7 @@ spec:
       containers:
         - args:
           - -config
-          - /data/config.yaml
+          - /jumpstart/config.yaml
           - -log-level
           - debug
           name: mqtt2prom
@@ -52,7 +52,7 @@ spec:
               memory: 128Mi
           volumeMounts:
           - name: mqtt2prom-config-volume
-            mountPath: data/config.yaml
+            mountPath: jumpstart/config.yaml
             subPath: config.yaml
             readOnly: true
       volumes:
