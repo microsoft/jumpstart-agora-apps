@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Product, useGlobalContext } from "../providers/GlobalContext";
 import Header from "../components/header/Header";
 import { IconTrash } from "../images";
 import ModalConfirmation from "../components/modal/ModalConfirmation";
 
 function ProductsPage() {
-    const { getProducts, products, updateProducts } = useGlobalContext();
+    const { getProducts, products, updateProducts, deleteProduct } = useGlobalContext();
     const [productList, setProductList] = React.useState<Product[]>([]);
     const [openSaveModal, setOpenSaveModal] = React.useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const [deletedProductId, setDeletedProductId] = React.useState<number | undefined>();
 
     //initial data load
     useEffect(() => {
@@ -23,15 +25,17 @@ function ProductsPage() {
         setProductList((x) => x.map((item) => (item.id === productId ? { ...item, [key]: value } : item)));
     };
 
-    const deleteProduct = (productId: number) => {
-        setProductList((x) => x.filter((item) => item.id !== productId));
-    };
-
     const onSaveProducts = () => {
         if (updateProducts) {
             updateProducts(productList);
         }
     };
+
+    const onDeleteProduct = useCallback(() => {
+        if (deleteProduct && deletedProductId) {
+            deleteProduct(deletedProductId);
+        }
+    }, [deletedProductId, deleteProduct]);
 
     return (
         <>
@@ -41,10 +45,22 @@ function ProductsPage() {
                 onCancelButtonClick={() => setOpenSaveModal(false)}
                 onActionButtonClick={() => onSaveProducts()}
                 setOpen={setOpenSaveModal}
+                actionButtonClass="btn-primary"
                 actionButtonText="Save"
                 cancelButtonText="Cancel"
                 title="Confirmation"
                 body="Are you sure you want to Save Changes?"
+            />
+            <ModalConfirmation
+                open={openDeleteModal}
+                onCancelButtonClick={() => setOpenDeleteModal(false)}
+                onActionButtonClick={() => onDeleteProduct()}
+                setOpen={setOpenDeleteModal}
+                actionButtonClass="btn-danger"
+                actionButtonText="Delete"
+                cancelButtonText="Cancel"
+                title="Confirmation"
+                body="Are you sure you want to delete this product?"
             />
             <div className="flex flex-col py-4 px-8 px-sm-8 container">
                 <h1 className="text-primary mb-2 fs-2">Product List</h1>
@@ -116,7 +132,10 @@ function ProductsPage() {
                                     <td className="col-1 text-center">
                                         <button
                                             className="btn-delete-product border-0 bg-transparent"
-                                            onClick={() => deleteProduct(item.id)}
+                                            onClick={() => {
+                                                setDeletedProductId(item.id);
+                                                setOpenDeleteModal(true);
+                                            }}
                                         >
                                             <IconTrash />
                                         </button>

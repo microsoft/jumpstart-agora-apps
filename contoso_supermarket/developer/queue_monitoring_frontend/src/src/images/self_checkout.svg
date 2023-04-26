@@ -1,1 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?><svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.35 131.14"><g id="Group_559"><g id="Group_558"><rect id="Rectangle_6896" x="42.85" y=".5" width="8" height="130.14" style="fill:#fff;"/><rect id="Rectangle_6897" x="42.85" y=".5" width="8" height="130.14" style="fill:none; stroke:#000;"/><rect id="Rectangle_6982" x=".5" y="13.01" width="42.18" height="103.6" style="fill:#fff;"/><path id="Path_2741" d="m42.18,13.51v102.6H1V13.51h41.18ZM0,12.51v104.6h43.18V12.51H0Z"/><rect id="Rectangle_6983" x=".71" y="53.24" width="41.5" height="37.25" style="fill:#fff;"/><path id="Path_2742" d="m41.96,53.5v36.75H.96v-36.75h41ZM.46,53v37.75h42v-37.75S.46,53,.46,53Z"/><rect id="Rectangle_6984" x="4.76" y="60.74" width="20.75" height="22.25" style="fill:#fff;"/><path id="Path_2743" d="m25.26,60.99v21.76H5.01v-21.76s20.25,0,20.25,0Zm-20.75-.5v22.76h21.25v-22.76s-21.25,0-21.25,0Z"/><rect id="Rectangle_6985" x="32.08" y="56.09" width="10.13" height="31.56" style="fill:#fff;"/><path id="Path_2744" d="m41.96,56.34v31.06h-9.63v-31.06s9.63,0,9.63,0Zm-10.13-.5v32.06h10.63v-32.06h-10.63Z"/><rect id="Rectangle_6986" x="33.09" y="57.64" width="4.05" height="28.46" style="fill:#fff;"/><path id="Path_2745" d="m36.9,57.89v27.96h-3.55v-27.96h3.55Zm-4.05-.5v28.96h4.55v-28.96h-4.55Z"/><line id="Line_83" x1="39.11" y1="56.05" x2="39.11" y2="87.69" style="fill:none; stroke:#000; stroke-width:.5px;"/><rect id="Rectangle_6987" x="12.85" y="63.13" width="11.23" height="17.16" style="fill:#fff;"/><path id="Path_2746" d="m23.83,63.38v16.66h-10.73v-16.66h10.73Zm-11.23-.5v17.66h11.73v-17.66h-11.73Z"/><rect id="Rectangle_6988" x="40.32" y="13.61" width="1.64" height="39.43" style="fill:#fff;"/><rect id="Rectangle_6989" x="40.32" y="13.61" width="1.64" height="39.43" style="fill:none; stroke:#000; stroke-width:.5px;"/><rect id="Rectangle_6990" x="28.83" y="42.01" width="12.06" height="1.97" style="fill:#fff;"/><rect id="Rectangle_6991" x="28.83" y="42.01" width="12.06" height="1.97" style="fill:none; stroke:#000; stroke-width:.5px;"/><rect id="Rectangle_6992" x="28.83" y="22.01" width="12.06" height="1.97" style="fill:#fff;"/><rect id="Rectangle_6993" x="28.83" y="22.01" width="12.06" height="1.97" style="fill:none; stroke:#000; stroke-width:.5px;"/></g></g></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.4.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 55 129.6" style="enable-background:new 0 0 55 129.6;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+</style>
+<g id="self_service">
+	<rect id="Rectangle_7577" x="1.1" y="0.9" class="st0" width="53" height="127.6"/>
+	<rect x="1.1" y="33.2" class="st1" width="14.8" height="37"/>
+	<rect x="9" y="36.9" class="st1" width="5.1" height="30"/>
+	<rect x="20.1" y="37.7" class="st1" width="26.7" height="28"/>
+	<rect x="22.1" y="40.7" class="st1" width="14" height="22"/>
+	<g>
+		<line class="st1" x1="53.6" y1="26.7" x2="1.6" y2="26.7"/>
+		<line class="st1" x1="53.1" y1="76.7" x2="1.1" y2="76.7"/>
+	</g>
+	<line class="st1" x1="6.6" y1="33.2" x2="6.6" y2="70.2"/>
+	<g>
+		<rect x="6.1" y="89.1" class="st2" width="13" height="2.4"/>
+		<rect x="6.1" y="113.9" class="st2" width="13" height="2.4"/>
+	</g>
+	<line class="st1" x1="5.6" y1="76.7" x2="5.6" y2="128.7"/>
+</g>
+</svg>

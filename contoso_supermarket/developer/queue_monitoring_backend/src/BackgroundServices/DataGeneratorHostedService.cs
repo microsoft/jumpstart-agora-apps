@@ -35,7 +35,7 @@ namespace Contoso.Backend.Data.BackgroundServices
         {
             _logger = logger;
             _postgreSqlService = postgreSqlService;
-            _timeZone = configuration["timeZone"];
+            _timeZone = configuration["TIMEZONE"];
         }
 
         public async Task StartAsync(CancellationToken stoppingToken)

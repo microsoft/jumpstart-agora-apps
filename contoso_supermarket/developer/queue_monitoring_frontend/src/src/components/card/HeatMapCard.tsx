@@ -1,6 +1,6 @@
 import React from "react";
 import { CheckoutHistory, CheckoutType } from "../../providers/GlobalContext";
-import { ExpressCheckout, HeatMap, SelfCheckout, StandardCheckout } from "../../images";
+import { ExpressCheckout, SelfCheckout, StandardCheckout } from "../../images";
 
 interface HeatMapCardProps {
     className?: string;
@@ -19,14 +19,26 @@ const getCheckoutImage = (checkoutType: CheckoutType) => {
     }
 };
 
-const getCheckoutColorClass = (checkoutType: CheckoutType) => {
+const getCheckoutColorClass = (item: CheckoutHistory) => {
+    if (item.checkoutType === CheckoutType.Standard && item.queueLength >= 4) {
+        return "bg-danger text-white";
+    } else if (item.checkoutType === CheckoutType.Express && item.queueLength >= 4) {
+        return "bg-danger  text-white";
+    } else if (item.checkoutType === CheckoutType.SelfService && item.queueLength >= 4) {
+        return "bg-danger text-white";
+    } else {
+        return "bg-success text-black";
+    }
+};
+
+const getCheckoutLabelText = (checkoutType: CheckoutType) => {
     switch (checkoutType) {
         case CheckoutType.Standard:
-            return " border-purple";
+            return "Checkout";
         case CheckoutType.Express:
-            return " border-yellow";
+            return "Express";
         case CheckoutType.SelfService:
-            return " border-cyan";
+            return "Self-Service";
     }
 };
 
@@ -44,15 +56,19 @@ function HeatMapCard(props: HeatMapCardProps) {
                                             .fill(0)
                                             .map((x, i) => {
                                                 return (
-                                                    <img
+                                                    <div
                                                         key={i}
-                                                        src={HeatMap}
                                                         style={{
                                                             position: "absolute",
+                                                            background: "#08dde5",
+                                                            border: "1px white solid",
+                                                            height: "1.25rem",
+                                                            width: "1.25rem",
+                                                            borderRadius: "100%",
                                                             left: `calc(${Math.floor(Math.random() * 100)}%)`,
                                                             top: `${Math.floor(Math.random() * 90)}%`,
                                                         }}
-                                                    />
+                                                    ></div>
                                                 );
                                             })}
                                 </div>
@@ -60,15 +76,13 @@ function HeatMapCard(props: HeatMapCardProps) {
                             </div>
                             <div
                                 className={
-                                    "d-flex text-white justify-content-between align-items-center border rounded-1 position-relative mt-4" +
-                                    getCheckoutColorClass(item.checkoutType)
+                                    "d-flex justify-content-between align-items-center rounded-1 position-relative mt-4 fw-semibold " +
+                                    getCheckoutColorClass(item)
                                 }
                             >
-                                <div
-                                    className="position-absolute bg-primary"
-                                    style={{ left: "2px", width: "0.6rem", height: "95%", borderRadius: "0.1rem" }}
-                                ></div>
-                                <div className="fs-6 ms-4">Checkout {item.checkoutId}</div>
+                                <div className="fs-6 ms-4">
+                                    {getCheckoutLabelText(item.checkoutType)} {item.checkoutId}
+                                </div>
                                 <div className="fs-3 me-4">{item.queueLength}</div>
                             </div>
                         </div>

@@ -7,10 +7,11 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Contoso.Backend.Data/Contoso.Backend.Data.csproj", "Contoso.Backend.Data/"]
+COPY ["Contoso.Backend.Data.csproj", "Contoso.Backend.Data/"]
 RUN dotnet restore "Contoso.Backend.Data/Contoso.Backend.Data.csproj"
-COPY . .
 WORKDIR "/src/Contoso.Backend.Data"
+COPY . .
+
 RUN dotnet build "Contoso.Backend.Data.csproj" -c Release -o /app/build
 
 FROM build AS publish

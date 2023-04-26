@@ -42,7 +42,9 @@
             "env": {
                 "FLASK_APP": "${workspaceFolder}/contoso_supermarket/developer/pos/src/app.py",
                 "FLASK_DEBUG": "1",
-                "HOLIDAY_BANNER": "True"
+                "HOLIDAY_BANNER": "True",
+                "STORE_LOCATION": "Seattle",
+                "STORE_ID": "1",
             },
             "args": ["run", "--no-debugger", "--no-reload", "--debug"],
             "serverReadyAction": {

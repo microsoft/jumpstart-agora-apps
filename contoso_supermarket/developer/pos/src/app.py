@@ -5,19 +5,26 @@ import cv2
 from flask import Flask, render_template, Response, request, session, redirect, url_for, jsonify
 from flask_session import Session
 import secrets
-from sqlConnector import SqlConnector
 import psycopg2
 import json
 from datetime import datetime
 
+storeid = os.environ.get('STORE_ID', 0)
+store_location =  os.environ.get('STORE_LOCATION', "")
+
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
+#variables that we want accessible from jinja templates
 app.config["HOLIDAY_BANNER"] = os.environ.get('HOLIDAY_BANNER', False)
+app.config["STORE_ID"] = storeid
+app.config["STORE_LOCATION"] = store_location
+
 app.config["SESSION_PERMANENT"] = False
 app.config['SESSION_TYPE'] = "filesystem"
+
 Session(app)
-storeid = os.environ.get('STORE_ID', 1)
+
 dbconfig = {
     "host": os.environ.get('SQL_HOST'),
     "user": os.environ.get('SQL_USERNAME'),

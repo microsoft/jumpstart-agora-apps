@@ -7,6 +7,7 @@ interface ModalProps {
     title: string;
     body: string;
     actionButtonText: string;
+    actionButtonClass?: string;
     cancelButtonText: string;
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -27,16 +28,16 @@ function ModalConfirmation(props: ModalProps) {
                         props.setOpen(false);
                     }}
                 >
-                    Dismiss
+                    {props.cancelButtonText}
                 </button>
                 <button
-                    className="btn bg-primary text-white px-5"
+                    className={"btn text-white px-5 " + props.actionButtonClass}
                     onClick={() => {
                         props.onActionButtonClick();
                         props.setOpen(false);
                     }}
                 >
-                    Save Changes
+                    {props.actionButtonText}
                 </button>
             </Modal.Footer>
         </Modal>

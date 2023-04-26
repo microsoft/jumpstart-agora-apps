@@ -214,7 +214,7 @@ namespace Contoso.Backend.Data.Services
 
             await importer.CompleteAsync();
             await importer.CloseAsync();
-            
+
             var merge = @$"
                 MERGE INTO contoso.products p
                 USING {tempTableName} t
@@ -228,6 +228,24 @@ namespace Contoso.Backend.Data.Services
             await cmdMerge.ExecuteNonQueryAsync();
             await con.CloseAsync();
             return;
+        }
+
+        public async Task<bool> DeleteProduct(int productId)
+        {
+            using var con = new NpgsqlConnection(_connectionString);
+            await con.OpenAsync();
+            var sql = $"DELETE FROM contoso.products WHERE productid = @productId;";
+            await using var cmd = new NpgsqlCommand(sql, con)
+            {
+                Parameters =
+                {
+                    new NpgsqlParameter("productId", productId)
+                }
+            };
+            var res = cmd.ExecuteNonQuery();
+            await con.CloseAsync();
+
+            return true;
         }
     }
 }

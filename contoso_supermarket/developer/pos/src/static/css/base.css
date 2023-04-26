@@ -1,7 +1,13 @@
 /* base styles for the site */
+html {
+    height: 100%;
+}
 
 /* page background color */
 body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     background-color: #f0f0f0;
 }
 
@@ -26,7 +32,7 @@ body {
 .border-none {
     border-color: #f0f0f0 !important;
 }
-.rounded{
+.rounded {
     border-radius: 0.25rem !important;
 }
 
@@ -38,4 +44,11 @@ body {
     outline: none;
     box-shadow: none;
     background: transparent;
+}
+
+.line-clamp-2 {
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
