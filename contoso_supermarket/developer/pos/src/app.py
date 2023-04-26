@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
 #variables that we want accessible from jinja templates
-app.config["HOLIDAY_BANNER"] = os.environ.get('HOLIDAY_BANNER', False)
+app.config["HOLIDAY_BANNER"] = os.environ.get('HOLIDAY_BANNER', 'False').lower() == 'true' #converts env from string to boolean
 app.config["STORE_ID"] = storeid
 app.config["STORE_LOCATION"] = store_location
 
