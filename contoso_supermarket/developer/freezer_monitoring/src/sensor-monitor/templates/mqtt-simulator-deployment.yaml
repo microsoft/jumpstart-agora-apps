@@ -26,6 +26,17 @@ spec:
         imagePullPolicy: {{ .Values.simulator.mqttSimulator.imagePullPolicy }}
         name: mqtt-simulator
         resources: {}
+        volumeMounts:
+        - name: mqtt-simulator-config-volume
+          mountPath: jumpstart-config.yaml
+          subPath: jumpstart-config.yaml
+          readOnly: true
+
+      volumes:
+      - name: mqtt-simulator-config-volume
+        configMap:
+          name: mqtt-simulator-config
+
       imagePullSecrets:
       - name: charrisagoracr
       restartPolicy: Always

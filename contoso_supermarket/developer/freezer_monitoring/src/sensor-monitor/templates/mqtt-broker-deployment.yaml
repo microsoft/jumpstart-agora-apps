@@ -28,6 +28,17 @@ spec:
         ports:
         - containerPort: 1883
         resources: {}
+        volumeMounts:
+        - name: mqtt-broker-config-volume
+          mountPath: jumpstart-config.conf
+          subPath: jumpstart-config.conf
+          readOnly: true
+
+      volumes:
+      - name: mqtt-broker-config-volume
+        configMap:
+          name: mqtt-broker-config
+
       imagePullSecrets:
       - name: charrisagoracr
       restartPolicy: Always
