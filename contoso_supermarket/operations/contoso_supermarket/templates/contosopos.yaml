@@ -58,5 +58,9 @@ spec:
               value: "{{ .Values.point_of_sale.new_category }}"
             - name: STORE_ID
               value: "{{ .Values.point_of_sale.store_id }}"
+            - name: STORE_LOCATION
+              value: "{{ .Values.point_of_sale.store_location }}"
+            - name: HOLIDAY_BANNER
+              value: "{{ .Values.point_of_sale.holiday_banner }}"
           ports:
             - containerPort: 5000

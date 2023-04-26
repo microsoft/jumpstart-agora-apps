@@ -1,8 +1,8 @@
-timezone: "Pacific Standard Time"
+queue_monitoring:
+  timezone: "Pacific Standard Time"
 
 postgres:
   username: "postgres"
-  password: "admin123"
   database: "contoso"
 
 point_of_sale:
@@ -11,3 +11,5 @@ point_of_sale:
   cameras_url: ""
   new_category: "True"
   store_id: 1
+  store_location: "Seattle"
+  holiday_banner: "False"

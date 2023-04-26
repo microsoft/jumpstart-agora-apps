@@ -5,4 +5,4 @@ home: https://github.com/microsoft/jumpstart-agora-apps
 type: application
 version: 0.1.0
 sources:
-  - https://github.com/microsoft/jumpstart-agora-apps/tree/main/contoso_supermarket/operations/pos
+  - https://github.com/microsoft/jumpstart-agora-apps/tree/main/contoso_supermarket/operations/contoso_supermarket
