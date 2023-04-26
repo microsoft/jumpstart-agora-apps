@@ -28,8 +28,8 @@ spec:
         resources: {}
         volumeMounts:
         - name: mqtt-simulator-config-volume
-          mountPath: jumpstart-config.yaml
-          subPath: jumpstart-config.yaml
+          mountPath: jumpstart-config.json
+          subPath: jumpstart-config.json
           readOnly: true
 
       volumes:
