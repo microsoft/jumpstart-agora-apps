@@ -194,6 +194,7 @@ Elevated PowerShell
 - [IoT Explorer](https://github.com/Azure/azure-iot-explorer/releases)
     
     Lets you explore devices and their messages in Azure IoT Hub.
+    However, you may not see messages in the Explorer if you are forwarding your messages to Azure Data Explorer (ADX) or Azure Event Hubs (AEH).
 
 - [MQTT Explorer](http://mqtt-explorer.com/)
     
