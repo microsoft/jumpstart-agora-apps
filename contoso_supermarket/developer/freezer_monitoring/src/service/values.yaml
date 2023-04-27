@@ -1,7 +1,0 @@
-kubernetesClusterDomain: cluster.local
-mqttBroker:
-  ports:
-  - name: "1883"
-    port: 1883
-    targetPort: 1883
-  type: ClusterIP
