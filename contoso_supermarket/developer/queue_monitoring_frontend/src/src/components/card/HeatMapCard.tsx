@@ -11,11 +11,11 @@ interface HeatMapCardProps {
 const getCheckoutImage = (checkoutType: CheckoutType) => {
     switch (checkoutType) {
         case CheckoutType.Standard:
-            return <StandardCheckout className="mw-100" style={{ width: "70%" }} />;
+            return <StandardCheckout className="mw-100" style={{ width: "90%" }} />;
         case CheckoutType.Express:
-            return <ExpressCheckout className="mw-100" style={{ width: "90%" }} />;
+            return <ExpressCheckout className="mw-100" style={{ width: "75%" }} />;
         case CheckoutType.SelfService:
-            return <SelfCheckout className="mw-100" style={{ width: "50%" }} />;
+            return <SelfCheckout className="mw-100" style={{ width: "60%" }} />;
     }
 };
 
