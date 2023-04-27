@@ -139,13 +139,21 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 2. 
 3. Ignore following...
 4. `$LOCATION = "eastus"`
-5. `$RESOURCE_GROUP_NAME = "charris-js-ag-41-rg"`
-6. `$HUB_NAME = "Ag-IotHub-9148c"`
+5. `$RESOURCE_GROUP_NAME = "charris-js-ag-42-rg"`
+6. `$HUB_NAME = "Ag-IotHub-b976e"`
 7. `az group create --location $location --name $RESOURCE_GROUP_NAME`
-8. foreach $DEVICE in $DEVICES
+   
+8. Create the devices
+    
+    ```powershell
+        $DEVICES = ("freezer-1-chicago","freezer-2-chicago")
+        foreach ($DEVICE in $DEVICES) {
+            az iot hub device-identity create --device-id $DEVICE --edge-enabled --hub-name $HUB_NAME
+        }
+    ```
     `az iot hub device-identity create --device-id $DEVICE --edge-enabled --hub-name $HUB_NAME`
 9. View connection string
-   1. `az iot hub device-identity connection-string show --device-id $DEVICE --hub-name $HUB_NAME`
+   1. `az iot hub device-identity connection-string show --device-id $DEVICE --hub-name $HUB_NAME -o tsv`
 10. Configure Broker to send to IoT Hub
   - foreach device: update remote_password in mqtt-broker/mosquitto.conf
   `az iot hub generate-sas-token --device-id $DEVICE --hub-name $HUB_NAME --duration (60*60*24*365) --query sas -o tsv`

@@ -6,12 +6,12 @@
   "TOPICS": [
     {
       "TYPE": "single",
-      "PREFIX": "devices/freezer1/messages/events/environmentSensor",
+      "PREFIX": "freezer1/environmentSensor",
       "TIME_INTERVAL": 5,
       "RETAIN_PROBABILITY": 0.5,
       "DATA": [
         {
-          "NAME": "Temperature(°F)",
+          "NAME": "Temperature(F)",
           "TYPE": "int",
           "MIN_VALUE": -10,
           "MAX_VALUE": 25,
@@ -21,7 +21,7 @@
     },
     {
       "TYPE": "single",
-      "PREFIX": "devices/freezer1/messages/events/environmentSensor",
+      "PREFIX": "freezer1/environmentSensor",
       "TIME_INTERVAL": 5,
       "RETAIN_PROBABILITY": 0.5,
       "DATA": [
@@ -36,12 +36,12 @@
     },
     {
       "TYPE": "single",
-      "PREFIX": "devices/freezer2/messages/events/environmentSensor",
+      "PREFIX": "freezer2/environmentSensor",
       "TIME_INTERVAL": 5,
       "RETAIN_PROBABILITY": 0.25,
       "DATA": [
         {
-          "NAME": "Temperature(°F)",
+          "NAME": "Temperature(F)",
           "TYPE": "int",
           "MIN_VALUE": -20,
           "MAX_VALUE": 50,
@@ -51,7 +51,7 @@
     },
     {
       "TYPE": "single",
-      "PREFIX": "devices/freezer2/messages/events/environmentSensor",
+      "PREFIX": "freezer2/environmentSensor",
       "TIME_INTERVAL": 5,
       "RETAIN_PROBABILITY": 0.25,
       "DATA": [
