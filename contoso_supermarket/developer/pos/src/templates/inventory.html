@@ -1,34 +1,73 @@
+{% set active_page = "products" %}
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Product List: </h1></br>
+<h1 class="text-green mb-4 fs-2">Product List</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col" class="text-center">Unit Price</th>
+      <th scope="col" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    {% for item in inventorylist %}
+      <tr class="border-grey border-2">
+        <td class="fs-5">{{ item.id }}</td>
+        <td class="fs-5" contenteditable="true">{{ item.name }}</td>
+        <td class="fs-5 text-center" contenteditable="true">{{ "$%.2f" | format(item.price) }}</td>
+        <td class="text-center">
+          <button class="btn-delete-product btn-reset"  data-id="{{ item.id }}"><img alt="delete" src="static/img/trash.svg"/></button>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in inventorylist %}
-        <tr>
-          <td>{{ item.id }}</td>
-          <td contenteditable="true">{{ item.name }}</td>
-          <td contenteditable="true">{{ item.price }}</td>
-          <td>
-            <button type="button" class="btn btn-primary" data-id="{{ item.id }}">Save</button>
-            <button type="button" class="btn btn-danger" data-id="{{ item.id }}">Delete</button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<div class="d-flex">
+  <button id="btn-save-products" class="btn bg-green text-white px-5 shadow ms-auto">Save Changes</button>
+</div>
 
+<!-- Save Product Confirmation Modal -->
+<div class="modal fade" id="saveProductConfirmationModal" tabindex="-1" aria-labelledby="saveProductConfirmationModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to save these changes?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" data-bs-dismiss="modal">Dismiss</button>
+        <button type="button" id="btn-confirm-save-products" class="btn bg-green text-white px-5 shadow">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <script src="static/js/products.js"></script>
-</body>
+<!-- Delete Product Confirmation Modal -->
+<div class="modal fade" id="deleteProductConfirmationModal" tabindex="-1" aria-labelledby="deleteProductConfirmationModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" data-bs-dismiss="modal">Dismiss</button>
+        <button type="button" id="btn-confirm-delete-product" class="btn bg-danger text-white px-5 shadow">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="static/js/products.js"></script>
 
 {% endblock %}

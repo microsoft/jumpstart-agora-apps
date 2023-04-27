@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-cloudsync
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-cloudsync
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-cloudsync
+    spec:
+      containers:
+      - name: cloudsync
+        image: jumpstartagora.azurecr.io/contoso-supermarket/pos-cloudsync:latest
+        env:
+        - name: SQL_HOST
+          value: {{ .Release.Name }}-contosodb
+        - name: SQL_USERNAME
+          value: {{ .Values.postgres.username }}
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: POSTGRES_PASSWORD     
+        - name: SQL_DATABASE
+          value: {{ .Values.postgres.database }}
+        - name: SYNCINTERVAL
+          value: '120'
+        - name: COSMOSENDPOINT
+          value: {{ required "A valid Cosmos container is required! (Set cosmos.endpoint)" .Values.cosmos.endpoint }}
+        - name: COSMOSKEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: COSMOS_KEY     
+        - name: COSMOSDB
+          value: {{ required "A valid Cosmos container is required! (Set cosmos.database)" .Values.cosmos.database }}
+        - name: COSMOSCONTAINER
+          value: {{ required "A valid Cosmos container is required! (Set cosmos.container)" .Values.cosmos.container }}

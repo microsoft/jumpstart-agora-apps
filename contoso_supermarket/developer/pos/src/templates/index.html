@@ -1,9 +1,9 @@
+{% set active_page = "home" %}
 {% extends 'base.html' %}
 
 {% block content %}
-
-</br></br>
-
-{% include 'item.html' %}
+<div id="products">
+    {% include 'item.html' %}
+</div>
 
 {% endblock %}

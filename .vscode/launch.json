@@ -1,0 +1,65 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "queue_monitoring_backend",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_backend/src/bin/Debug/net7.0/Contoso.Backend.Data.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_backend/src/",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger/index.html"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:4000/"
+            }
+        },
+        {
+            "name": "queue_monitoring_frontend",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/contoso_supermarket/developer/queue_monitoring_frontend/src/src",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "start"],
+            "env": {
+                "BACKEND_API_URL": "https://localhost:4000/"
+            }
+        },
+        {
+            "name": "pos",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "${workspaceFolder}/contoso_supermarket/developer/pos/src/app.py",
+                "FLASK_DEBUG": "1",
+                "HOLIDAY_BANNER": "True",
+                "STORE_LOCATION": "Seattle",
+                "STORE_ID": "1",
+            },
+            "args": ["run", "--no-debugger", "--no-reload", "--debug"],
+            "serverReadyAction": {
+                "pattern": "Running on http://127.0.0.1:([0-9]+)",
+                "uriFormat": "http://127.0.0.1:%s",
+                "action": "openExternally"
+            },
+            "jinja": true,
+            "justMyCode": true
+        }
+    ],
+    "compounds": [
+        {
+            "name": "AllProjects",
+            "configurations": ["queue_monitoring_frontend", "queue_monitoring_backend", "pos"]
+        }
+    ]
+}
