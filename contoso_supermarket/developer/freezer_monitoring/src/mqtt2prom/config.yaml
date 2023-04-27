@@ -21,7 +21,7 @@ mqtt:
   # device_id_regex: "(.*/)?(?P<deviceid>.*)"
   # device_id_regex: "(.*/)?(?P<deviceid>)/.*"
   # The MQTT QoS level
-  qos: 0
+  qos: 1
 cache:
   # Timeout. Each received metric will be presented for this time if no update is send via MQTT.
   # Set the timeout to -1 to disable the deletion of metrics from the cache. The exporter presents the ingest timestamp
