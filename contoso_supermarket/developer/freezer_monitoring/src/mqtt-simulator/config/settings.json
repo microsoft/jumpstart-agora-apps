@@ -16,15 +16,7 @@
           "MIN_VALUE": -10,
           "MAX_VALUE": 25,
           "MAX_STEP": 2
-        }
-      ]
-    },
-    {
-      "TYPE": "single",
-      "PREFIX": "freezer1/environmentSensor",
-      "TIME_INTERVAL": 5,
-      "RETAIN_PROBABILITY": 0.5,
-      "DATA": [
+        },
         {
           "NAME": "Humidity(%)",
           "TYPE": "int",
@@ -46,15 +38,7 @@
           "MIN_VALUE": -20,
           "MAX_VALUE": 50,
           "MAX_STEP": 20
-        }
-      ]
-    },
-    {
-      "TYPE": "single",
-      "PREFIX": "freezer2/environmentSensor",
-      "TIME_INTERVAL": 5,
-      "RETAIN_PROBABILITY": 0.25,
-      "DATA": [
+        },
         {
           "NAME": "Humidity(%)",
           "TYPE": "int",
