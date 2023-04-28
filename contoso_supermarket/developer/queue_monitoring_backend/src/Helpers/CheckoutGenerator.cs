@@ -9,13 +9,17 @@
         private (int min, int max) peakTimeRange;
         private (int min, int max) lowTrafficTimeRange;
         private (int min, int max) normalTimeRange;
+        private int maxCustomersInStore;
+        private int maxCustomersPerCheckout;
 
         public DataGenerator(List<Checkout> checkouts,
             List<(TimeSpan start, TimeSpan end)> peakTimes,
             List<(TimeSpan start, TimeSpan end)> lowTrafficTimes,
             (int min, int max) lowTrafficTimeRange,
             (int min, int max) normalTimeRange,
-            (int min, int max) peakTimeRange
+            (int min, int max) peakTimeRange,
+            int maxCustomersInStore,
+            int maxCustomersPerCheckout
             )
         {
             this.checkouts = checkouts;
@@ -24,6 +28,8 @@
             this.peakTimeRange = peakTimeRange;
             this.lowTrafficTimeRange = lowTrafficTimeRange;
             this.normalTimeRange = normalTimeRange;
+            this.maxCustomersInStore = maxCustomersInStore;
+            this.maxCustomersPerCheckout = maxCustomersPerCheckout;
         }
 
         public void GenerateCustomers(TimeSpan currentTime)
@@ -36,10 +42,16 @@
             else
                 numCustomers = random.Next(normalTimeRange.min, normalTimeRange.max);
 
+            int totalCustomersInStore = checkouts.Sum(c => c.Customers.Count);
+            numCustomers = Math.Min(numCustomers, maxCustomersInStore - totalCustomersInStore);
+
             for (int i = 0; i < numCustomers; i++)
             {
                 var checkout = GetCheckoutWithShortestQueue();
-                checkout.Customers.Enqueue(new Customer { CheckoutTime = checkout.AvgProcessingTime });
+                if (checkout.Customers.Count < maxCustomersPerCheckout)
+                {
+                    checkout.Customers.Enqueue(new Customer { CheckoutTime = checkout.AvgProcessingTime });
+                }
             }
         }
 
@@ -79,12 +91,12 @@
             return false;
         }
 
-        private Checkout GetCheckoutWithShortestQueue()
+        private Checkout GetCheckoutWithShortestQueue(int? excludedId = null)
         {
             Checkout minCheckout = null;
             int minQueueLength = int.MaxValue;
             foreach (var checkout in checkouts)
-                if (!checkout.Closed && checkout.Customers.Count < minQueueLength)
+                if (!checkout.Closed && checkout.Id != excludedId && checkout.Customers.Count < minQueueLength)
                 {
                     minCheckout = checkout;
                     minQueueLength = checkout.Customers.Count;
@@ -92,7 +104,7 @@
             return minCheckout;
         }
 
-        public List<CheckoutHistory> GenerateData(DateTime startTime, DateTime? endTime = null, List<Checkout> updatedCheckouts = null)
+        public List<CheckoutHistory> GenerateData(DateTime startTime, DateTime? endTime = null, List<Checkout> updatedCheckouts = null, bool redistributeOnly = false)
         {
             if (endTime == null)
                 endTime = DateTime.UtcNow;
@@ -106,26 +118,60 @@
                     {
                         existingCheckout.Type = updatedCheckout.Type;
                         existingCheckout.AvgProcessingTime = updatedCheckout.AvgProcessingTime;
+                        if (existingCheckout.Closed != updatedCheckout.Closed)
+                        {
+                            if (updatedCheckout.Closed && existingCheckout.Customers.Count > 0)
+                            {
+                                //redistribute customers to other open checkouts
+                                while (existingCheckout.Customers.Count > 0)
+                                {
+                                    var checkout = GetCheckoutWithShortestQueue(existingCheckout.Id);
+                                    if (checkout == null || existingCheckout.Customers.Count == 0)
+                                        break;
+
+                                    var cust = existingCheckout.Customers.Dequeue();
+                                    checkout.Customers.Enqueue(cust);
+                                }
+                            }
+                            else if (!updatedCheckout.Closed)
+                            {
+                                //redistribute customers to newly opened checkout
+                                var totalOpenCheckouts = updatedCheckouts.Where(x => !x.Closed).Count();
+                                var existingOpenCheckouts = this.checkouts.Where(c => !c.Closed).ToList();
+                                int totalQueueLength = existingOpenCheckouts.Sum(c => c.Customers.Count);
+                                int avgQueueLength = totalQueueLength / totalOpenCheckouts;
+
+                                while (existingCheckout.Customers.Count < avgQueueLength)
+                                {
+                                    var maxQueueCheckout = existingOpenCheckouts.OrderByDescending(c => c.Customers.Count).First();
+                                    if (maxQueueCheckout.Customers.Count <= avgQueueLength)
+                                        break;
+                                    existingCheckout.Customers.Enqueue(maxQueueCheckout.Customers.Dequeue());
+                                }
+                            }
+                        }
                         existingCheckout.Closed = updatedCheckout.Closed;
                     }
                 }
             }
-            //begin at the start of the next minute
-            startTime = startTime.AddMinutes(1);
+
             var checkoutHistories = new List<CheckoutHistory>();
             for (DateTime currentTime = startTime; currentTime <= endTime; currentTime = currentTime.AddSeconds(1))
             {
-                if (currentTime.TimeOfDay.Seconds == 0)
+                if (currentTime.TimeOfDay.Seconds == 0 && !redistributeOnly)
                     GenerateCustomers(currentTime.TimeOfDay);
 
                 foreach (var checkout in checkouts)
                 {
-                    if (checkout.Customers.Count > 0)
+                    if (checkout.Customers.Count > 0 && !redistributeOnly)
                     {
                         var customer = checkout.Customers.Peek();
-                        customer.CheckoutTime -= 1;
-                        if (customer.CheckoutTime <= 0)
-                            checkout.Customers.Dequeue();
+                        if (customer != null)
+                        {
+                            customer.CheckoutTime -= 1;
+                            if (customer.CheckoutTime <= 0)
+                                checkout.Customers.Dequeue();
+                        }
                     }
 
                     if (currentTime.TimeOfDay.Seconds == 0)

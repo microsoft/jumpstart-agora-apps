@@ -20,9 +20,9 @@ INSERT INTO contoso.checkout (id, type, avgprocessingtime, closed)
 SELECT *
 FROM (VALUES
     (1, 1, 60, false),
-    (2, 1, 60, false),
+    (2, 1, 60, true),
     (3, 2, 30, false),
-    (4, 2, 30, false),
+    (4, 2, 30, true),
     (5, 3, 45, false),
     (6, 3, 45, false),
     (7, 3, 45, true),

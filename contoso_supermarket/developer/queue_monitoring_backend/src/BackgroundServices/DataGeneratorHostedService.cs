@@ -31,7 +31,7 @@ namespace Contoso.Backend.Data.BackgroundServices
             _timeZone = configuration["TIMEZONE"];
             var checkouts = _postgreSqlService.GetCheckouts().Result;
 
-            _checkoutDataGenerator = new DataGenerator(checkouts, _peakTimes, _lowTrafficTimes, (0, 5), (0, 15), (8, 20));
+            _checkoutDataGenerator = new DataGenerator(checkouts, _peakTimes, _lowTrafficTimes, (0, 5), (4, 15), (8, 12), 200, 10);
         }
 
         public async Task StartAsync(CancellationToken stoppingToken)
@@ -53,14 +53,26 @@ namespace Contoso.Backend.Data.BackgroundServices
             _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
         }
 
-        private void DoWork(object? state) 
+        private void DoWork(object? state)
         {
-
             var startDate = _postgreSqlService.GetMaxCheckoutHistoryTimestamp().Result;
             var endDate = DateTime.UtcNow;
             _logger.LogInformation($"Generating data between {startDate}-{endDate}...");
             var checkouts = _postgreSqlService.GetCheckouts().Result;
             var checkoutData = _checkoutDataGenerator.GenerateData(startDate.UtcDateTime, endDate, checkouts);
+            _postgreSqlService.BulkUpsertCheckoutHistory(checkoutData).Wait();
+        }
+
+        public void RedistributeQueues()
+        {
+            //increase DoWork timer to avoid collisions
+            _timer.Change(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(60));
+
+            //redistributes the queues
+            var startDate = _postgreSqlService.GetMaxCheckoutHistoryTimestamp().Result;
+            var endDate = DateTime.UtcNow;
+            var checkouts = _postgreSqlService.GetCheckouts().Result;
+            var checkoutData = _checkoutDataGenerator.GenerateData(startDate.UtcDateTime, endDate, checkouts, true);
             _postgreSqlService.BulkUpsertCheckoutHistory(checkoutData).Wait();
         }
 

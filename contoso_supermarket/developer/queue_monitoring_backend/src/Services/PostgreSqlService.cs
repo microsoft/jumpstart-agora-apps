@@ -89,24 +89,35 @@ namespace Contoso.Backend.Data.Services
         public async Task BulkUpsertCheckoutHistory(List<CheckoutHistory> history)
         {
             await using var con = new NpgsqlConnection(_connectionString);
-
             await con.OpenAsync();
 
-            using var importer = con.BeginBinaryImport(
-                       "COPY contoso.checkout_history (timestamp, checkout_id, checkout_type, queue_length, average_wait_time_seconds) FROM STDIN (FORMAT binary)");
+            // Create a temporary table to hold the data for upsert
+            using (var cmd = new NpgsqlCommand("CREATE TEMP TABLE temp_table (LIKE contoso.checkout_history INCLUDING DEFAULTS)", con))
+                cmd.ExecuteNonQuery();
 
-            foreach (var element in history)
+            // Copy the data into the temporary table
+            using (var importer = con.BeginBinaryImport("COPY temp_table (timestamp, checkout_id, checkout_type, queue_length, average_wait_time_seconds) FROM STDIN (FORMAT binary)"))
             {
-                await importer.StartRowAsync();
-                await importer.WriteAsync(element.Timestamp, NpgsqlDbType.TimestampTz);
-                await importer.WriteAsync(element.CheckoutId, NpgsqlDbType.Integer);
-                await importer.WriteAsync((int)element.CheckoutType, NpgsqlDbType.Integer);
-                await importer.WriteAsync(element.QueueLength, NpgsqlDbType.Integer);
-                await importer.WriteAsync(element.AverageWaitTimeSeconds, NpgsqlDbType.Integer);
+                foreach (var element in history)
+                {
+                    await importer.StartRowAsync();
+                    await importer.WriteAsync(element.Timestamp, NpgsqlDbType.TimestampTz);
+                    await importer.WriteAsync(element.CheckoutId, NpgsqlDbType.Integer);
+                    await importer.WriteAsync((int)element.CheckoutType, NpgsqlDbType.Integer);
+                    await importer.WriteAsync(element.QueueLength, NpgsqlDbType.Integer);
+                    await importer.WriteAsync(element.AverageWaitTimeSeconds, NpgsqlDbType.Integer);
+                }
+                await importer.CompleteAsync();
             }
 
-            await importer.CompleteAsync();
-            return;
+            // Perform the upsert from the temporary table into the target table
+            using (var cmd = new NpgsqlCommand(@"INSERT INTO contoso.checkout_history (timestamp, checkout_id, checkout_type, queue_length, average_wait_time_seconds)
+                                        SELECT timestamp, checkout_id, checkout_type, queue_length, average_wait_time_seconds FROM temp_table
+                                        ON CONFLICT (timestamp, checkout_id) DO UPDATE SET
+                                        checkout_type = EXCLUDED.checkout_type,
+                                        queue_length = EXCLUDED.queue_length,
+                                        average_wait_time_seconds = EXCLUDED.average_wait_time_seconds", con))
+                cmd.ExecuteNonQuery();
         }
 
         public async Task<DateTimeOffset> GetMaxCheckoutHistoryTimestamp()
@@ -170,7 +181,7 @@ namespace Contoso.Backend.Data.Services
         {
             using var con = new NpgsqlConnection(_connectionString);
             await con.OpenAsync();
-            var sql = $@"SELECT id, type, avgprocessingtime, closed FROM contoso.checkout;";
+            var sql = $@"SELECT id, type, avgprocessingtime, closed FROM contoso.checkout order by id;";
             await using var cmd = new NpgsqlCommand(sql, con);
 
             List<Checkout> checkouts = new List<Checkout>();
@@ -188,6 +199,42 @@ namespace Contoso.Backend.Data.Services
             await con.CloseAsync();
 
             return checkouts;
+        }
+
+        public async Task<Checkout> ToggleCheckout(int checkoutId)
+        {
+            using var con = new NpgsqlConnection(_connectionString);
+            await con.OpenAsync();
+            var sql = $@"UPDATE contoso.checkout
+                SET closed = NOT closed
+                WHERE id = @checkoutId
+                RETURNING *;";
+            await using var cmd = new NpgsqlCommand(sql, con)
+            {
+                Parameters =
+                        {
+                    new NpgsqlParameter("checkoutId", checkoutId)
+                }
+            };
+            Checkout? checkout = null;
+
+            using (var reader = cmd.ExecuteReader())
+                if (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    CheckoutType type = (CheckoutType)reader.GetInt32(1);
+                    int avgProcessingTime = reader.GetInt32(2);
+                    bool closed = reader.GetBoolean(3);
+                    checkout = new Checkout(id, type, avgProcessingTime, closed);
+                }
+            await con.CloseAsync();
+
+            if (checkout == null)
+            {
+                throw new Exception($"Checkout with id {checkoutId} not found");
+            }
+
+            return checkout;
         }
 
         public async Task<List<Product>> GetProducts()
@@ -219,7 +266,7 @@ namespace Contoso.Backend.Data.Services
             return ret;
         }
 
-        public async Task UpdateProducts(List<Product> products)
+        public async Task UpsertProducts(List<Product> products)
         {
             await using var con = new NpgsqlConnection(_connectionString);
             var tempTableName = "temptable";

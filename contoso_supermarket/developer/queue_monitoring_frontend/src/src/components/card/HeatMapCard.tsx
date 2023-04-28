@@ -1,5 +1,5 @@
-import React from "react";
-import { CheckoutHistory, CheckoutType } from "../../providers/GlobalContext";
+import React, { useEffect } from "react";
+import { CheckoutHistory, CheckoutType, useGlobalContext } from "../../providers/GlobalContext";
 import { ExpressCheckout, SelfCheckout, StandardCheckout } from "../../images";
 
 interface HeatMapCardProps {
@@ -19,8 +19,10 @@ const getCheckoutImage = (checkoutType: CheckoutType) => {
     }
 };
 
-const getCheckoutColorClass = (item: CheckoutHistory) => {
-    if (item.checkoutType === CheckoutType.Standard && item.queueLength >= 4) {
+const getCheckoutColorClass = (item: CheckoutHistory, isClosed: boolean) => {
+    if (isClosed) {
+        return "bg-secondary-light text-white";
+    } else if (item.checkoutType === CheckoutType.Standard && item.queueLength >= 4) {
         return "bg-danger text-white";
     } else if (item.checkoutType === CheckoutType.Express && item.queueLength >= 4) {
         return "bg-danger  text-white";
@@ -43,12 +45,32 @@ const getCheckoutLabelText = (checkoutType: CheckoutType) => {
 };
 
 function HeatMapCard(props: HeatMapCardProps) {
+    const { checkouts, getCheckouts, toggleCheckout } = useGlobalContext();
+
+    useEffect(() => {
+        if (checkouts.length === 0 && getCheckouts) {
+            getCheckouts();
+        }
+    }, [checkouts, getCheckouts]);
+
     return (
         <div className={"" + props.className}>
             <div className="row">
                 {props.checkoutHistory.map((item) => {
+                    const checkout = checkouts?.filter((c) => c.id === item.checkoutId)[0];
+                    if (!checkout) {
+                        return <></>;
+                    }
                     return (
                         <div key={item.checkoutId} className="col d-flex flex-column">
+                            <div className="d-flex justify-content-end pb-4">
+                                <button
+                                    className={"btn text-white " + (checkout.closed ? " bg-danger" : " bg-primary")}
+                                    onClick={() => toggleCheckout && toggleCheckout(checkout.id)}
+                                >
+                                    {checkout.closed ? "Closed" : "Open"}
+                                </button>
+                            </div>
                             <div className="flex-grow-1 d-flex align-items-center row">
                                 <div className="col-4 d-flex flex-column position-relative h-100">
                                     {!props.isLoading &&
@@ -77,7 +99,7 @@ function HeatMapCard(props: HeatMapCardProps) {
                             <div
                                 className={
                                     "d-flex justify-content-between align-items-center rounded-1 position-relative mt-4 fw-semibold " +
-                                    getCheckoutColorClass(item)
+                                    getCheckoutColorClass(item, checkout.closed)
                                 }
                             >
                                 <div className="fs-6 ms-4">
