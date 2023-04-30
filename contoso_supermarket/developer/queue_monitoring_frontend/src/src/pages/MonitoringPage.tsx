@@ -115,7 +115,7 @@ function MonitoringPage() {
                     </div>
                     <div className="col-12 col-md-12 col-lg-6">
                         <div className="h-100 d-flex flex-column">
-                            <div className="text-primary h4 mb-3">Customer Wait Time (last 24 hours)</div>
+                            <div className="text-primary h4 mb-3">Shopper Wait Time (last 24 hours)</div>
                             <div className="bg-secondary rounded p-3 flex-grow-1">
                                 <WaitTimeGraph checkoutHistory={checkoutHistory} />
                             </div>
