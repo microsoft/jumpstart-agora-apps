@@ -161,7 +161,7 @@ function WaitTimeGraph(props: WaitTimeGraphProps) {
                     type="monotone"
                     dataKey="standardCheckoutWaitTime"
                     isAnimationActive={false}
-                    stroke="#e810e0"
+                    stroke="#BB80ff"
                     dot={false}
                 />
                 <Line
