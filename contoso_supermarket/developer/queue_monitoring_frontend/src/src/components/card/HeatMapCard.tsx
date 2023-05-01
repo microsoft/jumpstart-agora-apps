@@ -66,7 +66,7 @@ function HeatMapCard(props: HeatMapCardProps) {
                             <div className="d-flex justify-content-end pb-4">
                                 <button
                                     className={"btn text-white " + (checkout.closed ? " bg-danger" : " bg-primary")}
-                                    onClick={() => toggleCheckout && toggleCheckout(checkout.id)}
+                                    onClick={() => toggleCheckout && toggleCheckout(checkout.id, item.timestamp)}
                                 >
                                     {checkout.closed ? "Closed" : "Open"}
                                 </button>

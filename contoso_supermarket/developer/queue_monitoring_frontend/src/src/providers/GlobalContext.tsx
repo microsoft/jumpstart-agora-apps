@@ -42,7 +42,7 @@ export interface GlobalContextInterface {
 
     //checkouts
     getCheckouts?: () => void;
-    toggleCheckout?: (checkoutId: number) => void;
+    toggleCheckout?: (checkoutId: number, timestamp: string) => void;
     checkoutsLoading: boolean;
     checkouts: Checkout[];
 
@@ -86,7 +86,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
             });
     }, []);
 
-    const toggleCheckout = useCallback((checkoutId: number) => {
+    const toggleCheckout = useCallback((checkoutId: number, timestamp: string) => {
         setCheckoutsLoading(true);
         //close/open checkout
         axios
@@ -108,7 +108,7 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
             })
             .finally(() => {
                 setCheckoutsLoading(false);
-                getCheckoutHistory();
+                getCheckoutHistory(new Date(timestamp));
             });
     }, []);
 

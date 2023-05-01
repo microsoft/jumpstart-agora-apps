@@ -23,14 +23,14 @@ function MonitoringPage() {
     //get new checkout data every minute
     useEffect(() => {
         const intervalId = setInterval(() => {
-            if (latestTimestamp !== undefined && !!latestTimestamp.length) {
-                getCheckoutHistory && getCheckoutHistory(new Date(latestTimestamp));
+            if (latestTimestamp !== undefined && !!latestTimestamp.length && getCheckoutHistory) {
+                getCheckoutHistory(new Date(latestTimestamp));
             }
         }, 60000);
 
         // Clear interval on component unmount
         return () => clearInterval(intervalId);
-    }, [latestTimestamp]);
+    }, [latestTimestamp, getCheckoutHistory]);
 
     const latestCheckoutHistory = checkoutHistory?.filter((history) => history.timestamp === latestTimestamp);
     const latestCheckoutHistoryOrderedByType = latestCheckoutHistory.sort((a, b) => a.checkoutId - b.checkoutId);
