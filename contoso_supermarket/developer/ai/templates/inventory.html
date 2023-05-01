@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Product List: </h1></br>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in inventorylist %}
+        <tr>
+          <td>{{ item.id }}</td>
+          <td contenteditable="true">{{ item.name }}</td>
+          <td contenteditable="true">{{ item.price }}</td>
+          <td>
+            <button type="button" class="btn btn-primary" data-id="{{ item.id }}">Save</button>
+            <button type="button" class="btn btn-danger" data-id="{{ item.id }}">Delete</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+  <script src="static/js/products.js"></script>
+</body>
+
+{% endblock %}

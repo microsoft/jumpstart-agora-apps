@@ -1,0 +1,3 @@
+flask
+openvino
+opencv-python

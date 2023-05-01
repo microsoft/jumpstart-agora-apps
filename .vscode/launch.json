@@ -54,6 +54,24 @@
             },
             "jinja": true,
             "justMyCode": true
+        },
+        {
+            "name": "ai",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "${workspaceFolder}/contoso_supermarket/developer/ai/app.py",
+                "FLASK_DEBUG": "1"
+            },
+            "args": ["run", "--no-debugger", "--no-reload", "--debug"],
+            "serverReadyAction": {
+                "pattern": "Running on http://127.0.0.1:([0-9]+)",
+                "uriFormat": "http://127.0.0.1:%s",
+                "action": "openExternally"
+            },
+            "jinja": true,
+            "justMyCode": true
         }
     ],
     "compounds": [
