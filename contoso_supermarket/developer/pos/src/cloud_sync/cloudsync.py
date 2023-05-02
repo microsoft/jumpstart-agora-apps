@@ -35,7 +35,7 @@ container = database.get_container_client(container_name)
 logger.info("Connected to Cosmos DB")
 
 while True:
-    logger.info("Polling Orders for ")
+    logger.info("Polling Orders for unsynced records...")
     try:
         # Get all Order records where cloudSynced is NULL or FALSE
         query = "SELECT * FROM contoso.Orders WHERE cloudSynced IS NOT TRUE;"
