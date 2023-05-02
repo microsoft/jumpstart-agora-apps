@@ -1,4 +1,4 @@
-name: Build contososupermarket image
+name: Build contososupermarket app
 
 on:
   push:
@@ -38,5 +38,11 @@ jobs:
 
       - name: 'Build and push image'
         run: |
-          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/staging/contososupermarket:latest"
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/staging/contososupermarket:latest
+          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/contoso-supermarket/pos:latest"
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/staging/contoso-supermarket/pos:latest
+
+      - name: Replace ACR with the correct name
+        env:
+            ACR_NAME: ${{ secrets.ACR_NAME }}
+        run: |
+            find . -type f -name "./contoso_supermarket/operations/contoso_supermarket/templates/contosopos.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
