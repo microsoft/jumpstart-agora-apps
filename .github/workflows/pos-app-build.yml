@@ -37,7 +37,6 @@ jobs:
           password: ${{ secrets.SPN_CLIENT_SECRET }}
 
       - name: 'Build and push image'
-        working-directory: contoso_supermarket/developer/pos/src
         run: |
-          docker build . -t "${{ secrets.ACR_NAME }}.azurecr.io/dev/contososupermarket:latest"
+          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/dev/contososupermarket:latest"
           docker push ${{ secrets.ACR_NAME }}.azurecr.io/dev/contososupermarket:latest
