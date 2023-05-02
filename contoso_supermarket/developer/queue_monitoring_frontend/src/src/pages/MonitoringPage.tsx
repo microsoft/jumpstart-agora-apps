@@ -11,7 +11,7 @@ function MonitoringPage() {
 
     //initial data load
     useEffect(() => {
-        const yesterday = dayjs().add(-1, "day").startOf("day");
+        const yesterday = dayjs().add(-1, "day");
         getCheckoutHistory && getCheckoutHistory(yesterday.toDate());
     }, [getCheckoutHistory]);
 
@@ -23,14 +23,14 @@ function MonitoringPage() {
     //get new checkout data every minute
     useEffect(() => {
         const intervalId = setInterval(() => {
-            if (!!latestTimestamp.length) {
-                getCheckoutHistory && getCheckoutHistory(new Date(latestTimestamp));
+            if (latestTimestamp !== undefined && !!latestTimestamp.length && getCheckoutHistory) {
+                getCheckoutHistory(new Date(latestTimestamp));
             }
         }, 60000);
 
         // Clear interval on component unmount
         return () => clearInterval(intervalId);
-    }, [latestTimestamp]);
+    }, [latestTimestamp, getCheckoutHistory]);
 
     const latestCheckoutHistory = checkoutHistory?.filter((history) => history.timestamp === latestTimestamp);
     const latestCheckoutHistoryOrderedByType = latestCheckoutHistory.sort((a, b) => a.checkoutId - b.checkoutId);
@@ -115,7 +115,7 @@ function MonitoringPage() {
                     </div>
                     <div className="col-12 col-md-12 col-lg-6">
                         <div className="h-100 d-flex flex-column">
-                            <div className="text-primary h4 mb-3">Wait Time</div>
+                            <div className="text-primary h4 mb-3">Shopper Wait Time (last 24 hours)</div>
                             <div className="bg-secondary rounded p-3 flex-grow-1">
                                 <WaitTimeGraph checkoutHistory={checkoutHistory} />
                             </div>

@@ -1,0 +1,16 @@
+<div class="row row-cols-1 row-cols-md-4 g-4">
+    {% for product in productlist %}
+    <div class="col">
+        <div class="card text-center h-100" style="width: 17rem;">
+          <div class="card-title"><h5></br>{{ product.name }}</h5></div>
+          <img  src="{{ product.photolocation }}" height="280px" width="280px" class="card-img-top" alt="...">
+          <div class="card-body text-center">
+            <h5 class="card-title tex">Price: {{ product.price }}</h5>
+          </div>
+          <div class="card-footer">
+            <a href="#" class="btn btn-primary add-to-cart" id="liveAlertBtn" onclick="alert('Item Added to Cart', 'success')"  data-product-id="{{ product.produtctid }}" data-product-name="{{ product.name }}" data-product-price="{{ product.price }}"   data-product="{{ product.produtctid }} ">Add to order</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>

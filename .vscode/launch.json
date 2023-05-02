@@ -31,7 +31,8 @@
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run-script", "start"],
             "env": {
-                "BACKEND_API_URL": "https://localhost:4000/"
+                "BACKEND_API_URL": "https://localhost:4000/",
+                "AI_API_URL": "http://127.0.0.1:8000/"
             }
         },
         {
@@ -46,7 +47,7 @@
                 "STORE_LOCATION": "Seattle",
                 "STORE_ID": "1",
             },
-            "args": ["run", "--no-debugger", "--no-reload", "--debug"],
+            "args": ["run","--port", "5000", "--no-debugger", "--no-reload", "--debug"],
             "serverReadyAction": {
                 "pattern": "Running on http://127.0.0.1:([0-9]+)",
                 "uriFormat": "http://127.0.0.1:%s",
@@ -54,12 +55,38 @@
             },
             "jinja": true,
             "justMyCode": true
+        },
+        {
+            "name": "ai",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "${workspaceFolder}/contoso_supermarket/developer/ai/app.py",
+                "FLASK_DEBUG": "1"
+            },
+            "args": ["run", "--port", "8000", "--no-debugger", "--no-reload", "--debug"] ,
+            "serverReadyAction": {
+                "pattern": "Running on http://127.0.0.1:([0-9]+)",
+                "uriFormat": "http://127.0.0.1:%s",
+                "action": "openExternally"
+            },
+            "jinja": true,
+            "justMyCode": true
+        },
+        {
+            "name": "pos-cloudsync",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/contoso_supermarket/developer/pos/src/cloud_sync/cloudsync.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ],
     "compounds": [
         {
             "name": "AllProjects",
-            "configurations": ["queue_monitoring_frontend", "queue_monitoring_backend", "pos"]
+            "configurations": ["queue_monitoring_frontend", "queue_monitoring_backend", "pos", "ai"]
         }
     ]
 }

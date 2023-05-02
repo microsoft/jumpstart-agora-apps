@@ -26,14 +26,14 @@ interface AggregatedDataItem {
 }
 
 const formatXAxis = (tickItem: string | number | Date) => {
-    return dayjs(tickItem).format("hh.mm A");
+    return dayjs(tickItem).utc().format("hh.mm A");
 };
 
 const CustomTooltip = (props: TooltipProps<any, string>) => {
     const { active, payload, label } = props;
 
     if (active && payload && payload.length) {
-        const formattedDate = dayjs(label).format("MM/DD/YYYY HH:mm A");
+        const formattedDate = dayjs(label).utc().format("MM/DD/YYYY hh:mm A");
         return (
             <div className="bg-white p-3">
                 <div className="d-flex justify-content-between fs-7">
@@ -92,17 +92,21 @@ const aggregateData = (checkoutHistory: CheckoutHistory[]): AggregatedDataItem[]
         const fiveMinuteTimestamp = Math.floor(timestamp / fiveMinutesInMs) * fiveMinutesInMs;
         const timestampISO = new Date(fiveMinuteTimestamp).toISOString();
         const aggregatedDataItem = aggregatedData.get(timestampISO)!;
-
-        switch (checkout.checkoutType) {
-            case CheckoutType.SelfService:
-                aggregatedDataItem.selfCheckoutWaitTime = checkout.averageWaitTimeSeconds / 60;
-                break;
-            case CheckoutType.Express:
-                aggregatedDataItem.expressCheckoutWaitTime = checkout.averageWaitTimeSeconds / 60;
-                break;
-            case CheckoutType.Standard:
-                aggregatedDataItem.standardCheckoutWaitTime = checkout.averageWaitTimeSeconds / 60;
-                break;
+        if (!!aggregatedDataItem) {
+            if (checkout.averageWaitTimeSeconds === 0) {
+                return;
+            }
+            switch (checkout.checkoutType) {
+                case CheckoutType.SelfService:
+                    aggregatedDataItem.selfCheckoutWaitTime = checkout.averageWaitTimeSeconds / 60;
+                    break;
+                case CheckoutType.Express:
+                    aggregatedDataItem.expressCheckoutWaitTime = checkout.averageWaitTimeSeconds / 60;
+                    break;
+                case CheckoutType.Standard:
+                    aggregatedDataItem.standardCheckoutWaitTime = checkout.averageWaitTimeSeconds / 60;
+                    break;
+            }
         }
     });
 
@@ -157,7 +161,7 @@ function WaitTimeGraph(props: WaitTimeGraphProps) {
                     type="monotone"
                     dataKey="standardCheckoutWaitTime"
                     isAnimationActive={false}
-                    stroke="#e810e0"
+                    stroke="#BB80ff"
                     dot={false}
                 />
                 <Line
