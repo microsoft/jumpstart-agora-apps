@@ -1,9 +1,9 @@
 CREATE SCHEMA IF NOT EXISTS contoso;
 CREATE TABLE IF NOT EXISTS contoso.products (productId SERIAL PRIMARY KEY, name text, description text, price numeric, stock int, photopath text, category text);
-CREATE TABLE IF NOT EXISTS contoso.Orders (orderID SERIAL PRIMARY KEY, orderDate timestamp, orderdetails JSON, storeId INT);
-CREATE TABLE IF NOT EXISTS contoso.checkout_type ( id SERIAL PRIMARY KEY, name TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS contoso.checkout_history ( timestamp TIMESTAMPTZ, checkout_id INT, checkout_type INT, queue_length INT, average_wait_time_seconds INT, PRIMARY KEY (timestamp, checkout_id));
-CREATE TABLE IF NOT EXISTS contoso.checkout ( id INTEGER PRIMARY KEY, type INTEGER REFERENCES contoso.checkout_type(id), avgprocessingtime INTEGER, closed BOOLEAN);
+CREATE TABLE IF NOT EXISTS contoso.Orders (orderID SERIAL PRIMARY KEY, orderDate timestamp, orderdetails JSON, storeId INT, cloudsynced BOOLEAN DEFAULT FALSE);
+CREATE TABLE IF NOT EXISTS contoso.checkout_type (id SERIAL PRIMARY KEY, name TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS contoso.checkout (id INTEGER PRIMARY KEY, type INTEGER REFERENCES contoso.checkout_type(id), avgprocessingtime INTEGER, closed BOOLEAN);
+CREATE TABLE IF NOT EXISTS contoso.checkout_history (timestamp TIMESTAMPTZ, checkout_id INT REFERENCES contoso.checkout(id), checkout_type INT, queue_length INT, average_wait_time_seconds INT, PRIMARY KEY (timestamp, checkout_id));
 
 -- seeding contoso.checkout_type
 INSERT INTO contoso.checkout_type (id, name)
