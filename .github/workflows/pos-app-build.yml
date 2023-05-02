@@ -38,5 +38,5 @@ jobs:
 
       - name: 'Build and push image'
         run: |
-          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/staging/contososupermarket:0.0.${GITHUB_RUN_NUMBER}"
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/staging/contososupermarket:0.0.${GITHUB_RUN_NUMBER}
+          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/staging/contososupermarket:latest"
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/staging/contososupermarket:latest
