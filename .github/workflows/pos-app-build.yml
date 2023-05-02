@@ -39,5 +39,5 @@ jobs:
       - name: 'Build and push image'
         working-directory: contoso_supermarket/developer/pos/
         run: |
-          docker build -t "${{ secrets.ACR_NAME }}.azurecr.io/dev/contososupermarket:latest"
+          docker build . -t "${{ secrets.ACR_NAME }}.azurecr.io/dev/contososupermarket:latest"
           docker push ${{ secrets.ACR_NAME }}.azurecr.io/dev/contososupermarket:latest
