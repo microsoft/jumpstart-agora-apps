@@ -73,6 +73,14 @@
             },
             "jinja": true,
             "justMyCode": true
+        },
+        {
+            "name": "pos-cloudsync",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/contoso_supermarket/developer/pos/src/cloud_sync/cloudsync.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ],
     "compounds": [
