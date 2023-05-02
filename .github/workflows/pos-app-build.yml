@@ -24,8 +24,6 @@ permissions:
 jobs:
   build-and-deploy:
       runs-on: ubuntu-latest
-      env:
-        Version: "0.0.1"
       steps:
       # checkout the repo
       - name: 'Checkout repository'
