@@ -41,5 +41,9 @@ spec:
               value: "http://{{ .Release.Name }}-queue-monitoring-backend:4000"
             - name: BACKEND_API_HOST
               value: "{{ .Release.Name }}-queue-monitoring-backend"
+            - name: AI_API_URL
+              value: "http://{{ .Release.Name }}-contosoai:8000"
+            - name: AI_API_HOST
+              value: "{{ .Release.Name }}-contosoai"
           ports:
             - containerPort: 8080

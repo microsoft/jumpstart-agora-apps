@@ -13,12 +13,16 @@ import numpy as np
 
 app = Flask(__name__)
 
-model_xml = 'C:/Users/bent/source/repos/Microsoft/jumpstart-agora-apps/contoso_supermarket/developer/ai/models/person-detection-retail-0013.xml'
-model_bin = 'C:/Users/bent/source/repos/Microsoft/jumpstart-agora-apps/contoso_supermarket/developer/ai/models/person-detection-retail-0013.bin'
+# Get the directory where the app.py script is located
+# allows for running the app from any working directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# model_xml = './models/person-detection-retail-0013.xml'
-# model_bin = './models/person-detection-retail-0013.bin'
-video_path = 'https://agoravideos.blob.core.windows.net/videos/supermarket.mp4'
+# Construct the path to the model files relative to the location of app.py
+model_xml = os.path.join(script_dir, 'models', 'person-detection-retail-0013.xml')
+model_bin = os.path.join(script_dir, 'models', 'person-detection-retail-0013.bin')
+
+video_path = os.path.join(script_dir, 'videos', 'supermarket.mp4')
+
 
 # Load OpenVino model
 ie = IECore()

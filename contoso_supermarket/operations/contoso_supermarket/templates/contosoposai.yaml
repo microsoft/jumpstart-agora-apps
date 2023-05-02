@@ -1,0 +1,40 @@
+# Create Contoso Supermarket Point Of Sale Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-contosoai
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-contosoai
+spec:
+  selector:
+    app: {{ .Release.Name }}-contosoai
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+  type: LoadBalancer
+---
+# Create Contoso Supermarket Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-contosoai
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-contosoai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-contosoai
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-contosoai
+    spec:
+      containers:
+        - name: contosoai
+          image: jumpstartagora.azurecr.io/contoso-supermarket/ai:latest
+          ports:
+            - containerPort: 8000

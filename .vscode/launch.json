@@ -31,7 +31,8 @@
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run-script", "start"],
             "env": {
-                "BACKEND_API_URL": "https://localhost:4000/"
+                "BACKEND_API_URL": "https://localhost:4000/",
+                "AI_API_URL": "http://127.0.0.1:8000/"
             }
         },
         {
@@ -46,7 +47,7 @@
                 "STORE_LOCATION": "Seattle",
                 "STORE_ID": "1",
             },
-            "args": ["run", "--no-debugger", "--no-reload", "--debug"],
+            "args": ["run","--port", "5000", "--no-debugger", "--no-reload", "--debug"],
             "serverReadyAction": {
                 "pattern": "Running on http://127.0.0.1:([0-9]+)",
                 "uriFormat": "http://127.0.0.1:%s",
@@ -64,7 +65,7 @@
                 "FLASK_APP": "${workspaceFolder}/contoso_supermarket/developer/ai/app.py",
                 "FLASK_DEBUG": "1"
             },
-            "args": ["run", "--no-debugger", "--no-reload", "--debug"],
+            "args": ["run", "--port", "8000", "--no-debugger", "--no-reload", "--debug"] ,
             "serverReadyAction": {
                 "pattern": "Running on http://127.0.0.1:([0-9]+)",
                 "uriFormat": "http://127.0.0.1:%s",
@@ -77,7 +78,7 @@
     "compounds": [
         {
             "name": "AllProjects",
-            "configurations": ["queue_monitoring_frontend", "queue_monitoring_backend", "pos"]
+            "configurations": ["queue_monitoring_frontend", "queue_monitoring_backend", "pos", "ai"]
         }
     ]
 }

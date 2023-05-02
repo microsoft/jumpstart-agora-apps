@@ -12,4 +12,10 @@ server {
         proxy_pass ${BACKEND_API_URL};
         proxy_set_header Host ${BACKEND_API_HOST};
     }
+
+    location /ai {
+        rewrite ^/ai(.*)$ $1 break;
+        proxy_pass ${AI_API_URL};
+        proxy_set_header Host ${AI_API_HOST};
+    }
 }
