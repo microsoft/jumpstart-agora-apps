@@ -61,7 +61,7 @@ jobs:
       - name: Create Helm chart from Kubernetes manifest
         run: |
               helm create pos-chart
-              cp contoso_supermarket/operations/contoso_supermarket/templates/contosopos.yaml my-chart/templates/
+              cp contoso_supermarket/operations/contoso_supermarket/templates/contosopos.yaml pos-chart/templates/
               echo "apiVersion: v2\nname: pos-chart\ndescription: A Helm chart for pos app\nversion: 0.1.0" > pos-chart/Chart.yaml
               helm package pos-chart
       
