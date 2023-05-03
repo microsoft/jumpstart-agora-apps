@@ -12,4 +12,4 @@ RUN mkdir videos
 RUN curl https://agoravideos.blob.core.windows.net/videos/supermarket.mp4 --output ./videos/supermarket.mp4
 COPY . .
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=8000"]
