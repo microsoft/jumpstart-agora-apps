@@ -42,6 +42,7 @@ jobs:
           docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{github.ref_name}}/contoso-supermarket/pos:latest
 
       - name: Replace ACR with the correct name
+        continue-on-error: true
         env:
             ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
@@ -49,6 +50,7 @@ jobs:
 
       - name: Commit and push changes
         uses: devops-infra/action-commit-push@master
+        continue-on-error: true
         with:
             github_token: ${{ secrets.PAT_GITHUB }}
             commit_message: Replaced ACR with the correct name
