@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: pos
+  namespace: pos
+  annotations:
+    clusterconfig.azure.com/use-managed-source: "true"
+spec:
+  interval: 1m
+  releaseName: pos
+  chart:
+    spec:
+      chart: ./contoso_supermarket/chart/
+  values:
+    controller:
+      image:
+        repository: k8s.gcr.io/pos/controller
+        tag: "v1.1.1"
+      replicaCount: 2
