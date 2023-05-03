@@ -47,7 +47,7 @@ jobs:
             ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
             defaultLine="image: __jumpstartagora__.azurecr.io/contoso-supermarket/pos:latest"
-            file="contosopos.yaml"
+            file=$(find . -type f -name "contosopos.yaml")
             acrLine=$(find . -type f -name "contosopos.yaml" -print0 | grep "azurecr.io" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "contosopos.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
