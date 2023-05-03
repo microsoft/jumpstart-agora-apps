@@ -1,4 +1,4 @@
-name: Build contososupermarket app
+name: Build contososupermarket app- Helm
 
 on:
   push:
