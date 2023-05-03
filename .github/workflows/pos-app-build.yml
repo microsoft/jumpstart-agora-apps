@@ -38,8 +38,8 @@ jobs:
 
       - name: 'Build and push image'
         run: |
-          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/contoso-supermarket/pos:latest"
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/staging/contoso-supermarket/pos:latest
+          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/${{github.ref_name}}/contoso-supermarket/pos:latest"
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{github.ref_name}}/contoso-supermarket/pos:latest
 
       - name: Replace ACR with the correct name
         env:
