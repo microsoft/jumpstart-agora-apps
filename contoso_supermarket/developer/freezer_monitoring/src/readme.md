@@ -136,28 +136,31 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 ## Azure IoT Setup
 
 1. https://techcommunity.microsoft.com/t5/internet-of-things-blog/mosquitto-client-tools-and-azure-iot-hub-the-beginning-of/ba-p/2824717
-2. 
-3. Ignore following...
-4. `$LOCATION = "eastus"`
-5. `$RESOURCE_GROUP_NAME = "charris-js-ag-42-rg"`
-6. `$HUB_NAME = "Ag-IotHub-b976e"`
-7. `az group create --location $location --name $RESOURCE_GROUP_NAME`
-   
-8. Create the devices
-    
-    ```powershell
-        $DEVICES = ("freezer-1-chicago","freezer-2-chicago")
-        foreach ($DEVICE in $DEVICES) {
-            az iot hub device-identity create --device-id $DEVICE --edge-enabled --hub-name $HUB_NAME
-        }
-    ```
-    `az iot hub device-identity create --device-id $DEVICE --edge-enabled --hub-name $HUB_NAME`
-9. View connection string
-   1. `az iot hub device-identity connection-string show --device-id $DEVICE --hub-name $HUB_NAME -o tsv`
-10. Configure Broker to send to IoT Hub
-  - foreach device: update remote_password in mqtt-broker/mosquitto.conf
-  `az iot hub generate-sas-token --device-id $DEVICE --hub-name $HUB_NAME --duration (60*60*24*365) --query sas -o tsv`
+2. Create the devices
+```powershell
+    $LOCATION = "southcentralus"
+    $RESOURCE_GROUP_NAME = "charris-js-ag-45-rg"
+    $HUB_NAME = "Ag-IotHub-cf824"
+    $DEVICES = ("freezer-1-chicago","freezer-2-chicago")
+    foreach ($DEVICE in $DEVICES) {
+        az iot hub device-identity create -g $RESOURCE_GROUP_NAME --device-id $DEVICE --edge-enabled --hub-name $HUB_NAME
+    }
 
+```
+3. View connection string
+```powershell
+    foreach ($DEVICE in $DEVICES) {
+        az iot hub device-identity connection-string show --device-id $DEVICE --hub-name $HUB_NAME -o tsv
+    }
+```
+
+4. Get the sas tokens to update c:\deployment\developer\freezer_monitoring\mqtt-broker\mosquitto.conf
+```powershell
+    foreach ($DEVICE in $DEVICES) {
+        write-host "SAS Token for $DEVICE"
+        az iot hub generate-sas-token --device-id $DEVICE --hub-name $HUB_NAME --duration (60*60*24*365) --query sas -o tsv
+    }
+```
 
 Elevated PowerShell
     1. Install AzureIoTEdge

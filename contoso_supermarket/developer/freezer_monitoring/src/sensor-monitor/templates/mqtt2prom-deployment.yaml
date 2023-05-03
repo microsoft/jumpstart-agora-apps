@@ -26,7 +26,7 @@ spec:
           - debug
           name: mqtt2prom
           image: "ghcr.io/hikhvar/mqtt2prometheus:v0.1.7"
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.mqtt2prom.mqtt2prom.imagePullPolicy }}
           ports:
             - name: http
               containerPort: 9641
