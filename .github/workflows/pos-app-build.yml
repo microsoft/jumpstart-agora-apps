@@ -46,6 +46,10 @@ jobs:
         env:
             ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
+            defaultLine="image: __jumpstartagora__.azurecr.io/contoso-supermarket/pos:latest"
+            file="contosopos.yaml"
+            acrLine=$(find . -type f -name "contosopos.yaml" -print0 | grep "azurecr.io" "$file" | sed 's/^ *//')
+            newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "contosopos.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
 
       - name: Replace GitHub account with the correct name
