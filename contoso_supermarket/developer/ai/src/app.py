@@ -27,7 +27,7 @@ video_path = os.path.join(script_dir, 'videos', 'supermarket.mp4')
 # Load OpenVino model
 ie = IECore()
 net = ie.read_network(model=model_xml, weights=model_bin)
-exec_net = ie.load_network(network=net, device_name="GPU")
+exec_net = ie.load_network(network=net, device_name="CPU")
 
 # Get input and output node names
 input_blob = next(iter(net.input_info))
