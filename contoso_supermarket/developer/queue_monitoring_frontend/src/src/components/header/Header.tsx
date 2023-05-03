@@ -52,7 +52,7 @@ function Header() {
                                 </Link>
                             </li>
                             <li className="nav-item ms-4">
-                                <Link className={getNavClasses("/live-View") + " disabled"} to="#">
+                                <Link className={getNavClasses("/live-video")} to="/live-video">
                                     Live View
                                 </Link>
                             </li>

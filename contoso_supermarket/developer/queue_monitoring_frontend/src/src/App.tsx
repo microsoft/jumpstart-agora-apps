@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MonitoringPage from "./pages/MonitoringPage";
 import { GlobalProvider } from "./providers/GlobalContext";
 import ProductsPage from "./pages/ProductsPage";
+import LiveVideoPage from "./pages/LiveVideoPage";
 
 const router = createBrowserRouter([
     {
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
     {
         path: "/products",
         element: <ProductsPage />,
+    },
+    {
+        path: "/live-video",
+        element: <LiveVideoPage />,
     },
 ]);
 

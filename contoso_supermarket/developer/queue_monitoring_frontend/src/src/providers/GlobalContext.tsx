@@ -27,11 +27,24 @@ export interface Product {
     stock: number;
 }
 
+export interface Checkout {
+    id: number;
+    type: CheckoutType;
+    avgProcessingTime: number;
+    closed: boolean;
+}
+
 export interface GlobalContextInterface {
     //checkout history
     checkoutHistory: CheckoutHistory[];
     getCheckoutHistory?: (startDate?: Date, endDate?: Date) => void;
     checkoutHistoryLoading: boolean;
+
+    //checkouts
+    getCheckouts?: () => void;
+    toggleCheckout?: (checkoutId: number, timestamp: string) => void;
+    checkoutsLoading: boolean;
+    checkouts: Checkout[];
 
     //products
     products: Product[];
@@ -44,8 +57,10 @@ export interface GlobalContextInterface {
 export const GlobalContext = createContext<GlobalContextInterface>({
     checkoutHistory: [],
     products: [],
+    checkouts: [],
     productsLoading: false,
     checkoutHistoryLoading: false,
+    checkoutsLoading: false,
 });
 
 export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
@@ -54,6 +69,48 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [products, setProducts] = useState<Product[]>([]);
     const [productsLoading, setProductsLoading] = useState<boolean>(false);
+
+    const [checkouts, setCheckouts] = useState<Checkout[]>([]);
+    const [checkoutsLoading, setCheckoutsLoading] = useState<boolean>(false);
+
+    const getCheckouts = useCallback(() => {
+        setCheckoutsLoading(true);
+        //get checkout status
+        axios
+            .get(`/api/checkouts`)
+            .then((ret) => {
+                setCheckouts(ret.data);
+            })
+            .finally(() => {
+                setCheckoutsLoading(false);
+            });
+    }, []);
+
+    const toggleCheckout = useCallback((checkoutId: number, timestamp: string) => {
+        setCheckoutsLoading(true);
+        //close/open checkout
+        axios
+            .get(`/api/checkouts/${checkoutId}/toggle`)
+            .then((ret) => {
+                setCheckouts((results) => {
+                    const checkout: Checkout = ret.data;
+                    const index = results.findIndex((c) => c.id === checkout.id);
+                    if (index >= 0) {
+                        // Update existing checkout
+                        const updatedResults = [...results];
+                        updatedResults[index] = checkout;
+                        return updatedResults;
+                    } else {
+                        // Insert new checkout
+                        return [...results, checkout];
+                    }
+                });
+            })
+            .finally(() => {
+                setCheckoutsLoading(false);
+                getCheckoutHistory(new Date(timestamp));
+            });
+    }, []);
 
     const getCheckoutHistory = useCallback((startDate?: Date, endDate?: Date) => {
         setCheckoutHistoryLoading(true);
@@ -137,6 +194,10 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
                 getProducts: getProducts,
                 updateProducts: updateProducts,
                 deleteProduct: deleteProduct,
+                getCheckouts: getCheckouts,
+                checkoutsLoading: checkoutsLoading,
+                toggleCheckout: toggleCheckout,
+                checkouts: checkouts,
             }}
         >
             {children}

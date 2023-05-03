@@ -10,32 +10,28 @@ namespace Contoso.Backend.Data.BackgroundServices
         private readonly string? _timeZone;
         private Timer? _timer = null;
 
-        //store constants
-        private readonly List<(int CheckoutId, CheckoutType CheckoutType)> _checkoutIdAndTypes = new()
-        {
-            (1, CheckoutType.Express),
-            (2, CheckoutType.Express),
-            (3, CheckoutType.SelfService),
-            (4, CheckoutType.SelfService),
-            (5, CheckoutType.SelfService),
-            (6, CheckoutType.SelfService),
-            (7, CheckoutType.Standard),
-            (8, CheckoutType.Standard)
-        };
-        private readonly List<(TimeSpan StartPeak, TimeSpan EndPeak)> _peakTimes = new()
-        {
-            (new TimeSpan(11, 30, 0), new TimeSpan(13, 0, 0)), // 11:30am - 1pm
-            (new TimeSpan(17, 0, 0), new TimeSpan(18, 30, 0))   // 5pm - 6:30pm
-        };
-        private readonly TimeSpan _storeOpenTime = new(7, 0, 0); // 7am
-        private readonly TimeSpan _storeCloseTime = new(21, 0, 0); // 9pm
+        private readonly DataGenerator _checkoutDataGenerator;
 
+        //store constants
+        private readonly List<(TimeSpan start, TimeSpan end)> _peakTimes = new List<(TimeSpan start, TimeSpan end)>
+        {
+            (new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0)),
+            (new TimeSpan(17, 0, 0), new TimeSpan(19, 0, 0))
+        };
+
+        private readonly List<(TimeSpan start, TimeSpan end)> _lowTrafficTimes = new List<(TimeSpan start, TimeSpan end)>
+        {
+             (new TimeSpan(22, 0, 0), new TimeSpan(7, 0, 0))
+        };
 
         public TimedHostedService(ILogger<TimedHostedService> logger, PostgreSqlService postgreSqlService, IConfiguration configuration)
         {
             _logger = logger;
             _postgreSqlService = postgreSqlService;
             _timeZone = configuration["TIMEZONE"];
+            var checkouts = _postgreSqlService.GetCheckouts().Result;
+
+            _checkoutDataGenerator = new DataGenerator(checkouts, _peakTimes, _lowTrafficTimes, (0, 5), (4, 15), (8, 12), 200, 10);
         }
 
         public async Task StartAsync(CancellationToken stoppingToken)
@@ -46,9 +42,10 @@ namespace Contoso.Backend.Data.BackgroundServices
             var checkoutHistoryPopulated = await _postgreSqlService.TableHasValue("contoso.checkout_history");
             if (!checkoutHistoryPopulated)
             {
-                var endDate = DateTimeOffset.UtcNow.ConvertTimeZone(_timeZone);
-                var startDate = new DateTimeOffset(endDate.Date.AddDays(-1)).AppendTimeZone(_timeZone);
-                var checkoutData = CheckoutGenerator.GenerateCheckoutData(_checkoutIdAndTypes, _peakTimes, startDate, endDate, _storeOpenTime, _storeCloseTime);
+                // var endDate = DateTimeOffset.UtcNow.ConvertTimeZone(_timeZone);
+                var startDate = DateTime.UtcNow.AddDays(-1);
+                var checkouts = await _postgreSqlService.GetCheckouts();
+                var checkoutData = _checkoutDataGenerator.GenerateData(startDate, null, checkouts);
                 await _postgreSqlService.BulkUpsertCheckoutHistory(checkoutData);
             }
 
@@ -58,12 +55,24 @@ namespace Contoso.Backend.Data.BackgroundServices
 
         private void DoWork(object? state)
         {
-
-            var startDate = (_postgreSqlService.GetMaxCheckoutHistoryTimestamp().Result).ConvertTimeZone(_timeZone);
-            var endDate = DateTimeOffset.UtcNow.ConvertTimeZone(_timeZone);
+            var startDate = _postgreSqlService.GetMaxCheckoutHistoryTimestamp().Result;
+            var endDate = DateTime.UtcNow;
             _logger.LogInformation($"Generating data between {startDate}-{endDate}...");
+            var checkouts = _postgreSqlService.GetCheckouts().Result;
+            var checkoutData = _checkoutDataGenerator.GenerateData(startDate.UtcDateTime, endDate, checkouts);
+            _postgreSqlService.BulkUpsertCheckoutHistory(checkoutData).Wait();
+        }
 
-            var checkoutData = CheckoutGenerator.GenerateCheckoutData(_checkoutIdAndTypes, _peakTimes, startDate, endDate, _storeOpenTime, _storeCloseTime);
+        public void RedistributeQueues()
+        {
+            //increase DoWork timer to avoid collisions
+            _timer.Change(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(60));
+
+            //redistributes the queues
+            var startDate = _postgreSqlService.GetMaxCheckoutHistoryTimestamp().Result;
+            var endDate = DateTime.UtcNow;
+            var checkouts = _postgreSqlService.GetCheckouts().Result;
+            var checkoutData = _checkoutDataGenerator.GenerateData(startDate.UtcDateTime, endDate, checkouts, true);
             _postgreSqlService.BulkUpsertCheckoutHistory(checkoutData).Wait();
         }
 

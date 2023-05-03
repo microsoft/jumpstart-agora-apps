@@ -38,7 +38,13 @@ dbconfig = {
 
 conn = psycopg2.connect(**dbconfig)
 conn.autocommit= True # allows connection to recover on an error
-cursor = conn.cursor()
+
+def get_cursor():
+    try:
+        return conn.cursor()
+    except psycopg2.InterfaceError:
+        conn.reset()
+        return conn.cursor()
 
 @app.route('/')
 def index():
@@ -57,25 +63,30 @@ def index():
 
     query = "SELECT productid, name, description, price, stock, photopath FROM contoso.products ORDER BY productId"
     productlist = []
-    cursor.execute(query)
-    for item in cursor.fetchall():
-        productlist.append({
-        'productid': item[0],
-        'name': item[1],
-        'description': item[2],
-        'price': item[3],
-        'stock': item[4],
-        'photopath': item[5]
-    })
-    #cursor.close()
+    
+    try:
+        cur = get_cursor()
+        cur.execute(query)
+        for item in cur.fetchall():
+            productlist.append({
+            'productid': item[0],
+            'name': item[1],
+            'description': item[2],
+            'price': item[3],
+            'stock': item[4],
+            'photopath': item[5]
+        })
+        cur.close()
+    except Exception as e:
+        print("Error querying items: " + str(e))
+        conn.rollback()
 
-    #return render_template('index2.html' if new_category else 'index.html', head_title = head_title, cameras_enabled = cameras_enabled, productlist=productlist)
-    return render_template('index.html', head_title = head_title, cameras_enabled = cameras_enabled, productlist=productlist)
+    return render_template('index.html', head_title=head_title, cameras_enabled=cameras_enabled, productlist=productlist)
 
 @app.route('/inventory')
 def inventory():
     try:
-        cur = conn.cursor()
+        cur = get_cursor()
         inventorylist = []
         query = "SELECT productid, name, description, price, stock, photopath from contoso.products ORDER BY productId"
         cur.execute(query)
@@ -89,17 +100,16 @@ def inventory():
                 'photopath': item[5]
             })
         cur.close()
-        #conn.close()
         return render_template('inventory.html', inventorylist=inventorylist)
     except Exception as e:
+        print("Error querying items: " + str(e))
+        conn.rollback()
         return "Error querying items: " + str(e)
-
-
 @app.route('/update_item', methods=['POST'])
 def update_item():
-
-    cur = conn.cursor()
     try:
+        cur = get_cursor()
+        
         # Get item information from request data
         item_id = int(request.form['id'])
         name = request.form['name']
@@ -108,12 +118,14 @@ def update_item():
         # Update item in database  
         cur.execute("UPDATE contoso.products SET Name=%s, price=%s WHERE productId=%s", (name, price, item_id))
         conn.commit()
-        #cur.close()
+        cur.close()
 
         # Return success message
         return "Item updated successfully."
     except Exception as e:
         # Handle errors
+        print("Error updating item: " + str(e))
+        conn.rollback()
         return "Error updating item: " + str(e)
 
 @app.route('/delete_item', methods=['POST'])
@@ -123,17 +135,18 @@ def delete_item():
         item_id = int(request.form['id'])
 
         # Delete item from database
-        cur = conn.cursor()
+        cur = get_cursor()
         cur.execute("DELETE FROM contoso.products WHERE productid=%s", (item_id,))
         conn.commit()
-        #cur.close()
+        cur.close()
 
         # Return success message
         return "Item deleted successfully."
     except Exception as e:
         # Handle errors
+        print("Error deleting item: " + str(e))
+        conn.rollback()
         return "Error deleting item: " + str(e)
-
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -178,8 +191,7 @@ def cart():
 
 @app.route('/checkout')
 def checkout():
-
-    cur = conn.cursor()
+    cur = get_cursor()
     cart = session.get('cart', [])
 
     # only create order if the cart isn't empty
@@ -190,12 +202,18 @@ def checkout():
         orderDate = datetime.now()
         jsoncart = json.dumps(cart)
         query = "INSERT INTO contoso.Orders (orderDate, orderdetails, storeId) VALUES ('{}', '{}', {}) returning orderId".format(orderDate, jsoncart, storeid)
-        cur.execute(query)
-        ordernumber = cur.fetchone()[0]
-        conn.commit()
-        cur.close()
-        session.clear() # clears the cart
-        return render_template('checkout.html', ordernumber=ordernumber, order=order)
+        
+        try:
+            cur.execute(query)
+            ordernumber = cur.fetchone()[0]
+            conn.commit()
+            cur.close()
+            session.clear() # clears the cart
+            return render_template('checkout.html', ordernumber=ordernumber, order=order)
+        except Exception as e:
+            print("Error creating order: " + str(e))
+            conn.rollback()
+            return "Error creating order: " + str(e)
 
 @app.route('/addPurchase',methods = ['POST'])
 def addPurchase():

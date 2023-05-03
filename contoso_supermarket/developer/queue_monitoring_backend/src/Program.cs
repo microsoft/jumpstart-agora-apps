@@ -1,5 +1,6 @@
 using Contoso.Backend.Data.BackgroundServices;
 using Contoso.Backend.Data.Services;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -9,7 +10,8 @@ var Configuration = builder.Configuration;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(new PostgreSqlService($"Host={Configuration["SQL_HOST"]};Username={Configuration["SQL_USERNAME"]};Password={Configuration["SQL_PASSWORD"]};Database={Configuration["SQL_DATABASE"]}"));
-builder.Services.AddHostedService<TimedHostedService>();
+builder.Services.AddSingleton<TimedHostedService>();
+builder.Services.AddHostedService<TimedHostedService>(provider => provider.GetService<TimedHostedService>());
 
 var app = builder.Build();
 
@@ -40,7 +42,7 @@ app.MapGet("api/products", async (PostgreSqlService postgreSqlService) =>
 
 app.MapPost("api/products", async (PostgreSqlService postgreSqlService, List<Product> products) =>
 {
-    await postgreSqlService.UpdateProducts(products);
+    await postgreSqlService.UpsertProducts(products);
 })
 .WithName("UpdateProducts")
 .WithOpenApi();
@@ -50,6 +52,22 @@ app.MapDelete("api/products/{productId}", async (PostgreSqlService postgreSqlSer
     await postgreSqlService.DeleteProduct(productId);
 })
 .WithName("DeleteProduct")
+.WithOpenApi();
+
+app.MapGet("api/checkouts/", async (PostgreSqlService postgreSqlService) =>
+{
+    return await postgreSqlService.GetCheckouts();
+})
+.WithName("GetCheckouts")
+.WithOpenApi();
+
+app.MapGet("api/checkouts/{checkoutId}/toggle", async ([FromServices] PostgreSqlService postgreSqlService, [FromServices] TimedHostedService ths, int checkoutId) =>
+{
+    var toggleCheckout = await postgreSqlService.ToggleCheckout(checkoutId);
+    ths.RedistributeQueues();
+    return toggleCheckout;
+})
+.WithName("ToggleCheckout")
 .WithOpenApi();
 
 app.Run();
