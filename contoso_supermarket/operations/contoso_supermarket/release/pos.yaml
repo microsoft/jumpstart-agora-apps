@@ -11,9 +11,3 @@ spec:
   chart:
     spec:
       chart: ./contoso_supermarket/chart/
-  values:
-    controller:
-      image:
-        repository: k8s.gcr.io/pos/controller
-        tag: "v1.1.1"
-      replicaCount: 2
