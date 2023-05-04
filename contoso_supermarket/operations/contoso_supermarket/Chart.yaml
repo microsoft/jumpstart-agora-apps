@@ -1,8 +1,7 @@
 apiVersion: v2
 name: contoso_supermarket
-description: A helm chart to deploy the Contoso Supermarket application
-home: https://github.com/sebassem/jumpstart-agora-apps
-type: application
 version: 0.1.0
+description: A helm chart to deploy the Contoso Supermarket application
+type: application
 sources:
   - https://github.com/sebassem/jumpstart-agora-apps/tree/main/contoso_supermarket/operations/contoso_supermarket
