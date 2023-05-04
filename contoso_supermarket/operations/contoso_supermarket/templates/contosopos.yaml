@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: contosopos
-          image: Agacrce99b.azurecr.io/contoso-supermarket/pos:latest
+          image: jumpstartagora.azurecr.io/contoso-supermarket/pos:latest
           env:
             - name: SQL_HOST
               value: {{ .Release.Name }}-contosodb
