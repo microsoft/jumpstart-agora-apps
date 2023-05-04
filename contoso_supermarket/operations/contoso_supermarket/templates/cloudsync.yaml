@@ -35,7 +35,7 @@ spec:
         - name: COSMOSKEY
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-secrets
+              name: cosmoskey
               key: COSMOS_KEY     
         - name: COSMOSDB
           value: {{ required "A valid Cosmos container is required! (Set cosmos.database)" .Values.cosmos.database }}

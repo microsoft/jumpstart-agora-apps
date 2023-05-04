@@ -44,7 +44,7 @@ spec:
             - name: SQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secrets
+                  name: postgrespw
                   key: POSTGRES_PASSWORD      
             - name: SQL_DATABASE
               value: {{ .Values.postgres.database }}
