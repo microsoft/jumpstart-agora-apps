@@ -10,4 +10,4 @@ spec:
   releaseName: pos
   chart:
     spec:
-      chart: ./contoso_supermarket/chart/
+      chart: ./contoso_supermarket/operations/contoso_supermarket/contoso_supermarket
