@@ -4,17 +4,17 @@ on:
   push:
         branches:
             - main
-            - Staging
-            - Canary
-            - Prod
+            - staging
+            - canary
+            - prod
   pull_request:
         types:
             - closed
         branches:
             - main
-            - Staging
-            - Canary
-            - Prod
+            - staging
+            - canary
+            - prod
 
   workflow_dispatch: {}
 
