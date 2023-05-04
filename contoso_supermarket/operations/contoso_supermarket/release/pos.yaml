@@ -10,7 +10,7 @@ spec:
   releaseName: pos
   chart:
     spec:
-      chart: ./contoso_supermarket/operations/contoso_supermarket/contoso_supermarket
+      chart: ./contoso_supermarket/operations/contoso_supermarket
   values:
     queue_monitoring:
       timezone: "Pacific Standard Time"
