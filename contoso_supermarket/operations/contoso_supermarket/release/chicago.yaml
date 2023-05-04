@@ -12,6 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket
   values:
+    acr_name: "__jumpstartagora__"
     queue_monitoring:
       timezone: "Pacific Standard Time"
     postgres:
@@ -20,12 +21,12 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: "https://agcosmos154f8.documents.azure.com:443"
+      endpoint: "__cosmosdbendpoint__"
     point_of_sale:
       title: "Contoso Supermarket"
       cameras_enabled: "False"
       cameras_url: ""
       new_category: "True"
       holiday_banner: "False"
-      store_id: 1
-      store_location: "Seattle"
+      store_id: 2
+      store_location: "Chicago"

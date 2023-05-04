@@ -52,6 +52,10 @@ jobs:
             acrLine=$(find . -type f -name "contosopos.yaml" -print0 | grep "azurecr.io" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "contosopos.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
+            find . -type f -name "seattle.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
+            find . -type f -name "chicago.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
+            find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
+            find . -type f -name "dev.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
 
       - name: Replace GitHub account with the correct name
         continue-on-error: true
@@ -64,6 +68,16 @@ jobs:
             GITHUB_BRANCH: ${{github.ref_name}}
         run: |
             find . -type f -name "Chart.yaml" -print0 | xargs -0 sed -i "s/__branch__/$GITHUB_BRANCH/g"
+
+      - name: Replace Cosmos DB endpoint with the correct URL
+        continue-on-error: true
+        env:
+            COSMOS_ENDPOINT: ${{ secrets.COSMOS_DB_ENDPOINT }}
+        run: |
+            find . -type f -name "seattle.yaml" -print0 | xargs -0 sed -i "s/__cosmosdbendpoint__/$COSMOS_ENDPOINT/g"
+            find . -type f -name "chicago.yaml" -print0 | xargs -0 sed -i "s/__cosmosdbendpoint__/$COSMOS_ENDPOINT/g"
+            find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s/__cosmosdbendpoint__/$COSMOS_ENDPOINT/g"
+            find . -type f -name "dev.yaml" -print0 | xargs -0 sed -i "s/__cosmosdbendpoint__/$COSMOS_ENDPOINT/g"
 
       - name: Commit and push changes
         uses: devops-infra/action-commit-push@master
