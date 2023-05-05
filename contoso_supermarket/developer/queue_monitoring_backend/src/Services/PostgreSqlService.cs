@@ -10,68 +10,6 @@ namespace Contoso.Backend.Data.Services
         public PostgreSqlService(string connectionString)
         {
             _connectionString = connectionString;
-            CreateCheckoutTablesIfNotExists();
-            SeedCheckoutTypeTableIfEmpty();
-        }
-
-        private void SeedCheckoutTypeTableIfEmpty()
-        {
-            var checkoutTypePopulated = TableHasValue("contoso.checkout_type").Result;
-            if (!checkoutTypePopulated)
-            {
-                using var con = new NpgsqlConnection(_connectionString);
-                con.Open();
-                var sql = @"
-                    INSERT INTO contoso.checkout_type(Id, Name)
-                    VALUES 
-                        (@StandardId, @StandardName),
-                        (@ExpressId, @ExpressName),
-                        (@SelfServiceId, @SelfServiceName)
-                    ";
-                using var cmd = new NpgsqlCommand(sql, con)
-                {
-                    Parameters =
-                    {
-                        new NpgsqlParameter("StandardId",(int)CheckoutType.Standard),
-                        new NpgsqlParameter("StandardName",CheckoutType.Standard.ToString()),
-                        new NpgsqlParameter("ExpressId",(int)CheckoutType.Express),
-                        new NpgsqlParameter("ExpressName",CheckoutType.Express.ToString()),
-                        new NpgsqlParameter("SelfServiceId",(int)CheckoutType.SelfService),
-                        new NpgsqlParameter("SelfServiceName",CheckoutType.SelfService.ToString())
-                    }
-                };
-                cmd.ExecuteNonQuery();
-                con.Close();
-            }
-        }
-
-        private void CreateCheckoutTablesIfNotExists()
-        {
-            var con = new NpgsqlConnection(_connectionString);
-            con.Open();
-            var sql = @"
-                CREATE TABLE IF NOT EXISTS contoso.checkout_type ( 
-                    id SERIAL PRIMARY KEY,
-                    name TEXT NOT NULL
-                );
-                CREATE TABLE IF NOT EXISTS contoso.checkout_history (
-                    timestamp TIMESTAMPTZ,
-                    checkout_id INT,
-                    checkout_type INT,
-                    queue_length INT,
-                    average_wait_time_seconds INT,
-                    PRIMARY KEY (timestamp, checkout_id)
-                );
-                CREATE TABLE IF NOT EXISTS contoso.checkout (
-                    id INTEGER PRIMARY KEY,
-                    type INTEGER REFERENCES contoso.checkout_type(id),
-                    avgprocessingtime INTEGER,
-                    closed BOOLEAN
-                );
-            ";
-            var cmd = new NpgsqlCommand(sql, con);
-            cmd.ExecuteNonQuery();
-            con.Close();
         }
 
         public async Task<bool> TableHasValue(string tableName)
