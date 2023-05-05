@@ -25,7 +25,6 @@ helm upgrade contoso-supermarket -n "contoso" . `
 ## Setable Values
 | Value Name | Description | Required to be set | Default |
 | --- | --- | --- | --- |
-| timezone | The timezone for the application to use. Uses Microsoft Time Zone strings | No | "Pacific Standard Time" |
 | postgres.password | The password to use when intilizaing the Postgres DB | Yes |  |
 | postgres.username | The username to use when intilizaing the Postgres DB | No | "postgres" |
 | cosmos.access_key | The Cosmos DB Access Key | Yes |  |

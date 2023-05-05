@@ -7,7 +7,6 @@ namespace Contoso.Backend.Data.BackgroundServices
     {
         private readonly ILogger<TimedHostedService> _logger;
         private readonly PostgreSqlService _postgreSqlService;
-        private readonly string? _timeZone;
         private Timer? _timer = null;
 
         private readonly DataGenerator _checkoutDataGenerator;
@@ -28,7 +27,6 @@ namespace Contoso.Backend.Data.BackgroundServices
         {
             _logger = logger;
             _postgreSqlService = postgreSqlService;
-            _timeZone = configuration["TIMEZONE"];
             var checkouts = _postgreSqlService.GetCheckouts().Result;
 
             _checkoutDataGenerator = new DataGenerator(checkouts, _peakTimes, _lowTrafficTimes, (0, 5), (4, 15), (8, 12), 200, 10);

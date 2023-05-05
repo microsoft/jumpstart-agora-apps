@@ -47,8 +47,6 @@ spec:
                   key: POSTGRES_PASSWORD
             - name: SQL_DATABASE
               value: {{ .Values.postgres.database }}
-            - name: TIMEZONE
-              value: {{ .Values.queue_monitoring.timezone }}
             - name: ASPNETCORE_URLS
               value : "http://*:4000/"
           ports:

@@ -1,6 +1,3 @@
-queue_monitoring:
-  timezone: "Pacific Standard Time"
-
 postgres:
   username: "postgres"
   database: "contoso"
