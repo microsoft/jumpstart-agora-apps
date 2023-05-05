@@ -1,0 +1,49 @@
+# Create Contoso Supermarket Queue Monitoring Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-queue-monitoring-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-queue-monitoring-frontend
+spec:
+  selector:
+    app: {{ .Release.Name }}-queue-monitoring-frontend
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+---
+# Create Contoso Supermarket Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-queue-monitoring-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-queue-monitoring-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-queue-monitoring-frontend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-queue-monitoring-frontend
+    spec:
+      containers:
+        - name: queue-monitoring-frontend
+          image: jumpstartagora.azurecr.io/contoso-supermarket/queue-monitoring-frontend:latest
+          env:
+            - name: BACKEND_API_URL
+              value: "http://{{ .Release.Name }}-queue-monitoring-backend:4000"
+            - name: BACKEND_API_HOST
+              value: "{{ .Release.Name }}-queue-monitoring-backend"
+            - name: AI_API_URL
+              value: "http://{{ .Release.Name }}-contosoai:8000"
+            - name: AI_API_HOST
+              value: "{{ .Release.Name }}-contosoai"
+          ports:
+            - containerPort: 8080

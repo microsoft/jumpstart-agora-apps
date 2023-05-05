@@ -1,0 +1,10 @@
+export { default as bgWood } from "./wood.png";
+export { default as HeatMap } from "./heat_map.png";
+export { ReactComponent as FloorTexture } from "./floor_texture.svg";
+export { ReactComponent as IconLogo } from "./logo.svg";
+export { ReactComponent as IconAlert } from "./icon_alert.svg";
+export { ReactComponent as IconProfile } from "./icon_profile.svg";
+export { ReactComponent as IconTrash } from "./trash.svg";
+export { ReactComponent as SelfCheckout } from "./self_checkout.svg";
+export { ReactComponent as ExpressCheckout } from "./express_checkout.svg";
+export { ReactComponent as StandardCheckout } from "./standard_checkout.svg";
