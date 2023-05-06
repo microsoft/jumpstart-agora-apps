@@ -4,18 +4,6 @@ on:
   push:
         branches:
             - main
-            - staging
-            - canary
-            - prod
-  pull_request:
-        types:
-            - closed
-        branches:
-            - main
-            - staging
-            - canary
-            - prod
-
   workflow_dispatch: {}
 
 permissions:
