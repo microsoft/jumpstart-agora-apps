@@ -3,7 +3,7 @@ name: Build contososupermarket app
 on:
   push:
         branches:
-            - main
+            - dev
   workflow_dispatch: {}
 
 permissions:
