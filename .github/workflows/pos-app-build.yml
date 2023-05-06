@@ -47,29 +47,26 @@ jobs:
         env:
             ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
-            defaultLine="image: __jumpstartagora__.azurecr.io/contoso-supermarket/pos:latest"
-            file=$(find . -type f -name "contosopos.yaml")
-            acrLine=$(find . -type f -name "contosopos.yaml" -print0 | grep "azurecr.io" "$file" | sed 's/^ *//')
-            newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
-            find . -type f -name "contosopos.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
+
+            defaultLine="acr_name: __jumpstartagora__"
 
             file=$(find . -type f -name "seattle.yaml")
-            acrLine=$(find . -type f -name "seattle.yaml" -print0 | grep "azurecr.io" "$file" | sed 's/^ *//')
+            acrLine=$(find . -type f -name "seattle.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "seattle.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
 
             file=$(find . -type f -name "chicago.yaml")
-            acrLine=$(find . -type f -name "chicago.yaml" -print0 | grep "azurecr.io" "$file" | sed 's/^ *//')
+            acrLine=$(find . -type f -name "chicago.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "chicago.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
 
             file=$(find . -type f -name "staging.yaml")
-            acrLine=$(find . -type f -name "staging.yaml" -print0 | grep "azurecr.io" "$file" | sed 's/^ *//')
+            acrLine=$(find . -type f -name "staging.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
 
             file=$(find . -type f -name "dev.yaml")
-            acrLine=$(find . -type f -name "dev.yaml" -print0 | grep "azurecr.io" "$file" | sed 's/^ *//')
+            acrLine=$(find . -type f -name "dev.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "dev.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
 

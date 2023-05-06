@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: contosopos
-          image: {{ .Values.acr_name }}.azurecr.io/contoso-supermarket/pos:latest
+          image: {{ .Values.acr_name }}.azurecr.io/${{ .Values.branch_name}}/contoso-supermarket/pos:latest
           env:
             - name: SQL_HOST
               value: {{ .Release.Name }}-contosodb

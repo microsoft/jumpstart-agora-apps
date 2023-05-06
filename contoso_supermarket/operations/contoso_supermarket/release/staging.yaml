@@ -13,6 +13,7 @@ spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket
   values:
     acr_name: "__jumpstartagora__"
+    branch_name: "staging"
     queue_monitoring:
       timezone: "Pacific Standard Time"
     postgres:
