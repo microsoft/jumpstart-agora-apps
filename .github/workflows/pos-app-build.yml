@@ -1,4 +1,4 @@
-name: Build contososupermarket app
+name: Build contososupermarket app - staging
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
     contents: write
 
 jobs:
-  build-and-deploy:
+  build-and-deploy-staging-image:
       if: ${{ github.repository != 'microsoft/jumpstart-agora-apps' }}
       runs-on: ubuntu-latest
       steps:
@@ -25,10 +25,17 @@ jobs:
           username: ${{ secrets.SPN_CLIENT_ID }}
           password: ${{ secrets.SPN_CLIENT_SECRET }}
 
-      - name: 'Build and push image'
+      - name: 'Build and push image staging image'
+        env:
+          GITHUB_BRANCH: 'staging'
         run: |
-          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/${{github.ref_name}}/contoso-supermarket/pos:latest"
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{github.ref_name}}/contoso-supermarket/pos:latest
+          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/$GITHUB_BRANCH/contoso-supermarket/pos:latest"
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/$GITHUB_BRANCH/contoso-supermarket/pos:latest
+
+      - name: 'Checkout repository'
+        uses: actions/checkout@v3
+        with:
+          ref: 'staging'
 
       - name: Replace ACR with the correct name
         continue-on-error: true
@@ -66,7 +73,7 @@ jobs:
       - name: Replace GitHub branch with the correct name
         continue-on-error: true
         env:
-            GITHUB_BRANCH: ${{github.ref_name}}
+            GITHUB_BRANCH: 'staging'
         run: |
             find . -type f -name "Chart.yaml" -print0 | xargs -0 sed -i "s/__branch__/$GITHUB_BRANCH/g"
 
