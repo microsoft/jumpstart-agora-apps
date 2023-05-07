@@ -70,13 +70,13 @@ jobs:
             file=$(find . -type f -name "staging.yaml")
             endpointLine=$(find . -type f -name "staging.yaml" -print0 | grep "endpoint:" "$file" | sed 's/^ *//')
             newLine=$(echo $endpointLine | sed -i "s#$endpointLine#$defaultLine#g" $file)
-            find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s/__cosmosdbendpoint__/$COSMOS_ENDPOINT/g"
+            find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s#__cosmosdbendpoint__#$COSMOS_ENDPOINT#g"
 
       - name: Push new changes
         run: |
             git config --global user.email "dev@agora.com"
             git config --global user.name "Agora Dev"
-            git checkout -b staging
+            git checkout staging
             git add .
             git commit -m "Update staging helm values"
             git push --set-upstream origin staging
