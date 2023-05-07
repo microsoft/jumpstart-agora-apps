@@ -7,7 +7,7 @@ postgres:
 
 cosmos:
   container: "pos"
-  database: "contoso" 
+  database: "contoso"
 
 point_of_sale:
   title: "Contoso Supermarket"

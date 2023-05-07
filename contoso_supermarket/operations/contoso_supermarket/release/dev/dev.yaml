@@ -1,0 +1,33 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: pos
+  namespace: contoso-supermarket
+  annotations:
+    clusterconfig.azure.com/use-managed-source: "true"
+spec:
+  interval: 1m
+  releaseName: pos
+  chart:
+    spec:
+      chart: ./contoso_supermarket/operations/contoso_supermarket
+  values:
+    acr_name: __jumpstartagora__
+    branch_name: "main"
+    queue_monitoring:
+      timezone: "Pacific Standard Time"
+    postgres:
+      username: "postgres"
+      database: "contoso"
+    cosmos:
+      container: "pos"
+      database: "contoso"
+      endpoint: __cosmosdbendpoint__
+    point_of_sale:
+      title: "Contoso Supermarket"
+      cameras_enabled: "False"
+      cameras_url: ""
+      new_category: "True"
+      holiday_banner: "False"
+      store_id: 4
+      store_location: "dev"
