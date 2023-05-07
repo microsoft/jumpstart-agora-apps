@@ -3,11 +3,12 @@ name: Build contososupermarket app - staging
 on:
   push:
         branches:
-            - dev
+            - main
   workflow_dispatch: {}
 
 permissions:
     contents: write
+    pull-requests: write
 
 jobs:
   build-and-deploy-staging-image:
@@ -32,7 +33,7 @@ jobs:
           docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/$GITHUB_BRANCH/contoso-supermarket/pos:v1.0"
           docker push ${{ secrets.ACR_NAME }}.azurecr.io/$GITHUB_BRANCH/contoso-supermarket/pos:v1.0
 
-      - name: 'Checkout repository'
+      - name: 'Checkout staging branch'
         uses: actions/checkout@v3
         with:
           ref: 'staging'
@@ -77,3 +78,22 @@ jobs:
         with:
             github_token: ${{ secrets.PAT_GITHUB }}
             commit_message: Push changes
+            target_branch: staging
+
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v3
+        with:
+            token: ${{ secrets.PAT_GITHUB }}
+            title: "Add auto-approved feature"
+            body: "This pull request adds an auto-approved feature to the project."
+            base: "main"
+            branch: "staging"
+            labels: "auto-approve"
+
+      - name: Auto-approve PR
+        if: steps.create_pr.outputs.pull-request-number
+        uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{ secrets.PAT_GITHUB }}
+          pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
