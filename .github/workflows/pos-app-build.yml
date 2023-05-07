@@ -42,28 +42,11 @@ jobs:
         env:
             ACR_NAME: ${{ secrets.ACR_NAME }}
         run: |
-
             defaultLine="acr_name: __jumpstartagora__"
-
-            file=$(find . -type f -name "seattle.yaml")
-            acrLine=$(find . -type f -name "seattle.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
-            newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
-            find . -type f -name "seattle.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
-
-            file=$(find . -type f -name "chicago.yaml")
-            acrLine=$(find . -type f -name "chicago.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
-            newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
-            find . -type f -name "chicago.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
-
             file=$(find . -type f -name "staging.yaml")
             acrLine=$(find . -type f -name "staging.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
-
-            file=$(find . -type f -name "dev.yaml")
-            acrLine=$(find . -type f -name "dev.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
-            newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
-            find . -type f -name "dev.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
 
       - name: Replace GitHub account with the correct name
         continue-on-error: true
@@ -82,24 +65,6 @@ jobs:
         env:
             COSMOS_ENDPOINT: ${{ secrets.COSMOS_DB_ENDPOINT }}
         run: |
-            defaultLine="endpoint: __cosmosdbendpoint__"
-            file=$(find . -type f -name "seattle.yaml")
-            endpointLine=$(find . -type f -name "seattle.yaml" -print0 | grep "endpoint:" "$file" | sed 's/^ *//')
-            newLine=$(echo $endpointLine | sed -i "s#$endpointLine#$defaultLine#g" $file)
-            find . -type f -name "seattle.yaml" -print0 | xargs -0 sed -i "s/__cosmosdbendpoint__/$COSMOS_ENDPOINT/g"
-
-            defaultLine="endpoint: __cosmosdbendpoint__"
-            file=$(find . -type f -name "chicago.yaml")
-            endpointLine=$(find . -type f -name "chicago.yaml" -print0 | grep "endpoint:" "$file" | sed 's/^ *//')
-            newLine=$(echo $endpointLine | sed -i "s#$endpointLine#$defaultLine#g" $file)
-            find . -type f -name "chicago.yaml" -print0 | xargs -0 sed -i "s/__cosmosdbendpoint__/$COSMOS_ENDPOINT/g"
-
-            defaultLine="endpoint: __cosmosdbendpoint__"
-            file=$(find . -type f -name "dev.yaml")
-            endpointLine=$(find . -type f -name "dev.yaml" -print0 | grep "endpoint:" "$file" | sed 's/^ *//')
-            newLine=$(echo $endpointLine | sed -i "s#$endpointLine#$defaultLine#g" $file)
-            find . -type f -name "dev.yaml" -print0 | xargs -0 sed -i "s/__cosmosdbendpoint__/$COSMOS_ENDPOINT/g"
-
             defaultLine="endpoint: __cosmosdbendpoint__"
             file=$(find . -type f -name "staging.yaml")
             endpointLine=$(find . -type f -name "staging.yaml" -print0 | grep "endpoint:" "$file" | sed 's/^ *//')
