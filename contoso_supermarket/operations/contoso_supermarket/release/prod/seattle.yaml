@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket
   values:
-    acr_name: Agacr13a08
+    acr_name: __jumpstartagora__
     branch_name: "production"
     queue_monitoring:
       timezone: "Pacific Standard Time"
