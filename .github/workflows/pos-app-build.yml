@@ -76,10 +76,11 @@ jobs:
         run: |
             git config --global user.email "dev@agora.com"
             git config --global user.name "Agora Dev"
-            git checkout staging
+            git checkout -b auto-approved-feature-branch
+            # Make changes to the code, e.g., add a new file or update an existing one
             git add .
-            git commit -m "Update staging helm values"
-            git push --set-upstream origin main
+            git commit -m "Add auto-approved feature"
+            git push --set-upstream origin auto-approved-feature-branch
 
       - name: Create Pull Request
         id: create_pr
@@ -88,8 +89,8 @@ jobs:
             token: ${{ secrets.PAT_GITHUB }}
             title: "Add auto-approved feature"
             body: "This pull request adds an auto-approved feature to the project."
-            base: "main"
-            branch: "staging"
+            base: "staging"
+            branch: "auto-approved-feature-branch"
             labels: "auto-approve"
 
       - name: Auto-approve PR
