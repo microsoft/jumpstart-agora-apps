@@ -36,9 +36,9 @@ jobs:
       - name: 'Checkout staging branch'
         uses: actions/checkout@v3
         with:
-          ref: 'staging'
+          ref: staging
 
-      - name: Push new changes
+      - name: Create auto-approved feature branch
         run: |
             git config --global user.email "dev@agora.com"
             git config --global user.name "Agora Dev"
@@ -53,19 +53,19 @@ jobs:
             file=$(find . -type f -name "staging.yaml")
             acrLine=$(find . -type f -name "staging.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
-            find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s#__jumpstartagora__#$ACR_NAME#g"
+            find . -type f -name "staging.yaml" -print0 | xargs --buffer-size=1000000 -0 sed -i "s#__jumpstartagora__#$ACR_NAME#g"
 
       - name: Replace GitHub account with the correct name
         continue-on-error: true
         run: |
-            find . -type f -name "Chart.yaml" -print0 | xargs -0 sed -i "s/__github_account__/$GITHUB_REPOSITORY_OWNER/g"
+            find . -type f -name "Chart.yaml" -print0 | xargs --buffer-size=1000000 -0 sed -i "s/__github_account__/$GITHUB_REPOSITORY_OWNER/g"
 
       - name: Replace GitHub branch with the correct name
         continue-on-error: true
         env:
             GITHUB_BRANCH: 'staging'
         run: |
-            find . -type f -name "Chart.yaml" -print0 | xargs -0 sed -i "s/__branch__/$GITHUB_BRANCH/g"
+            find . -type f -name "Chart.yaml" -print0 | xargs --buffer-size=1000000 -0 sed -i "s/__branch__/$GITHUB_BRANCH/g"
 
       - name: Replace Cosmos DB endpoint with the correct URL
         continue-on-error: true
@@ -76,7 +76,7 @@ jobs:
             file=$(find . -type f -name "staging.yaml")
             endpointLine=$(find . -type f -name "staging.yaml" -print0 | grep "endpoint:" "$file" | sed 's/^ *//')
             newLine=$(echo $endpointLine | sed -i "s#$endpointLine#$defaultLine#g" $file)
-            find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s#__cosmosdbendpoint__#$COSMOS_ENDPOINT#g"
+            find . -type f -name "staging.yaml" -print0 | xargs --buffer-size=1000000 -0 sed -i "s#__cosmosdbendpoint__#$COSMOS_ENDPOINT#g"
 
       - name: Push new changes
         run: |
