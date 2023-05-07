@@ -54,6 +54,8 @@ jobs:
             acrLine=$(find . -type f -name "staging.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
             find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
+            acrLine=$(find . -type f -name "staging.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
+            echo $acrLine
 
       - name: Replace GitHub account with the correct name
         continue-on-error: true
@@ -82,7 +84,7 @@ jobs:
         run: |
             git add .
             git commit -m "Add auto-approved feature"
-            git push --set-upstream origin auto-approved-feature-branch
+            git push --set-upstream staging auto-approved-feature-branch
 
       - name: Create Pull Request
         id: create_pr
