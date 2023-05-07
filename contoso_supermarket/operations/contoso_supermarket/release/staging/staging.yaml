@@ -22,7 +22,7 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: "__cosmosdbendpoint__"
+      endpoint: __cosmosdbendpoint__
     point_of_sale:
       title: "Contoso Supermarket"
       cameras_enabled: "False"
