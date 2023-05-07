@@ -29,8 +29,8 @@ jobs:
         env:
           GITHUB_BRANCH: 'staging'
         run: |
-          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/$GITHUB_BRANCH/contoso-supermarket/pos:latest"
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/$GITHUB_BRANCH/contoso-supermarket/pos:latest
+          docker build ./contoso_supermarket/developer/pos/src -t "${{ secrets.ACR_NAME }}.azurecr.io/$GITHUB_BRANCH/contoso-supermarket/pos:v1.0"
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/$GITHUB_BRANCH/contoso-supermarket/pos:v1.0
 
       - name: 'Checkout repository'
         uses: actions/checkout@v3
