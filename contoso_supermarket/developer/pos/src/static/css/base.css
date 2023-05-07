@@ -3,6 +3,13 @@ html {
     height: 100%;
 }
 
+/* holiday banner overlay positioning */
+#holiday-overlay{
+    right: 17rem;
+    height: 100%;
+    aspect-ratio: 6;
+}
+
 /* page background color */
 body {
     height: 100%;
@@ -46,9 +53,14 @@ body {
     background: transparent;
 }
 
+/* helper classes */
 .line-clamp-2 {
     -webkit-line-clamp: 2;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.z-index-1{
+    z-index: 1;
 }
