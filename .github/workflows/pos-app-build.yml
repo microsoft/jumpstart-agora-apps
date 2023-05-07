@@ -38,6 +38,12 @@ jobs:
         with:
           ref: 'staging'
 
+      - name: Push new changes
+        run: |
+            git config --global user.email "dev@agora.com"
+            git config --global user.name "Agora Dev"
+            git checkout -b auto-approved-feature-branch
+
       - name: Replace ACR with the correct name
         continue-on-error: true
         env:
@@ -47,7 +53,7 @@ jobs:
             file=$(find . -type f -name "staging.yaml")
             acrLine=$(find . -type f -name "staging.yaml" -print0 | grep "acr_name" "$file" | sed 's/^ *//')
             newLine=$(echo $acrLine | sed -i "s#$acrLine#$defaultLine#g" $file)
-            find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s/__jumpstartagora__/$ACR_NAME/g"
+            find . -type f -name "staging.yaml" -print0 | xargs -0 sed -i "s#__jumpstartagora__#$ACR_NAME#g"
 
       - name: Replace GitHub account with the correct name
         continue-on-error: true
@@ -74,10 +80,6 @@ jobs:
 
       - name: Push new changes
         run: |
-            git config --global user.email "dev@agora.com"
-            git config --global user.name "Agora Dev"
-            git checkout -b auto-approved-feature-branch
-            # Make changes to the code, e.g., add a new file or update an existing one
             git add .
             git commit -m "Add auto-approved feature"
             git push --set-upstream origin auto-approved-feature-branch
