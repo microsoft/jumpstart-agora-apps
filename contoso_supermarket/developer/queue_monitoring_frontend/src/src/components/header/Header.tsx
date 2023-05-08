@@ -6,7 +6,7 @@ function Header() {
     //get the location from react router
     //used to determine which page is active
     const location = useLocation();
-    const liveViewEnabled = process.env.REACT_APP_LIVE_VIEW_ENABLED;
+    const liveViewEnabled = process.env.REACT_APP_LIVE_VIEW_ENABLED?.toLowerCase() === "true";
 
     //get the classes for the nav links based on the current path
     const getNavClasses = (path: string, disabled: boolean = false) => {

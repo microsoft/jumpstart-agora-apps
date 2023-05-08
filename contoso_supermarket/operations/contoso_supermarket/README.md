@@ -38,3 +38,4 @@ helm upgrade contoso-supermarket -n "contoso" . `
 | point_of_sale.cameras_enabled | Flag to enable cameras | No | "False" |
 | point_of_sale.cameras_url | The base URL for the camera feed, required if point_of_sale.cameras_enabled is "True" | No | "" |
 | point_of_sale.new_category |  | No | "True" |
+| queue_monitoring_frontend.live_view_enabled | Enables or disables the live view  | No | "True" |
