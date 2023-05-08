@@ -6,10 +6,13 @@ function Header() {
     //get the location from react router
     //used to determine which page is active
     const location = useLocation();
+    const liveViewEnabled = process.env.REACT_APP_LIVE_VIEW_ENABLED;
 
     //get the classes for the nav links based on the current path
-    const getNavClasses = (path: string) => {
-        if (location.pathname === path) {
+    const getNavClasses = (path: string, disabled: boolean = false) => {
+        if (disabled) {
+            return "nav-link p-0 fs-5 text-muted disabled";
+        } else if (location.pathname === path) {
             return "nav-link p-0 fs-5 text-primary";
         } else {
             return "nav-link p-0 fs-5 text-white";
@@ -52,7 +55,10 @@ function Header() {
                                 </Link>
                             </li>
                             <li className="nav-item ms-0 ms-lg-4 my-2 my-lg-0">
-                                <Link className={getNavClasses("/live-video")} to="/live-video">
+                                <Link
+                                    className={getNavClasses("/live-video", !liveViewEnabled)}
+                                    to={liveViewEnabled ? "/live-video" : "#"}
+                                >
                                     Live View
                                 </Link>
                             </li>

@@ -32,7 +32,8 @@
             "runtimeArgs": ["run-script", "start"],
             "env": {
                 "BACKEND_API_URL": "https://localhost:4000/",
-                "AI_API_URL": "http://127.0.0.1:8000/"
+                "AI_API_URL": "http://127.0.0.1:8000/",
+                "REACT_APP_LIVE_VIEW_ENABLED": "true"
             }
         },
         {

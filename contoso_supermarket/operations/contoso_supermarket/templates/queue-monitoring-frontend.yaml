@@ -45,5 +45,7 @@ spec:
               value: "http://{{ .Release.Name }}-contosoai:8000"
             - name: AI_API_HOST
               value: "{{ .Release.Name }}-contosoai"
+            - name: REACT_APP_LIVE_VIEW_ENABLED
+              value: "{{ .Values.queue_monitoring_frontend.live_view_enabled }}"
           ports:
             - containerPort: 8080
