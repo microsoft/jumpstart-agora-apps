@@ -1,37 +1,50 @@
+{% set active_page = "cart" %}
 {% extends 'base.html' %}
 
 {% block content %}
+  <h1 class="text-green mb-4 fs-2">Confirm your order</h1>
+  <div class="rounded border border border-grey rounded bg-white overflow-hidden">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center">ID</th>
+          <th scope="col" class="text-center">Item</th>
+          <th scope="col" class="text-center">Quantity</th>
+          <th scope="col" class="text-center">Unit Price</th>
+          <th scope="col" class="text-center">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider border-grey">
+        {% for item in cart %}
+        <tr class="border-top border-bottom border-1 fs-5">
+          <td class="text-center">{{ item['id'] }}</td>
+          <td class="text-center">{{ item['name'] }}</td>
+          <td class="text-center">{{ item['quantity'] }}</td>
+          <td class="text-center">${{ "%.2f" | format (item['price']) }}</td>
+          <td class="text-center">${{ "%.2f" | format (item['quantity'] * item['price']) }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="border-none fw-medium fs-5">
+          <td colspan="3"></td>
+          <td class="text-center">Total</td>
+          <td id="cart-total" class="text-center"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-
-  <h1>Confirm your order</h1>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Item</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Price</th>
-        <th scope="col">Subtotal</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      {% for item in cart %}
-      <tr>
-        <th>{{ item['id'] }}</th>
-        <td>{{ item['quantity'] }}</td>
-        <td>{{ item['name'] }}</td>
-        <td>{{ item['price'] }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <!-- <button type="button" class="btn btn-primary btn-lg float-right">Place Order</button> -->
-  <a href="{{ url_for('checkout') }}" class="btn btn-success" type="submit">Place Order</a>
+  <div class="d-flex mt-3">
+    <a href="{{ url_for('checkout') }}" class="btn bg-green text-white px-5 shadow ms-auto" type="submit">Place Order</a>
+  </div>
 </div>
 
-
-{% include 'item.html' %}
+<script>
+  // Update the cart total on page load
+  var items = '{% if cart %}{{ cart|tojson }}{% else %}[]{% endif %}';
+  var cart = JSON.parse(items);
+  var cartTotal = cart.map(item => item.price * item.quantity).reduce((a, b) => a + b, 0);
+  $("#cart-total").text("$" + cartTotal.toFixed(2))
+</script>
 
 {% endblock %}
 

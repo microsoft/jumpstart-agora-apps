@@ -1,0 +1,21 @@
+server_tokens off;
+server {
+    listen       8080;
+    server_name  localhost;
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri /index.html;
+    }
+
+    location /api {
+        proxy_pass ${BACKEND_API_URL};
+        proxy_set_header Host ${BACKEND_API_HOST};
+    }
+
+    location /ai {
+        rewrite ^/ai(.*)$ $1 break;
+        proxy_pass ${AI_API_URL};
+        proxy_set_header Host ${AI_API_HOST};
+    }
+}

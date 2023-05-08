@@ -1,36 +1,56 @@
+{% if config['HOLIDAY_BANNER'] == True %}
+    {% set image_path = 'static/img/wood_hh.png' %}
+{% else %}
+    {% set image_path = 'static/img/wood.png' %}
+{% endif %}
 
-<nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
+<nav class="navbar sticky-top navbar-expand-lg px-4" data-bs-theme="light" style="background-image: url('{{ image_path }}');">
     <div class="container-fluid">
-      <!-- <img src="static/img/fourthcoffee1.png" class="d-inline-block align-top" alt=""> -->
-      <a class="navbar-brand" href="#">
-        <img src="static/img/contosologo.png"  class="d-inline-block align-top" alt="">
+      <a class="navbar-brand p-3" href="{{ url_for('index') }}">
+        <img src="static/img/contoso.svg"  class="d-inline-block align-top" alt="">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('inventory') }}">Products</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="{{ url_for('index') }}">Orders</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" >Dashboard</a>
-          </li>
-        </ul>
+        <div class="me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link p-0 fs-5 text-white fs-5 {% if active_page == 'home' %}text-green{% endif %}" href="{{ url_for('index') }}">Home</a>
+            </li>
+            <li class="nav-item ms-4">
+              <a class="nav-link p-0 fs-5 text-white fs-5 {% if active_page == 'cart' %}text-green{% endif %}" href="{{ url_for('cart') }}">Cart</a>
+            </li>
+          </ul>
+        </div>
         <form class="d-flex" role="checkout">
-          <a href="{{ url_for('cart') }}" class="btn btn-success" type="submit">Checkout</a>
+          <a href="{{ url_for('cart') }}" id="checkout-btn" class="btn border-radius-xs bg-green px-4 text-white d-flex justify-content-between" type="submit">
+            <div class="me-5">
+              <span>Items:</span>
+              <span id="cart-count"></span>
+            </div>
+            <div class="">
+              <span>Total:</span>
+              <span id="cart-value"></span>
+            </div>
+          </a>
         </form>
+        <a href="#" class="ms-5">
+          <img src="static/img/icon_profile.svg" alt="">
+        </a>
       </div>
     </div>
+</nav>
 
-  </nav>
+<script>
+  // set the cart items on page load
+  var items = '{% if session["cart"] %}{{ session["cart"]|tojson }}{% else %}[]{% endif %}';
+  var cart = JSON.parse(items);
+  var itemCount = cart.map(item => item.quantity).reduce((a, b) => a + b, 0);
+  var cartTotal = cart.map(item => item.price * item.quantity).reduce((a, b) => a + b, 0);
   
-  
-  
-  
+  //update the checkout button with the count & total
+  $("#cart-count").text(itemCount)
+  $("#cart-value").text("$" + cartTotal.toFixed(2))
+</script>
+

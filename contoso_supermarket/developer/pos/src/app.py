@@ -2,21 +2,29 @@
 from importlib import import_module
 import os
 import cv2
-from flask import Flask, render_template, Response, request, session, redirect, url_for
+from flask import Flask, render_template, Response, request, session, redirect, url_for, jsonify
 from flask_session import Session
 import secrets
 import psycopg2
 import json
 from datetime import datetime
 
+storeid = os.environ.get('STORE_ID', 0)
+store_location =  os.environ.get('STORE_LOCATION', "")
+
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
+#variables that we want accessible from jinja templates
+app.config["HOLIDAY_BANNER"] = os.environ.get('HOLIDAY_BANNER', 'False').lower() == 'true' #converts env from string to boolean
+app.config["STORE_ID"] = storeid
+app.config["STORE_LOCATION"] = store_location
+
 app.config["SESSION_PERMANENT"] = False
 app.config['SESSION_TYPE'] = "filesystem"
+
 Session(app)
-#storeid = 1
-storeid = os.environ.get('STORE_ID')
+
 dbconfig = {
     "host": os.environ.get('SQL_HOST'),
     "user": os.environ.get('SQL_USERNAME'),
@@ -29,7 +37,14 @@ dbconfig = {
 }
 
 conn = psycopg2.connect(**dbconfig)
-cursor = conn.cursor()
+conn.autocommit= True # allows connection to recover on an error
+
+def get_cursor():
+    try:
+        return conn.cursor()
+    except psycopg2.InterfaceError:
+        conn.reset()
+        return conn.cursor()
 
 @app.route('/')
 def index():
@@ -46,48 +61,55 @@ def index():
     if os.environ.get('NEW_CATEGORY'):
         new_category = os.environ.get('NEW_CATEGORY') == 'True'
 
-    query = "SELECT * FROM contoso.products ORDER BY productId"
+    query = "SELECT productid, name, description, price, stock, photopath FROM contoso.products ORDER BY productId"
     productlist = []
-    cursor.execute(query)
-    for item in cursor.fetchall():
-        productlist.append({
-        'produtctid': item[0],
-        'name': item[1],
-        'price': item[2],
-        'currentInventory': item[3],
-        'photolocation': item[4]
-    })
-    #cursor.close()
+    
+    try:
+        cur = get_cursor()
+        cur.execute(query)
+        for item in cur.fetchall():
+            productlist.append({
+            'productid': item[0],
+            'name': item[1],
+            'description': item[2],
+            'price': item[3],
+            'stock': item[4],
+            'photopath': item[5]
+        })
+        cur.close()
+    except Exception as e:
+        print("Error querying items: " + str(e))
+        conn.rollback()
 
-    #return render_template('index2.html' if new_category else 'index.html', head_title = head_title, cameras_enabled = cameras_enabled, productlist=productlist)
-    return render_template('index.html', head_title = head_title, cameras_enabled = cameras_enabled, productlist=productlist)
+    return render_template('index.html', head_title=head_title, cameras_enabled=cameras_enabled, productlist=productlist)
 
 @app.route('/inventory')
 def inventory():
     try:
-        cur = conn.cursor()
+        cur = get_cursor()
         inventorylist = []
-        query = "SELECT * from contoso.products"
+        query = "SELECT productid, name, description, price, stock, photopath from contoso.products ORDER BY productId"
         cur.execute(query)
         for item in cur.fetchall():
             inventorylist.append({
                 'id': item[0],
                 'name': item[1],
-                'price': item[2],
-                'currentInventory': item[3]
+                'description': item[2],
+                'price': item[3],
+                'stock': item[4],
+                'photopath': item[5]
             })
         cur.close()
-        #conn.close()
         return render_template('inventory.html', inventorylist=inventorylist)
     except Exception as e:
+        print("Error querying items: " + str(e))
+        conn.rollback()
         return "Error querying items: " + str(e)
-
-
 @app.route('/update_item', methods=['POST'])
 def update_item():
-
-    cur = conn.cursor()
     try:
+        cur = get_cursor()
+        
         # Get item information from request data
         item_id = int(request.form['id'])
         name = request.form['name']
@@ -96,12 +118,14 @@ def update_item():
         # Update item in database  
         cur.execute("UPDATE contoso.products SET Name=%s, price=%s WHERE productId=%s", (name, price, item_id))
         conn.commit()
-        #cur.close()
+        cur.close()
 
         # Return success message
         return "Item updated successfully."
     except Exception as e:
         # Handle errors
+        print("Error updating item: " + str(e))
+        conn.rollback()
         return "Error updating item: " + str(e)
 
 @app.route('/delete_item', methods=['POST'])
@@ -111,17 +135,18 @@ def delete_item():
         item_id = int(request.form['id'])
 
         # Delete item from database
-        cur = conn.cursor()
+        cur = get_cursor()
         cur.execute("DELETE FROM contoso.products WHERE productid=%s", (item_id,))
         conn.commit()
-        #cur.close()
+        cur.close()
 
         # Return success message
         return "Item deleted successfully."
     except Exception as e:
         # Handle errors
+        print("Error deleting item: " + str(e))
+        conn.rollback()
         return "Error deleting item: " + str(e)
-
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -136,49 +161,59 @@ def add_to_cart():
         'id': product_id,
         'quantity': quantity,
         'name': product_name,
-        'price': product_price
+        'price': float(product_price) # ensures that the price is a float
     }
-
     # Add the item to the shopping cart session
     if 'cart' not in session:
         session['cart'] = []
-    session['cart'].append(item)
+    
+    item_found = False
+    # Check if the item is already in the cart
+    for existing_item in session['cart']:
+        # If it is, increment the quantity
+        if existing_item['id'] == item['id']:
+            existing_item['quantity'] += 1
+            item_found = True
 
-    # Redirect back to the homepage
-    return redirect('/')
+    # If not, add it to the cart
+    if not item_found:
+        session['cart'].append(item)
+
+    return jsonify(session['cart'])
 
 @app.route('/cart')
 def cart():
     # Get the cart data from the session
-    summary = {}
     cart = session.get('cart', [])
-    for item in cart:
-        id = item['id']
-        quantity = item['quantity']
-        if id in summary:
-            summary[id] += quantity
-        else:
-            summary[id] = quantity
-    # print (summary)
+
     # Render the shopping cart template with the cart data
     return render_template('cart.html', cart=cart)
 
 @app.route('/checkout')
 def checkout():
-
-    cur = conn.cursor()
+    cur = get_cursor()
     cart = session.get('cart', [])
-    #orderDate = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    orderDate = datetime.now()
-    jsoncart = json.dumps(cart)
-    query = "INSERT INTO contoso.Orders (orderDate, orderdetails, storeId) VALUES ('{}', '{}', {}) returning orderId".format(orderDate, jsoncart, storeid)
-    cur.execute(query)
-    ordernumber = cur.fetchone()[0]
-    conn.commit()
-    cur.close()
-    #cnx.close()
-    session.clear()
-    return render_template('checkout.html', ordernumber=ordernumber)
+
+    # only create order if the cart isn't empty
+    if(len(cart) == 0):
+        return redirect(url_for('index'))
+    else:
+        order = cart.copy() # stores a copy of the cart for the checkout page summary
+        orderDate = datetime.now()
+        jsoncart = json.dumps(cart)
+        query = "INSERT INTO contoso.Orders (orderDate, orderdetails, storeId) VALUES ('{}', '{}', {}) returning orderId".format(orderDate, jsoncart, storeid)
+        
+        try:
+            cur.execute(query)
+            ordernumber = cur.fetchone()[0]
+            conn.commit()
+            cur.close()
+            session.clear() # clears the cart
+            return render_template('checkout.html', ordernumber=ordernumber, order=order)
+        except Exception as e:
+            print("Error creating order: " + str(e))
+            conn.rollback()
+            return "Error creating order: " + str(e)
 
 @app.route('/addPurchase',methods = ['POST'])
 def addPurchase():

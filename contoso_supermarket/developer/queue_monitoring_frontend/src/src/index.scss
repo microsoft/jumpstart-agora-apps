@@ -1,0 +1,59 @@
+// Override default variables before the import
+$enable-rounded: true;
+
+$body-bg: #fff;
+
+$theme-colors: (
+    "primary": #51b60d,
+    "secondary": #313131,
+    "secondary-light": #3e3e3e,
+    "purple": #e810e0,
+    "yellow": #f5f73e,
+    "cyan": #2be6e6,
+    "danger": #fc4b1d,
+    "success": #77FC1D,
+);
+
+$font-size-base: 1rem;
+$headings-font-weight: 500;
+
+$h1-font-size: $font-size-base * 2.5;
+$h2-font-size: $font-size-base * 2;
+$h3-font-size: $font-size-base * 1.75;
+$h4-font-size: $font-size-base * 1.5;
+$h5-font-size: $font-size-base * 1.25;
+$h6-font-size: $font-size-base;
+
+$font-sizes: (
+    1: $h1-font-size,
+    2: $h2-font-size,
+    3: $h3-font-size,
+    4: $h4-font-size,
+    5: $h5-font-size,
+    6: $h6-font-size,
+    7: $font-size-base * 0.8,
+    8: $font-size-base * 0.6,
+    9: $font-size-base * 0.4,
+    10: $font-size-base * 0.2,
+);
+
+$aspect-ratios: (
+    "none": 0,
+    "1x1": 100%,
+    "4x1": calc(1 / 4 * 100%),
+    "4x3": calc(3 / 4 * 100%),
+    "16x9": calc(9 / 16 * 100%),
+    "21x9": calc(9 / 21 * 100%),
+    "28x9": calc(9 / 28 * 100%),
+);
+
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1440px,
+    xxl: 1800px,
+);
+
+// Import Bootstrap and its default variables
+@import "~bootstrap/scss/bootstrap.scss";
