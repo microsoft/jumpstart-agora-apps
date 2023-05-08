@@ -42,7 +42,7 @@ namespace Contoso.Backend.Data.BackgroundServices
 
             // Check if the checkout history table has any data
             var checkoutHistoryPopulated = await _postgreSqlService.TableHasValue("contoso.checkout_history");
-            if (checkoutHistoryPopulated)
+            if (!checkoutHistoryPopulated)
             {
                 // If the table is empty, backfill data for the past day
                 var startDate = DateTime.UtcNow.AddDays(-10);
