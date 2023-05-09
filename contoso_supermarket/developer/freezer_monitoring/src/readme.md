@@ -139,9 +139,9 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 2. Create the devices
 ```powershell
     $LOCATION = "southcentralus"
-    $RESOURCE_GROUP_NAME = "charris-js-ag-45-rg"
-    $HUB_NAME = "Ag-IotHub-cf824"
-    $DEVICES = ("freezer-1-chicago","freezer-2-chicago")
+    $RESOURCE_GROUP_NAME = "charris-js-ag-77-rg"
+    $HUB_NAME = "Ag-IotHub-72133"
+    $DEVICES = ("freezer-1-chicago","freezer-2-chicago","freezer-1-seattle","freezer-2-seattle")
     foreach ($DEVICE in $DEVICES) {
         az iot hub device-identity create -g $RESOURCE_GROUP_NAME --device-id $DEVICE --edge-enabled --hub-name $HUB_NAME
     }
@@ -184,7 +184,11 @@ Elevated PowerShell
 
 3. To manually update a configmap after changing a local config file for testing
 
+    `kubectl create configmap mqtt-simulator-config --from-file=$mqttsimulatorConfigPath --dry-run=client -o yaml | kubectl apply -f -`
+
     `kubectl create configmap mqtt-broker-config --from-file=$mqttbrokerConfigPath --dry-run=client -o yaml | kubectl apply -f -`
+
+    `kubectl create configmap mqtt2prom-config --from-file=$mqtt2promConfigPath --dry-run=client -o yaml | kubectl apply -f -`
 
 ## Resources
 
