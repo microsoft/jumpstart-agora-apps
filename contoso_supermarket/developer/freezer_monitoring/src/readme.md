@@ -190,6 +190,8 @@ Elevated PowerShell
 
     `kubectl create configmap mqtt2prom-config --from-file=$mqtt2promConfigPath --dry-run=client -o yaml | kubectl apply -f -`
 
+4. After updating a configmap, you need wait up to 1 minute, and then delete the pod to have it pick up the new configmap
+
 ## Resources
 
 - [Mosquitto MQTT broker to IoT Hub/IoT Edge](http://busbyland.com/mosquitto-mqtt-broker-to-iot-hub-iot-edge/)
