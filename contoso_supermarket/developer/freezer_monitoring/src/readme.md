@@ -126,6 +126,9 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 
     ### Local AKS EE deployment - All-in-one commands for convenience
     
+    From the /src folder
+    `az acr login -n jumpstartagora`
+
     ```shell
     docker build -t js/mqtt-broker .\mqtt-broker\.; docker tag js/mqtt-broker jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker ; docker push jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker
     
