@@ -86,32 +86,6 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
             });
     }, []);
 
-    const toggleCheckout = useCallback((checkoutId: number, timestamp: string) => {
-        setCheckoutsLoading(true);
-        //close/open checkout
-        axios
-            .get(`/api/checkouts/${checkoutId}/toggle`)
-            .then((ret) => {
-                setCheckouts((results) => {
-                    const checkout: Checkout = ret.data;
-                    const index = results.findIndex((c) => c.id === checkout.id);
-                    if (index >= 0) {
-                        // Update existing checkout
-                        const updatedResults = [...results];
-                        updatedResults[index] = checkout;
-                        return updatedResults;
-                    } else {
-                        // Insert new checkout
-                        return [...results, checkout];
-                    }
-                });
-            })
-            .finally(() => {
-                setCheckoutsLoading(false);
-                getCheckoutHistory(new Date(timestamp));
-            });
-    }, []);
-
     const getCheckoutHistory = useCallback((startDate?: Date, endDate?: Date) => {
         setCheckoutHistoryLoading(true);
         //get checkoutHistory
@@ -140,6 +114,32 @@ export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
                 setCheckoutHistoryLoading(false);
             });
     }, []);
+
+    const toggleCheckout = useCallback((checkoutId: number, timestamp: string) => {
+        setCheckoutsLoading(true);
+        //close/open checkout
+        axios
+            .get(`/api/checkouts/${checkoutId}/toggle`)
+            .then((ret) => {
+                setCheckouts((results) => {
+                    const checkout: Checkout = ret.data;
+                    const index = results.findIndex((c) => c.id === checkout.id);
+                    if (index >= 0) {
+                        // Update existing checkout
+                        const updatedResults = [...results];
+                        updatedResults[index] = checkout;
+                        return updatedResults;
+                    } else {
+                        // Insert new checkout
+                        return [...results, checkout];
+                    }
+                });
+            })
+            .finally(() => {
+                setCheckoutsLoading(false);
+                getCheckoutHistory(new Date(timestamp));
+            });
+    }, [getCheckoutHistory]);
 
     const getProducts = useCallback(() => {
         setProductsLoading(true);

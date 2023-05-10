@@ -19,13 +19,13 @@ helm upgrade contoso-supermarket -n "contoso" . `
 --set cosmos.endpoint="<ComsmosDbEndpoint>" `
 --set point_of_sale.store_id="1" `
 --set point_of_sale.store_location="Seattle" `
---set-string point_of_sale.holiday_banner="True"
+--set-string point_of_sale.holiday_banner="True" `
+--set queue_monitoring_frontend.live_view_enabled="True"
 ```
 
 ## Setable Values
 | Value Name | Description | Required to be set | Default |
 | --- | --- | --- | --- |
-| timezone | The timezone for the application to use. Uses Microsoft Time Zone strings | No | "Pacific Standard Time" |
 | postgres.password | The password to use when intilizaing the Postgres DB | Yes |  |
 | postgres.username | The username to use when intilizaing the Postgres DB | No | "postgres" |
 | cosmos.access_key | The Cosmos DB Access Key | Yes |  |
@@ -39,3 +39,4 @@ helm upgrade contoso-supermarket -n "contoso" . `
 | point_of_sale.cameras_enabled | Flag to enable cameras | No | "False" |
 | point_of_sale.cameras_url | The base URL for the camera feed, required if point_of_sale.cameras_enabled is "True" | No | "" |
 | point_of_sale.new_category |  | No | "True" |
+| queue_monitoring_frontend.live_view_enabled | Enables or disables the live view  | No | "False" |

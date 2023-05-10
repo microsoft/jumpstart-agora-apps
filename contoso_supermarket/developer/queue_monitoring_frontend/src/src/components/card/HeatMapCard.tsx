@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { CheckoutHistory, CheckoutType, useGlobalContext } from "../../providers/GlobalContext";
 import { ExpressCheckout, SelfCheckout, StandardCheckout } from "../../images";
 
@@ -20,16 +20,15 @@ const getCheckoutImage = (checkoutType: CheckoutType) => {
 };
 
 const getCheckoutColorClass = (item: CheckoutHistory, isClosed: boolean) => {
+    const waitTimeMins = item.averageWaitTimeSeconds / 60;
     if (isClosed) {
         return "bg-secondary-light text-white";
-    } else if (item.checkoutType === CheckoutType.Standard && item.queueLength >= 4) {
-        return "bg-danger text-white";
-    } else if (item.checkoutType === CheckoutType.Express && item.queueLength >= 4) {
-        return "bg-danger  text-white";
-    } else if (item.checkoutType === CheckoutType.SelfService && item.queueLength >= 4) {
-        return "bg-danger text-white";
+    } else if (waitTimeMins <= 2) {
+        return "bg-success";
+    } else if (waitTimeMins <= 4) {
+        return "bg-warning";
     } else {
-        return "bg-success text-black";
+        return "bg-danger text-white";
     }
 };
 
@@ -45,13 +44,7 @@ const getCheckoutLabelText = (checkoutType: CheckoutType) => {
 };
 
 function HeatMapCard(props: HeatMapCardProps) {
-    const { checkouts, getCheckouts, toggleCheckout } = useGlobalContext();
-
-    useEffect(() => {
-        if (checkouts.length === 0 && getCheckouts) {
-            getCheckouts();
-        }
-    }, [checkouts, getCheckouts]);
+    const { checkouts, toggleCheckout } = useGlobalContext();
 
     return (
         <div className={"" + props.className}>
@@ -59,7 +52,7 @@ function HeatMapCard(props: HeatMapCardProps) {
                 {props.checkoutHistory.map((item) => {
                     const checkout = checkouts?.filter((c) => c.id === item.checkoutId)[0];
                     if (!checkout) {
-                        return <></>;
+                        return <div key={item.checkoutId}></div>;
                     }
                     return (
                         <div key={item.checkoutId} className="col d-flex flex-column">

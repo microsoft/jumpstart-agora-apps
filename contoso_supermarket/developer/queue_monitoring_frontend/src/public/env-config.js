@@ -1,0 +1,1 @@
+//this file is replaced by the Docker entrypoint script which runs env-config.sh
