@@ -107,7 +107,10 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 - Follow one of the [Resources](#resources) links above to get the Baltimore.pem file
 
     ```shell
-    export sas_token=$(az iot hub generate-sas-token -g charris-iot1 -d myEdgeDevice --duration $(60*20*24*365) -n charris-iot1 -o json | jq -r '.sas')
+    $resourceGroup = "charris-iot1"
+    $deviceId = "myEdgeDevice"
+    $iotHubNam = "charris-iot1"
+    export sas_token=$(az iot hub generate-sas-token -g $resourceGroup -d $deviceId --duration $(60*20*24*365) -n $iotHubName -o json | jq -r '.sas')
 
     mosquitto_pub -t "devices/myEdgeDevice/messages/events/environmentSensor" -i "myEdgeDevice" -u "charris-iot1.azure-devices.net/myEdgeDevice/?api-version=2020-09-30" -P $sas_token -h "charris-iot1.azure-devices.net" -V mqttv311 -p 8883 --cafile Baltimore.pem -m 'My Awesome Message' -d
     ```
