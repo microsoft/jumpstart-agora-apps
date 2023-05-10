@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: contosopos
-          image: jumpstartagora.azurecr.io/contoso-supermarket/pos:latest
+          image: "{{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/pos:{{ .Values.image_tag}}"
           env:
             - name: SQL_HOST
               value: {{ .Release.Name }}-contosodb
@@ -44,8 +44,8 @@ spec:
             - name: SQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secrets
-                  key: POSTGRES_PASSWORD      
+                  name: postgrespw
+                  key: POSTGRES_PASSWORD
             - name: SQL_DATABASE
               value: {{ .Values.postgres.database }}
             - name: HEAD_TITLE
@@ -64,3 +64,5 @@ spec:
               value: "{{ .Values.point_of_sale.holiday_banner }}"
           ports:
             - containerPort: 5000
+      imagePullSecrets:
+        - name: acr-secret
