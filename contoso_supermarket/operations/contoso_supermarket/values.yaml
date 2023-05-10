@@ -14,4 +14,4 @@ point_of_sale:
   holiday_banner: "False"
 
 queue_monitoring_frontend:
-  live_view_enabled: "True"
+  live_view_enabled: "False"

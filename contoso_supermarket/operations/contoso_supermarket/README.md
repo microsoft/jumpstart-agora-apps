@@ -19,7 +19,8 @@ helm upgrade contoso-supermarket -n "contoso" . `
 --set cosmos.endpoint="<ComsmosDbEndpoint>" `
 --set point_of_sale.store_id="1" `
 --set point_of_sale.store_location="Seattle" `
---set-string point_of_sale.holiday_banner="True"
+--set-string point_of_sale.holiday_banner="True" `
+--set queue_monitoring_frontend.live_view_enabled="True"
 ```
 
 ## Setable Values
@@ -38,4 +39,4 @@ helm upgrade contoso-supermarket -n "contoso" . `
 | point_of_sale.cameras_enabled | Flag to enable cameras | No | "False" |
 | point_of_sale.cameras_url | The base URL for the camera feed, required if point_of_sale.cameras_enabled is "True" | No | "" |
 | point_of_sale.new_category |  | No | "True" |
-| queue_monitoring_frontend.live_view_enabled | Enables or disables the live view  | No | "True" |
+| queue_monitoring_frontend.live_view_enabled | Enables or disables the live view  | No | "False" |
