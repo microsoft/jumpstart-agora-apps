@@ -1,41 +1,38 @@
-{% if config['HOLIDAY_BANNER'] == True %}
-    {% set image_path = 'static/img/wood_hh.png' %}
-{% else %}
-    {% set image_path = 'static/img/wood.png' %}
-{% endif %}
-
-<nav class="navbar sticky-top navbar-expand-lg px-4" data-bs-theme="light" style="background-image: url('{{ image_path }}');">
+<nav class="navbar sticky-top navbar-expand-lg px-4 py-0" data-bs-theme="light" style="background-image: url('static/img/wood.png');">
     <div class="container-fluid">
-      <a class="navbar-brand p-3" href="{{ url_for('index') }}">
+      <a class="navbar-brand p-3 z-index-1" href="{{ url_for('index') }}">
         <img src="static/img/contoso.svg"  class="d-inline-block align-top" alt="">
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler  z-index-1 navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      {% if config['HOLIDAY_BANNER'] == True %}
+      <img src="static/img/happy_holidays_overlay.png" class="position-absolute d-none d-xl-block shadow-lg" id="holiday-overlay" alt="Happy Holidays!"/>
+      {% endif %}
+      <div class="collapse navbar-collapse z-index-1 mb-4 mb-lg-0" id="navbarSupportedContent">
         <div class="me-auto mb-2 mb-lg-0">
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link p-0 fs-5 text-white fs-5 {% if active_page == 'home' %}text-green{% endif %}" href="{{ url_for('index') }}">Home</a>
+            <li class="nav-item my-2 my-lg-0">
+              <a class="nav-link z-index-1 p-0 fs-5 text-white fs-5 {% if active_page == 'home' %}text-green{% endif %}" href="{{ url_for('index') }}">Home</a>
             </li>
-            <li class="nav-item ms-4">
-              <a class="nav-link p-0 fs-5 text-white fs-5 {% if active_page == 'cart' %}text-green{% endif %}" href="{{ url_for('cart') }}">Cart</a>
+            <li class="nav-item my-2 my-lg-0 ms-lg-4">
+              <a class="nav-link z-index-1 p-0 fs-5 text-white fs-5 {% if active_page == 'cart' %}text-green{% endif %}" href="{{ url_for('cart') }}">Cart</a>
             </li>
           </ul>
         </div>
-        <form class="d-flex" role="checkout">
+        <form class="d-flex z-index-1" role="checkout">
           <a href="{{ url_for('cart') }}" id="checkout-btn" class="btn border-radius-xs bg-green px-4 text-white d-flex justify-content-between" type="submit">
-            <div class="me-5">
+            <div class="me-5 d-flex flex-nowrap">
               <span>Items:</span>
-              <span id="cart-count"></span>
+              <span id="cart-count" class="ms-2"></span>
             </div>
-            <div class="">
+            <div class="d-flex flex-nowrap">
               <span>Total:</span>
-              <span id="cart-value"></span>
+              <span id="cart-value" class="ms-2"></span>
             </div>
           </a>
         </form>
-        <a href="#" class="ms-5">
+        <a href="#" class="ms-5 d-none d-lg-block">
           <img src="static/img/icon_profile.svg" alt="">
         </a>
       </div>
