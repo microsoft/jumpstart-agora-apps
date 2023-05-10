@@ -11,7 +11,7 @@ namespace Contoso.Backend.Data.BackgroundServices
         private readonly DataGenerator _checkoutDataGenerator;
 
         // Maximum number of days to keep checkout history data in the database
-        private readonly int MAX_DAYS_OF_CHECKOUT_HISTORY = 3;
+        private readonly int MAX_DAYS_OF_CHECKOUT_HISTORY = 2;
 
         // Peak times for store traffic
         private readonly List<(TimeSpan start, TimeSpan end)> _peakTimes = new List<(TimeSpan start, TimeSpan end)>
@@ -44,8 +44,8 @@ namespace Contoso.Backend.Data.BackgroundServices
             var checkoutHistoryPopulated = await _postgreSqlService.TableHasValue("contoso.checkout_history");
             if (!checkoutHistoryPopulated)
             {
-                // If the table is empty, backfill data for the past day
-                var startDate = DateTime.UtcNow.AddDays(-10);
+                // If the table is empty, backfill data for the past 2 days
+                var startDate = DateTime.UtcNow.AddDays(-2);
                 var checkouts = await _postgreSqlService.GetCheckouts();
                 var checkoutData =
                     _checkoutDataGenerator.GenerateData(startDate, null, checkouts);
