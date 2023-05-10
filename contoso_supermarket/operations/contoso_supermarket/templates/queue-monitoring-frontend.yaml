@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: queue-monitoring-frontend
-          image: jumpstartagora.azurecr.io/contoso-supermarket/queue-monitoring-frontend:latest
+          image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/queue-monitoring-frontend:v1.0
           env:
             - name: BACKEND_API_URL
               value: "http://{{ .Release.Name }}-queue-monitoring-backend:4000"
@@ -45,5 +45,9 @@ spec:
               value: "http://{{ .Release.Name }}-contosoai:8000"
             - name: AI_API_HOST
               value: "{{ .Release.Name }}-contosoai"
+            - name: REACT_APP_LIVE_VIEW_ENABLED
+              value: "{{ .Values.queue_monitoring_frontend.live_view_enabled }}"
           ports:
             - containerPort: 8080
+      imagePullSecrets:
+        - name: acr-secret
