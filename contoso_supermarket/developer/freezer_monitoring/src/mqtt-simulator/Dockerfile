@@ -16,6 +16,5 @@ ARG PROJECT_ROOT=workspace
 COPY ./config ./config
 COPY ./mqtt-simulator ./mqtt-simulator
 
-# CMD ["python3", "./mqtt-simulator/main.py"]
 ENTRYPOINT ["python3", "./mqtt-simulator/main.py"]
 
