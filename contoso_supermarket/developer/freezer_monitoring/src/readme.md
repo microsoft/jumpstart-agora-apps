@@ -104,7 +104,7 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
 
 ### Test your own messages with `mosquitto_pub`
 
-- Follow one of the [Resources](#resources) links above to get the Baltimore.pem file
+- use the DigiCertGlobalRootG2.crt.pem file from the /mqtt2prom folder
 
     ```shell
     $resourceGroup = "charris-iot1"
@@ -112,7 +112,7 @@ helm upgrade -n observability prometheus prometheus-community/kube-prometheus-st
     $iotHubNam = "charris-iot1"
     export sas_token=$(az iot hub generate-sas-token -g $resourceGroup -d $deviceId --duration $(60*20*24*365) -n $iotHubName -o json | jq -r '.sas')
 
-    mosquitto_pub -t "devices/myEdgeDevice/messages/events/environmentSensor" -i "myEdgeDevice" -u "charris-iot1.azure-devices.net/myEdgeDevice/?api-version=2020-09-30" -P $sas_token -h "charris-iot1.azure-devices.net" -V mqttv311 -p 8883 --cafile Baltimore.pem -m 'My Awesome Message' -d
+    mosquitto_pub -t "devices/myEdgeDevice/messages/events/environmentSensor" -i "myEdgeDevice" -u "charris-iot1.azure-devices.net/myEdgeDevice/?api-version=2020-09-30" -P $sas_token -h "charris-iot1.azure-devices.net" -V mqttv311 -p 8883 --cafile DigiCertGlobalRootG2.crt.pem -m 'My Awesome Message' -d
     ```
 
 ### View the messages in IoT Hub
