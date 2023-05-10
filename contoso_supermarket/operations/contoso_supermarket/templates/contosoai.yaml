@@ -35,6 +35,8 @@ spec:
     spec:
       containers:
         - name: contosoai
-          image: jumpstartagora.azurecr.io/contoso-supermarket/contosoai:latest
+          image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/contosoai:v1.0
           ports:
             - containerPort: 8000
+      imagePullSecrets:
+        - name: acr-secret
