@@ -22,8 +22,7 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.simulator.mqttSimulator.image.repository }}:{{ .Values.simulator.mqttSimulator.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.simulator.mqttSimulator.image.repository }}:{{ .Values.simulator.mqttSimulator.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.simulator.mqttSimulator.imagePullPolicy }}
         name: mqtt-simulator
         args: 
