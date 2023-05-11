@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket
   values:
-    acr_name: __acrName__
+    acr_name: agacr2480e
     branch_name: "canary"
     image_tag: "v1.0"
     queue_monitoring:
@@ -23,7 +23,7 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: __cosmosEndpoint__
+      endpoint: https://agcosmos2480e.documents.azure.com:443/
     point_of_sale:
       title: "Contoso Supermarket"
       cameras_enabled: "False"
