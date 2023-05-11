@@ -12,6 +12,6 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/freezer_monitoring
   values:
-    acr_name: agacr2480e
+    acr_name: agacr34a58
     branch_name: "canary"
     image_tag: "v1.0"
