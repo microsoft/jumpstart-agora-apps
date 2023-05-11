@@ -1,0 +1,16 @@
+# Create Freezer Monitoring mqtt-broker Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-broker
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-broker
+    io.kompose.service: mqtt-broker
+spec:
+  selector:
+    io.kompose.service: mqtt-broker
+  ports:
+    {{ .Values.broker.ports | toYaml | indent 4 }}
+  type: {{ .Values.broker.type }}
+

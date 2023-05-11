@@ -1,0 +1,62 @@
+# Create Freezer Monitoring mqtt2prom Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mqtt2prom
+  namespace: {{ .Release.Namespace }}
+  labels:
+    io.kompose.service: mqtt2prom
+spec:
+  replicas: {{ .Values.mqtt2prom.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mqtt2prom
+      io.kompose.service: mqtt2prom
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mqtt2prom
+        io.kompose.service: mqtt2prom
+    spec:
+      containers:
+      - name: mqtt2prom
+        image: {{ .Values.mqtt2prom.mqtt2prom.image.repository }}:{{ .Values.mqtt2prom.mqtt2prom.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.mqtt2prom.mqtt2prom.imagePullPolicy }}
+        args:
+          - -config
+          - /jumpstart/config.yaml
+          - -log-level
+          - debug
+        ports:
+          - name: http
+            containerPort: 9641
+            protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: 
+          #     port: http
+          #   initialDelaySeconds: 45
+          #   periodSeconds: 30
+          # readinessProbe:
+          #   httpGet:
+          #     path: 
+          #     port: http
+          #   initialDelaySeconds: 45
+          #   periodSeconds: 10
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        volumeMounts:
+        - name: mqtt2prom-config-volume
+          mountPath: jumpstart/config.yaml
+          subPath: config.yaml
+          readOnly: true
+      volumes:
+      - name: mqtt2prom-config-volume
+        configMap:
+          name: mqtt2prom-config
+      restartPolicy: Always

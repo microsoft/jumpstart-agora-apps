@@ -1,33 +1,32 @@
+# Create Freezer Monitoring mqtt-simulator Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sensor-monitor.fullname" . }}-simulator
+  name: {{ .Release.Name }}-simulator
+  namespace: {{ .Release.Namespace }}
   labels:
     io.kompose.service: mqtt-simulator
-  {{- include "sensor-monitor.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.simulator.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: mqtt-simulator
-    {{- include "sensor-monitor.selectorLabels" . | nindent 6 }}
+      app: {{ .Release.Name }}-simulator
   template:
     metadata:
       labels:
-        version: 1.0.14
+        app: {{ .Release.Name }}-simulator
         io.kompose.service: mqtt-simulator
-      {{- include "sensor-monitor.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-      - env:
-        - name: KUBERNETES_CLUSTER_DOMAIN
-          value: {{ quote .Values.kubernetesClusterDomain }}
+      - name: mqtt-simulator
         image: {{ .Values.simulator.mqttSimulator.image.repository }}:{{ .Values.simulator.mqttSimulator.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.simulator.mqttSimulator.imagePullPolicy }}
-        name: mqtt-simulator
         args: 
           - "--file"
           - "/jumpstart/settings.json"
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
         resources: {}
         volumeMounts:
         - name: mqtt-simulator-config-volume
