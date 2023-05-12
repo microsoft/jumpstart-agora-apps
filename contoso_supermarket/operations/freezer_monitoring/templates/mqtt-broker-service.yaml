@@ -11,8 +11,6 @@ spec:
   selector:
     io.kompose.service: mqtt-broker
   ports:
-    - name: mqtt-broker
-      port: 1883
-      targetPort: 1883
+  {{ .Values.broker.ports | toYaml | indent 2 }}
   type: {{ .Values.broker.type }}
 
