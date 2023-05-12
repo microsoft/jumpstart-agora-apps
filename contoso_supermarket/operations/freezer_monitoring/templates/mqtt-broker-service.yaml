@@ -13,4 +13,3 @@ spec:
   ports:
   {{ .Values.broker.ports | toYaml | indent 2 }}
   type: {{ .Values.broker.type }}
-
