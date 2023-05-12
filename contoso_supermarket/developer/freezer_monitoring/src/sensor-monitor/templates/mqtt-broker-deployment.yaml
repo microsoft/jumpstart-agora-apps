@@ -22,8 +22,7 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.broker.mqttBroker.image.repository }}:{{ .Values.broker.mqttBroker.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.broker.mqttBroker.image.repository }}:{{ .Values.broker.mqttBroker.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.broker.mqttBroker.imagePullPolicy }}
         name: mqtt-broker
         args: 
