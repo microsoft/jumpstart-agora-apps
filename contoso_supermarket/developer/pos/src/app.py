@@ -36,10 +36,16 @@ dbconfig = {
     #"database": "contoso"
 }
 
-conn = psycopg2.connect(**dbconfig)
-conn.autocommit= True # allows connection to recover on an error
+conn = None
+def get_conn():
+    global conn
+    if conn is None:
+        conn = psycopg2.connect(**dbconfig)
+        conn.autocommit= True # allows connection to recover on an error
+    return conn
 
 def get_cursor():
+    get_conn()
     try:
         return conn.cursor()
     except psycopg2.InterfaceError:
@@ -48,6 +54,7 @@ def get_cursor():
 
 @app.route('/')
 def index():
+    get_conn()
     """Contoso Supermarket home page."""
     cameras_enabled = True
     if os.environ.get('CAMERAS_ENABLED'):
@@ -130,6 +137,7 @@ def update_item():
 
 @app.route('/delete_item', methods=['POST'])
 def delete_item():
+    get_conn()
     try:
         # Get item ID from request data
         item_id = int(request.form['id'])
