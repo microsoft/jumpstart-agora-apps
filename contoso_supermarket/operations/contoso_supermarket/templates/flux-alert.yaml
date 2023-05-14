@@ -22,9 +22,6 @@ spec:
   eventSources:
     - kind: Kustomization
       name: config-supermarket-pos
-  inclusionList:
-    - "Health check passed\b"
-    - "*Health check passed*"
   exclusionList:
     - ".*upgrade.*has.*started"
     - ".*is.*not.*ready"
