@@ -28,3 +28,5 @@ spec:
     - "^Dependencies.*"
     - "*configured*"
     - "\\bconfigured\\b"
+    - "\\bfailed\\b"
+    - "*failed*"
