@@ -1,0 +1,17 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: sensor-monitor
+  namespace: sensor-monitor
+  annotations:
+    clusterconfig.azure.com/use-managed-source: "true"
+spec:
+  interval: 1m
+  releaseName: sensor-monitor
+  chart:
+    spec:
+      chart: ./contoso_supermarket/operations/freezer_monitoring
+  values:
+    acr_name: agacrc4a52
+    branch_name: "production"
+    image_tag: "v1.0"
