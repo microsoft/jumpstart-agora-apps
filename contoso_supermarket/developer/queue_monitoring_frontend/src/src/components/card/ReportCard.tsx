@@ -6,12 +6,15 @@ interface ReportCardProps {
     title: string;
     value?: number;
     unit?: string;
+    standardThresholdValue?: number;
+    expressThresholdValue?: number;
+    selfServiceThresholdValue?: number;
     standardValue?: number;
-    standardThreshold: number;
     expressValue?: number;
-    expressThreshold: number;
     selfServiceValue?: number;
-    selfServiceThreshold: number;
+    standardClosed: boolean;
+    expressClosed: boolean;
+    selfServiceClosed: boolean;
 }
 
 //format number to x decimal points
@@ -24,15 +27,26 @@ const formatNumber = (num: number, minDigits?: number, maxDigits?: number) => {
         maximumFractionDigits: maxDigits ?? 1,
     });
 };
-
 function ReportCard(props: ReportCardProps) {
-    const standardThreshold = props.standardThreshold ?? 0;
-    const expressThreshold = props.expressThreshold ?? 0;
-    const selfServiceThreshold = props.selfServiceThreshold ?? 0;
     const standardValue = props.standardValue ?? 0;
     const expressValue = props.expressValue ?? 0;
     const selfServiceValue = props.selfServiceValue ?? 0;
 
+    const standardThresholdValue = props.standardThresholdValue ?? 0;
+    const expressThresholdValue = props.expressThresholdValue ?? 0;
+    const selfServiceThresholdValue = props.selfServiceThresholdValue ?? 0;
+
+    const getBackgroundClass = (closed: boolean, value: number) => {
+        if (closed) {
+            return "bg-secondary-light text-white";
+        } else if (value <= 2) {
+            return "bg-success";
+        } else if (value <= 4) {
+            return "bg-warning";
+        } else {
+            return "bg-danger text-white";
+        }
+    };
     return (
         <div className={"bg-secondary rounded p-3 " + props.className}>
             <div className="row pb-5">
@@ -41,8 +55,8 @@ function ReportCard(props: ReportCardProps) {
             </div>
             <div
                 className={
-                    "d-flex justify-content-between align-items-center px-3 py-1 mb-2 bg-secondary-light rounded " +
-                    (standardValue >= standardThreshold ? "bg-danger text-white" : "bg-success text-black")
+                    "d-flex justify-content-between align-items-center px-3 py-1 mb-2 rounded " +
+                    getBackgroundClass(props.standardClosed, standardThresholdValue)
                 }
             >
                 <div className="fs-6 fw-semibold">Standard</div>
@@ -53,8 +67,8 @@ function ReportCard(props: ReportCardProps) {
             </div>
             <div
                 className={
-                    "d-flex justify-content-between align-items-center px-3 py-1 mb-2 bg-secondary-light rounded " +
-                    (expressValue >= expressThreshold ? "bg-danger text-white" : "bg-success text-black")
+                    "d-flex justify-content-between align-items-center px-3 py-1 mb-2 rounded " +
+                    getBackgroundClass(props.expressClosed, expressThresholdValue)
                 }
             >
                 <div className="fs-6 fw-semibold">Express</div>
@@ -65,8 +79,8 @@ function ReportCard(props: ReportCardProps) {
             </div>
             <div
                 className={
-                    "d-flex justify-content-between align-items-center px-3 py-1 mb-2 bg-secondary-light rounded " +
-                    (selfServiceValue >= selfServiceThreshold ? "bg-danger text-white" : "bg-success text-black")
+                    "d-flex justify-content-between align-items-center px-3 py-1 mb-2 rounded " +
+                    getBackgroundClass(props.selfServiceClosed, selfServiceThresholdValue)
                 }
             >
                 <div className="fs-6 fw-semibold">Self Service</div>

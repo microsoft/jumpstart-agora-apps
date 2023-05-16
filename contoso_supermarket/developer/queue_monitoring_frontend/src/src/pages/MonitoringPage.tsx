@@ -1,19 +1,34 @@
 import React, { useEffect } from "react";
 import WaitTimeGraph from "../components/graphs/WaitTimeGraph";
-import { CheckoutType, useGlobalContext } from "../providers/GlobalContext";
+import { Checkout, CheckoutType, useGlobalContext } from "../providers/GlobalContext";
 import dayjs from "dayjs";
 import Header from "../components/header/Header";
 import ReportCard from "../components/card/ReportCard";
 import HeatMapCard from "../components/card/HeatMapCard";
 
+function countOpenCheckouts(checkouts: Checkout[]): number {
+    const openCheckoutsPerType = Object.assign({}, ...Object.values(CheckoutType).map((type) => ({ [type]: false })));
+    for (const checkout of checkouts) {
+        if (!checkout.closed) {
+            openCheckoutsPerType[checkout.type] = true;
+        }
+    }
+    return Object.values(openCheckoutsPerType).filter(Boolean).length;
+}
 function MonitoringPage() {
-    const { getCheckoutHistory, checkoutHistory, checkoutHistoryLoading } = useGlobalContext();
+    const { getCheckoutHistory, checkoutHistory, checkoutHistoryLoading, checkouts, getCheckouts } = useGlobalContext();
 
     //initial data load
     useEffect(() => {
         const yesterday = dayjs().add(-1, "day");
         getCheckoutHistory && getCheckoutHistory(yesterday.toDate());
     }, [getCheckoutHistory]);
+
+    useEffect(() => {
+        if (checkouts.length === 0 && getCheckouts) {
+            getCheckouts();
+        }
+    }, [checkouts, getCheckouts]);
 
     const latestTimestamp = checkoutHistory?.reduce(
         (acc, curr) => (dayjs(curr.timestamp).isAfter(dayjs(acc)) ? curr.timestamp : acc),
@@ -23,49 +38,74 @@ function MonitoringPage() {
     //get new checkout data every minute
     useEffect(() => {
         const intervalId = setInterval(() => {
-            if (latestTimestamp !== undefined && !!latestTimestamp.length && getCheckoutHistory) {
+            if (latestTimestamp !== undefined && !!latestTimestamp.length && getCheckoutHistory && getCheckouts) {
                 getCheckoutHistory(new Date(latestTimestamp));
+                getCheckouts();
             }
         }, 60000);
 
         // Clear interval on component unmount
         return () => clearInterval(intervalId);
-    }, [latestTimestamp, getCheckoutHistory]);
+    }, [latestTimestamp, getCheckoutHistory, getCheckouts]);
+
+    const openCheckouts = countOpenCheckouts(checkouts);
 
     const latestCheckoutHistory = checkoutHistory?.filter((history) => history.timestamp === latestTimestamp);
     const latestCheckoutHistoryOrderedByType = latestCheckoutHistory.sort((a, b) => a.checkoutId - b.checkoutId);
 
     const totalPeople = latestCheckoutHistory?.reduce((acc, curr) => acc + curr.queueLength, 0) ?? 0;
 
-    const expressCheckouts = latestCheckoutHistory?.filter((history) => history.checkoutType === CheckoutType.Express);
+    const expressCheckouts = latestCheckoutHistory?.filter(
+        (history) =>
+            history.checkoutType === CheckoutType.Express &&
+            checkouts.find((x) => x.id === history.checkoutId)?.closed === false
+    );
     const expressPeople = expressCheckouts?.reduce((acc, curr) => acc + curr.queueLength, 0);
     const expressAvgWaitTime =
-        expressCheckouts?.reduce((acc, curr) => acc + curr.averageWaitTimeSeconds, 0) / expressCheckouts.length / 60;
+        expressCheckouts.length === 0
+            ? 0
+            : expressCheckouts?.reduce((acc, curr) => acc + curr.averageWaitTimeSeconds, 0) /
+              expressCheckouts.length /
+              60;
 
     const standardCheckouts = latestCheckoutHistory?.filter(
-        (history) => history.checkoutType === CheckoutType.Standard
+        (history) =>
+            history.checkoutType === CheckoutType.Standard &&
+            checkouts.find((x) => x.id === history.checkoutId)?.closed === false
     );
     const standardPeople = standardCheckouts?.reduce((acc, curr) => acc + curr.queueLength, 0);
     const standardAvgWaitTime =
-        standardCheckouts?.reduce((acc, curr) => acc + curr.averageWaitTimeSeconds, 0) / standardCheckouts.length / 60;
+        standardCheckouts?.length === 0
+            ? 0
+            : standardCheckouts?.reduce((acc, curr) => acc + curr.averageWaitTimeSeconds, 0) /
+              standardCheckouts.length /
+              60;
 
     const selfServiceCheckouts = latestCheckoutHistory?.filter(
-        (history) => history.checkoutType === CheckoutType.SelfService
+        (history) =>
+            history.checkoutType === CheckoutType.SelfService &&
+            checkouts.find((x) => x.id === history.checkoutId)?.closed === false
     );
     const selfServicePeople = selfServiceCheckouts?.reduce((acc, curr) => acc + curr.queueLength, 0);
     const selfServiceAvgWaitTime =
-        selfServiceCheckouts?.reduce((acc, curr) => acc + curr.averageWaitTimeSeconds, 0) /
-        selfServiceCheckouts.length /
-        60;
+        selfServiceCheckouts?.length === 0
+            ? 0
+            : selfServiceCheckouts?.reduce((acc, curr) => acc + curr.averageWaitTimeSeconds, 0) /
+              selfServiceCheckouts.length /
+              60;
 
-    const avgWaitTime = (expressAvgWaitTime + standardAvgWaitTime + selfServiceAvgWaitTime) / 3;
+    const avgWaitTime =
+        openCheckouts === 0 ? 0 : (expressAvgWaitTime + standardAvgWaitTime + selfServiceAvgWaitTime) / openCheckouts;
 
-    const totalStandardCheckouts =
-        latestCheckoutHistory?.filter((history) => history.checkoutType === CheckoutType.Standard).length ?? 0;
-    const totalExpressCheckouts =
-        latestCheckoutHistory?.filter((history) => history.checkoutType === CheckoutType.Express).length ?? 0;
-    const totalSelfServiceCheckouts =
-        latestCheckoutHistory?.filter((history) => history.checkoutType === CheckoutType.SelfService).length ?? 0;
+    const standardAllClosed = checkouts
+        .filter((x) => x.type === CheckoutType.Standard)
+        .every((checkout) => checkout.closed);
+    const expressAllClosed = checkouts
+        .filter((x) => x.type === CheckoutType.Express)
+        .every((checkout) => checkout.closed);
+    const selfServiceAllClosed = checkouts
+        .filter((x) => x.type === CheckoutType.SelfService)
+        .every((checkout) => checkout.closed);
 
     return (
         <>
@@ -91,9 +131,12 @@ function MonitoringPage() {
                                 standardValue={standardPeople}
                                 expressValue={expressPeople}
                                 selfServiceValue={selfServicePeople}
-                                expressThreshold={totalStandardCheckouts * 4}
-                                standardThreshold={totalExpressCheckouts * 4}
-                                selfServiceThreshold={totalSelfServiceCheckouts * 4}
+                                standardThresholdValue={standardAvgWaitTime}
+                                selfServiceThresholdValue={selfServiceAvgWaitTime}
+                                expressThresholdValue={expressAvgWaitTime}
+                                standardClosed={standardAllClosed}
+                                expressClosed={expressAllClosed}
+                                selfServiceClosed={selfServiceAllClosed}
                             />
                         </div>
                     </div>
@@ -107,9 +150,12 @@ function MonitoringPage() {
                                 standardValue={standardAvgWaitTime}
                                 expressValue={expressAvgWaitTime}
                                 selfServiceValue={selfServiceAvgWaitTime}
-                                standardThreshold={(totalStandardCheckouts * 60 * 1) / 60}
-                                expressThreshold={(totalSelfServiceCheckouts * 60 * 0.5) / 60}
-                                selfServiceThreshold={(totalSelfServiceCheckouts * 60 * 0.7) / 60}
+                                standardThresholdValue={standardAvgWaitTime}
+                                selfServiceThresholdValue={selfServiceAvgWaitTime}
+                                expressThresholdValue={expressAvgWaitTime}
+                                standardClosed={standardAllClosed}
+                                expressClosed={expressAllClosed}
+                                selfServiceClosed={selfServiceAllClosed}
                             />
                         </div>
                     </div>

@@ -1,3 +1,6 @@
+# Setting env vars
+The `.env` file can be used for local development. To allow for runtime setting of variables the Docker file will use the `.env` file as a template for variable replacement and overwrite the variables with passed in variables. This is to overcome the limitation that the react app has already been compiled.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

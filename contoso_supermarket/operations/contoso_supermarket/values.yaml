@@ -1,6 +1,3 @@
-queue_monitoring:
-  timezone: "Pacific Standard Time"
-
 postgres:
   username: "postgres"
   database: "contoso"
@@ -15,3 +12,6 @@ point_of_sale:
   cameras_url: ""
   new_category: "True"
   holiday_banner: "False"
+
+queue_monitoring_frontend:
+  live_view_enabled: "False"

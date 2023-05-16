@@ -27,13 +27,13 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-secrets
+              name: postgrespw
               key: POSTGRES_PASSWORD
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-secrets
-              key: POSTGRES_PASSWORD        
+              name: postgrespw
+              key: POSTGRES_PASSWORD
         - name: POSTGRES_DB
           value: {{ .Values.postgres.database }}
         command:

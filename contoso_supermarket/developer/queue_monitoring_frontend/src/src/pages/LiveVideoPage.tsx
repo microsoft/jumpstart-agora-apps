@@ -28,7 +28,7 @@ function LiveVideoPage() {
                         <img src="/ai/video_feed" className="ratio ratio-16x9" alt="supermarket video feed" />
                     </div>
                     <div className="col-3 col-lg-2">
-                        <NumberCard title={"People Count"} value={peopleCount} />
+                        <NumberCard title={"People Count"} value={isNaN(peopleCount) ? 0 : peopleCount} />
                     </div>
                 </div>
             </div>

@@ -1,0 +1,32 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Provider
+metadata:
+  name: github
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: githubdispatch
+  address: https://github.com/{{ .Values.github_User}}/jumpstart-agora-apps
+  secretRef:
+    name: github-token
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: promote-image
+  namespace: {{ .Release.Namespace }}
+spec:
+  providerRef:
+    name: github
+  summary: env=${{ .Values.branch_name}}
+  eventSeverity: info
+  eventSources:
+    - kind: Kustomization
+      name: config-supermarket-pos
+  exclusionList:
+    - ".*upgrade.*has.*started"
+    - ".*is.*not.*ready"
+    - "^Dependencies.*"
+    - "*configured*"
+    - "\\bconfigured\\b"
+    - "\\bfailed\\b"
+    - "*failed*"
