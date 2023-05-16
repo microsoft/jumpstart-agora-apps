@@ -15,6 +15,7 @@ spec:
     acr_name: __acrName__
     branch_name: "production"
     image_tag: "v1.0"
+    github_User: __githubUser__
     queue_monitoring:
       timezone: "Pacific Standard Time"
     postgres:
