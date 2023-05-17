@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: pos
-  namespace: contoso-supermarket
+  namespace: contoso
   annotations:
     clusterconfig.azure.com/use-managed-source: "true"
 spec:
