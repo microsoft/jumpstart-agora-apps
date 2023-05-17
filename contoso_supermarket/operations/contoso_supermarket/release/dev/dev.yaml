@@ -12,10 +12,10 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket
   values:
-    acr_name: __acrName__
+    acr_name: "jumpstartagora.azurecr.io"
     branch_name: "dev"
     image_tag: v1.0
-    github_User: __githubUser__
+    github_User: "brauliomsft"
     queue_monitoring:
       timezone: "Pacific Standard Time"
     postgres:
@@ -24,12 +24,12 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: __cosmosEndpoint__
+      endpoint: "https://agcosmos896e3.documents.azure.com:443/"
     point_of_sale:
       title: "Contoso Supermarket"
       cameras_enabled: "False"
       cameras_url: ""
       new_category: "True"
       holiday_banner: "False"
-      store_id: 4
+      store_id: 5
       store_location: "dev"

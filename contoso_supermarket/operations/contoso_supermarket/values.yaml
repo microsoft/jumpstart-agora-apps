@@ -7,7 +7,7 @@ cosmos:
   database: "contoso" 
 
 point_of_sale:
-  title: "Contoso Supermarket"
+  title: "Contoso Supermarket v1.0"
   cameras_enabled: "False"
   cameras_url: ""
   new_category: "True"
