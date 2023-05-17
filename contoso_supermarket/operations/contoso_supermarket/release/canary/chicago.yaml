@@ -15,7 +15,7 @@ spec:
     acr_name: agacr51c01
     branch_name: "canary"
     image_tag: "v1.0"
-    github_User: __githubUser__
+    github_User: chintalavr
     queue_monitoring:
       timezone: "Pacific Standard Time"
     postgres:
