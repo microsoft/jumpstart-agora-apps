@@ -15,7 +15,7 @@ if (args?.Length > 0)
     }
 }
 
-// Get configuration values from environment varibles. These environment variables are setup as part of Agora deployment.
+// Get configuration values from environment variables. These environment variables are setup as part of Agora deployment.
 var cosmosAccountName = Environment.GetEnvironmentVariable("cosmosDBName", EnvironmentVariableTarget.Machine);
 var spnTenantId = Environment.GetEnvironmentVariable("SPN_TENANT_ID", EnvironmentVariableTarget.Machine);
 var spnClientId = Environment.GetEnvironmentVariable("SPN_CLIENT_ID", EnvironmentVariableTarget.Machine);
@@ -26,7 +26,7 @@ var cosmosDatabaseName = Environment.GetEnvironmentVariable("cosmosDatabaseName"
 var containerName = Environment.GetEnvironmentVariable("containerName", EnvironmentVariableTarget.Machine);
 int NoOfDays = -30;
 
-// Use App.Config when running outside of Agore client VM. Configure thes values in App.Config to generate test data.
+// Use App.Config when running outside of Agora client VM. Configure thes values in App.Config to generate test data.
 if (String.IsNullOrEmpty(cosmosAccountName)){ cosmosAccountName = ConfigurationManager.AppSettings["cosmosDBName"]; }
 if (String.IsNullOrEmpty(spnTenantId)) { spnTenantId = ConfigurationManager.AppSettings["SPN_TENANT_ID"]; }
 if (String.IsNullOrEmpty(spnClientId)) { spnClientId = ConfigurationManager.AppSettings["SPN_CLIENT_ID"]; }
@@ -51,7 +51,7 @@ Console.WriteLine("cosmosDatabaseName: {0}", cosmosDatabaseName);
 Console.WriteLine("containerName: {0}", containerName);
 Console.WriteLine("No of days to generate history: {0}", NoOfDays);
 
-// Assign defaults if stil not configured
+// Assign defaults if not configured
 if (String.IsNullOrEmpty(cosmosDatabaseName)) { cosmosDatabaseName = "Orders"; }
 if (String.IsNullOrEmpty(containerName)) { containerName = "Orders"; }
 
@@ -84,7 +84,7 @@ List<Store> storeList = new List<Store>();
 
 try
 {
-    // Get databae
+    // Get database
     if (null == cosmosClient)
     {
         Console.WriteLine("Could not create CosmosDB client.");
