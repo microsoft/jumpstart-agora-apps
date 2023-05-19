@@ -52,4 +52,7 @@ spec:
             items:
             - key: initDB.sql
               path: initDB.sql
+  dependsOn:
+    - name: {{ .Release.Name }}-contosodb
+      condition: "Ready"
         
