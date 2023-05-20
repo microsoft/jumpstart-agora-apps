@@ -12,9 +12,9 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket
   values:
-    acr_name: agacr7ffca
+    acr_name: hello
     branch_name: "dev"
-    image_tag: v1.0
+    image_tag: hello
     github_User: sebassem
     queue_monitoring:
       timezone: "Pacific Standard Time"
@@ -24,7 +24,7 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: https://agcosmos7ffca.documents.azure.com:443/
+      endpoint: hello
     point_of_sale:
       title: "Contoso Supermarket"
       cameras_enabled: "False"
