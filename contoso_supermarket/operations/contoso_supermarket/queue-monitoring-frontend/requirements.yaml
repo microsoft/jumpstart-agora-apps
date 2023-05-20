@@ -1,0 +1,4 @@
+dependencies:
+  - name: queue-monitoring-backend
+    version: 0.1.0
+    repository: https://github.com/__github_account__/jumpstart-agora-apps

@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: cloudsync
+  name: queue-monitoring-backend
   namespace: contoso-supermarket
   annotations:
     clusterconfig.azure.com/use-managed-source: "true"
@@ -10,10 +10,10 @@ spec:
   releaseName: pos
   chart:
     spec:
-      chart: ./contoso_supermarket/operations/contoso_supermarket/cloudsync
+      chart: ./contoso_supermarket/operations/contoso_supermarket/queue-monitoring-backend
   values:
     acr_name: agacrfcbd5
-    branch_name: "production"
+    branch_name: "dev"
     image_tag: v1.0
     github_User: sebassem
     queue_monitoring:
@@ -31,5 +31,5 @@ spec:
       cameras_url: ""
       new_category: "True"
       holiday_banner: "False"
-      store_id: 1
-      store_location: "Seattle"
+      store_id: 4
+      store_location: "dev"
