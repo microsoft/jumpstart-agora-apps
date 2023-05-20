@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/queue-monitoring-frontend
   values:
-    acr_name: agacrfcbd5
+    acr_name: agacrdee1b
     branch_name: "canary"
     image_tag: v1.0
     github_User: sebassem
