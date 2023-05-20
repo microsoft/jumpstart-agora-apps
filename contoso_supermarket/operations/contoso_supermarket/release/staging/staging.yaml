@@ -14,7 +14,7 @@ spec:
   values:
     acr_name: agacrfcbd5
     branch_name: "staging"
-    image_tag: "v1.0"
+    image_tag: v1.0
     github_User: sebassem
     queue_monitoring:
       timezone: "Pacific Standard Time"
