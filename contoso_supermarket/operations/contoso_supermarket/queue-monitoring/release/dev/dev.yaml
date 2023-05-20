@@ -10,7 +10,7 @@ spec:
   releaseName: pos
   chart:
     spec:
-      chart: ./contoso_supermarket/operations/contoso_supermarket
+      chart: ./contoso_supermarket/operations/contoso_supermarket/queue-monitoring
   values:
     acr_name: agacrfcbd5
     branch_name: "dev"
