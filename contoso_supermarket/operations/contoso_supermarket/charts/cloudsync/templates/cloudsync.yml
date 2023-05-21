@@ -2,24 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-cloudsync
+  name: cloudsync
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-cloudsync
+      app: cloudsync
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-cloudsync
+        app: cloudsync
     spec:
       containers:
         - name: cloudsync
           image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/pos-cloudsync:v1.0
           env:
           - name: SQL_HOST
-            value: {{ .Release.Name }}-contosodb
+            value: contosodb
           - name: SQL_USERNAME
             value: {{ .Values.postgres.username }}
           - name: SQL_PASSWORD

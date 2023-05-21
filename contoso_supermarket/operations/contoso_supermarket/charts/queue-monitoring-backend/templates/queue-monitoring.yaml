@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-queue-monitoring-backend
+  name: queue-monitoring-backend
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-queue-monitoring-backend
+    app: queue-monitoring-backend
 spec:
   selector:
-    app: {{ .Release.Name }}-queue-monitoring-backend
+    app: queue-monitoring-backend
   ports:
   - name: http
     port: 4000
@@ -18,26 +18,26 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-queue-monitoring-backend
+  name: queue-monitoring-backend
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-queue-monitoring-backend
+    app: queue-monitoring-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-queue-monitoring-backend
+      app: queue-monitoring-backend
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-queue-monitoring-backend
+        app: queue-monitoring-backend
     spec:
       containers:
         - name: queue-monitoring-backend
           image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/queue-monitoring-backend:v1.0
           env:
             - name: SQL_HOST
-              value: {{ .Release.Name }}-contosodb
+              value: contosodb
             - name: SQL_USERNAME
               value: {{ .Values.postgres.username }}
             - name: SQL_PASSWORD
@@ -58,13 +58,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-queue-monitoring-frontend
+  name: queue-monitoring-frontend
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-queue-monitoring-frontend
+    app: queue-monitoring-frontend
 spec:
   selector:
-    app: {{ .Release.Name }}-queue-monitoring-frontend
+    app: queue-monitoring-frontend
   ports:
   - name: http
     port: 81
@@ -75,32 +75,32 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-queue-monitoring-frontend
+  name: queue-monitoring-frontend
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-queue-monitoring-frontend
+    app: queue-monitoring-frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-queue-monitoring-frontend
+      app: queue-monitoring-frontend
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-queue-monitoring-frontend
+        app: queue-monitoring-frontend
     spec:
       containers:
         - name: queue-monitoring-frontend
           image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/queue-monitoring-frontend:v1.0
           env:
             - name: BACKEND_API_URL
-              value: "http://{{ .Release.Name }}-queue-monitoring-backend:4000"
+              value: "http://queue-monitoring-backend:4000"
             - name: BACKEND_API_HOST
-              value: "{{ .Release.Name }}-queue-monitoring-backend"
+              value: "queue-monitoring-backend"
             - name: AI_API_URL
-              value: "http://{{ .Release.Name }}-contosoai:8000"
+              value: "http://contosoai:8000"
             - name: AI_API_HOST
-              value: "{{ .Release.Name }}-contosoai"
+              value: "contosoai"
             - name: REACT_APP_LIVE_VIEW_ENABLED
               value: "{{ .Values.queue_monitoring_frontend.live_view_enabled }}"
           ports:
