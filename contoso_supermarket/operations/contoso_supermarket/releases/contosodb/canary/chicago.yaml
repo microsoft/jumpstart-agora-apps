@@ -1,13 +1,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: pos
+  name: contosodb
   namespace: contoso-supermarket
   annotations:
     clusterconfig.azure.com/use-managed-source: "true"
 spec:
   interval: 1m
-  releaseName: pos
+  releaseName: contosodb
   chart:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/contosodb
