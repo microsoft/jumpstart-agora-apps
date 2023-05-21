@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-contosodb
+  name: contosodb
   namespace: {{ .Release.Namespace }}
 spec:
   selector:
-    app: {{ .Release.Name }}-contosodb
+    app: contosodb
   ports:
   - name: postgresql
     port: 5432
@@ -16,17 +16,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-contosodb
+  name: contosodb
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-contosodb
+      app: contosodb
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-contosodb
+        app: contosodb
     spec:
       containers:
       - name: contosodb
@@ -44,10 +44,10 @@ spec:
         ports:
         - containerPort: 5432
         volumeMounts:
-          - name: {{ .Release.Name }}-postgresql-vol
+          - name: postgresql-vol
             mountPath: /var/lib/postgresql/data
       volumes:
-        - name: {{ .Release.Name }}-postgresql-vol
+        - name: postgresql-vol
           hostPath:
             path: /var/postgresql-data
 ---
@@ -62,19 +62,19 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-init-db
+  name: init-db
   namespace: {{ .Release.Namespace }}
 spec:
   template:
     metadata:
-      name: {{ .Release.Name }}-init-db
+      name: init-db
     spec:
       containers:
       - name: initdb
         image: postgres:15.0
         env:
         - name: PGHOST
-          value: {{ .Release.Name }}-contosodb
+          value: contosodb
         - name: POSTGRES_USER
           value: {{ .Values.postgres.username }}
         - name: POSTGRES_PASSWORD

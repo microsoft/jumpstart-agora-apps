@@ -3,13 +3,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-contosopos
+  name: contosopos
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-contosopos
+    app: contosopos
 spec:
   selector:
-    app: {{ .Release.Name }}-contosopos
+    app: contosopos
   ports:
   - name: http
     port: 5000
@@ -20,26 +20,26 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-contosopos
+  name: contosopos
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-contosopos
+    app: contosopos
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-contosopos
+      app: contosopos
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-contosopos
+        app: contosopos
     spec:
       containers:
         - name: contosopos
           image: "{{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/pos:{{ .Values.image_tag}}"
           env:
             - name: SQL_HOST
-              value: {{ .Release.Name }}-contosodb
+              value: contosodb
             - name: SQL_USERNAME
               value: {{ .Values.postgres.username }}
             - name: SQL_PASSWORD
