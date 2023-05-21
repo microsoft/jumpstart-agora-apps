@@ -1,0 +1,35 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: queue-monitoring-frontend
+  namespace: contoso-supermarket
+  annotations:
+    clusterconfig.azure.com/use-managed-source: "true"
+spec:
+  interval: 1m
+  releaseName: pos
+  chart:
+    spec:
+      chart: ./contoso_supermarket/operations/contoso_supermarket/charts/queue-monitoring-frontend
+  values:
+    acr_name: agacrfcbd5
+    branch_name: "canary"
+    image_tag: v1.0
+    github_User: sebassem
+    queue_monitoring:
+      timezone: "Pacific Standard Time"
+    postgres:
+      username: "postgres"
+      database: "contoso"
+    cosmos:
+      container: "pos"
+      database: "contoso"
+      endpoint: https://agcosmosfcbd5.documents.azure.com:443/
+    point_of_sale:
+      title: "Contoso Supermarket"
+      cameras_enabled: "False"
+      cameras_url: ""
+      new_category: "True"
+      holiday_banner: "False"
+      store_id: 2
+      store_location: "Chicago"
