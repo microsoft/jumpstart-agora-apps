@@ -6,6 +6,9 @@ using Azure.ResourceManager;
 using Azure.ResourceManager.CosmosDB;
 using Azure.ResourceManager.CosmosDB.Models;
 using System.Configuration;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 if (args?.Length > 0)
 {
@@ -24,6 +27,8 @@ var subscriptionId = Environment.GetEnvironmentVariable("subscriptionId", Enviro
 var resourceGroup = Environment.GetEnvironmentVariable("resourceGroup", EnvironmentVariableTarget.Machine);
 var cosmosDatabaseName = Environment.GetEnvironmentVariable("cosmosDatabaseName", EnvironmentVariableTarget.Machine);
 var containerName = Environment.GetEnvironmentVariable("containerName", EnvironmentVariableTarget.Machine);
+var productsJsonFile = Environment.GetEnvironmentVariable("productsJsonFile", EnvironmentVariableTarget.Machine);
+var storesJsonFile = Environment.GetEnvironmentVariable("storesJsonFile", EnvironmentVariableTarget.Machine);
 int NoOfDays = -30;
 
 // Use App.Config when running outside of Agora client VM. Configure thes values in App.Config to generate test data.
@@ -35,6 +40,8 @@ if (String.IsNullOrEmpty(subscriptionId)) { subscriptionId = ConfigurationManage
 if (String.IsNullOrEmpty(resourceGroup)) { resourceGroup = ConfigurationManager.AppSettings["resourceGroup"]; }
 if (String.IsNullOrEmpty(cosmosDatabaseName)) { cosmosDatabaseName = ConfigurationManager.AppSettings["cosmosDatabaseName"]; } else { cosmosDatabaseName = "Orders"; }
 if (String.IsNullOrEmpty(containerName)) { containerName = ConfigurationManager.AppSettings["containerName"]; } else { cosmosDatabaseName = "Orders"; }
+if (String.IsNullOrEmpty(productsJsonFile)) { productsJsonFile = ConfigurationManager.AppSettings["productsJsonFile"]; } 
+if (String.IsNullOrEmpty(storesJsonFile)) { storesJsonFile = ConfigurationManager.AppSettings["storesJsonFile"]; }
 
 string history = ConfigurationManager.AppSettings["NoOfDays"] ?? "-30";
 if (string.IsNullOrEmpty(history))
@@ -113,25 +120,58 @@ try
     }
 
     // Read products list from Products container to generate orders
-    Console.WriteLine("Retrieving product information from Products container.");
-    Container productsContainer = cosmosDB.GetContainer("Products");
-    if(productsContainer != null)
+    try
     {
-        using FeedIterator<Product> productIterator = productsContainer.GetItemQueryIterator<Product>(queryText: "SELECT * FROM Products");
-        if (productIterator.HasMoreResults)
+        Console.WriteLine("Retrieving product information from Products container.");
+        Container productsContainer = cosmosDB.GetContainer("Products");
+        if (productsContainer != null)
         {
-            foreach (Product product in await productIterator.ReadNextAsync())
+            using FeedIterator<Product> productIterator = productsContainer.GetItemQueryIterator<Product>(queryText: "SELECT * FROM Products");
+            if (productIterator.HasMoreResults)
             {
-                productList.Add(product);
+                foreach (Product product in await productIterator.ReadNextAsync())
+                {
+                    productList.Add(product);
+                }
             }
         }
     }
-
+    catch (Exception)
+    {
+        Console.WriteLine("Products container not found in CosmosDB.");
+    }
     // If Products container is not populated, generate new Products using below info or JSON file
     if (productList.Count <= 0)
     {
-        Console.WriteLine("No products available to generate sample data. Upload products information into Products container in CosmosDB.");
-        System.Environment.Exit(-1);
+        Console.WriteLine("No products available to generate sample data. Importing products information from local JSON file.");
+
+        // Import products frok JSON file in GitHub and use for sampling
+        if (null != productsJsonFile && File.Exists(productsJsonFile))
+        {
+            var productsJsonText = File.ReadAllText(productsJsonFile);
+
+            // Converto JSOn object
+            productList = JsonConvert.DeserializeObject<List<Product>>(productsJsonText);
+            if (null != productList && productList.Count > 0)
+            {
+                Console.WriteLine("Found {0} products in the container to generate sample data.", productList.Count);
+
+                // Import products into CosmosDB to make them available for Azure Data Explorer reports
+                Container productsContainer = await cosmosDB.CreateContainerIfNotExistsAsync(id: "Products", partitionKeyPath: "/ProductId");
+                if (null != productsContainer)
+                {
+                    Console.WriteLine("Importing products data into CosmosDB container Products.");
+                    foreach (Product product in productList)
+                    {
+                        var createdproduct = await productsContainer.CreateItemAsync<Product>(item: product);
+                    }
+                }
+            }
+        }
+        else
+        {
+            System.Environment.Exit(-1);
+        }
     }
     else
     {
@@ -139,26 +179,66 @@ try
     }
 
     // Get Store list to generate random orders from these stores
-    Console.WriteLine("Retrieving stores information from Stores container.");
-    Container storesContainer = cosmosDB.GetContainer("Stores");
-    if (storesContainer != null )
+    try
     {
-        using FeedIterator<Store> storeIterator = storesContainer.GetItemQueryIterator<Store>(queryText: "SELECT * FROM Stores");
-        foreach (Store Store in await storeIterator.ReadNextAsync())
+        Console.WriteLine("Retrieving stores information from Stores container.");
+        Container storesContainer = cosmosDB.GetContainer("Stores");
+        if (storesContainer != null)
         {
-            storeList.Add(Store);
+            using FeedIterator<Store> storeIterator = storesContainer.GetItemQueryIterator<Store>(queryText: "SELECT * FROM Stores");
+            foreach (Store Store in await storeIterator.ReadNextAsync())
+            {
+                storeList.Add(Store);
+            }
         }
     }
+    catch (Exception)
+    {
+
+    }
+
     
     // Create new Stores list if no stores exist in the Stores container
     if (storeList.Count <= 0)
     {
-        Console.WriteLine("No stores information available to generate sample data. Upload stores information into Stores container in CosmosDB.");
-        System.Environment.Exit(-1);
+        Console.WriteLine("No stores information available to generate sample data. Importing stores information from local JSON file.");
+        // Import products frok JSON file in GitHub and use for sampling
+        if (null != storesJsonFile && File.Exists(storesJsonFile))
+        {
+            var storesJsonText = File.ReadAllText(storesJsonFile);
+
+            // Converto JSOn object
+            storeList = JsonConvert.DeserializeObject<List<Store>>(storesJsonText);
+            if (null != storeList && storeList.Count > 0)
+            {
+                Console.WriteLine("Found {0} stores in the container to generate sample data.", storeList.Count);
+
+                // Import stores into CosmosDB to make them available for Azure Data Explorer reports
+                Container storeContainer = await cosmosDB.CreateContainerIfNotExistsAsync(id: "Stores", partitionKeyPath: "/StoreId");
+                if (null != storeContainer)
+                {
+                    Console.WriteLine("Importing stores data into CosmosDB container Stores.");
+
+                    foreach (Store store in storeList)
+                    {
+                        var createdStore = await storeContainer.CreateItemAsync<Store>(item: store);
+                    }
+                }
+            }
+        }
+        else
+        {
+            System.Environment.Exit(-1);
+        }
     }
     else
     {
         Console.WriteLine("Found {0} stores in the container to generate sample data.", storeList.Count);
+    }
+
+    if (null == productList || null == storeList)
+    {
+        System.Environment.Exit(-1);
     }
 
     DateTime dataStartDate = DateTime.Now.AddDays(NoOfDays);
@@ -211,7 +291,7 @@ try
             // Select random store
             var storeIndex= random.Next(0, stores.Length-1);
             var order = new Order();
-            order.storeId = stores[storeIndex].storeId.ToString();
+            order.storeId = stores[storeIndex].id;
 
             order.orderDate = dataStartDate;
             order.id = string.Format("{0}{1:D2}", dataStartDate.ToString("yyyMMddHHmmss"), orderNo);
