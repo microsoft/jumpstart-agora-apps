@@ -27,7 +27,7 @@ spec:
       endpoint: https://agcosmosd4082.documents.azure.com:443/
     point_of_sale:
       title: "Contoso Supermarket"
-      cameras_enabled: "False"
+      cameras_enabled: "True"
       cameras_url: ""
       new_category: "True"
       holiday_banner: "False"
