@@ -12,10 +12,10 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/queue-monitoring-frontend
   values:
-    acr_name: agacrd4082
+    acr_name: __acrName__
     branch_name: "canary"
     image_tag: v1.0
-    github_User: sebassem
+    github_User: __githubUser__
     queue_monitoring:
       timezone: "Pacific Standard Time"
     postgres:
@@ -24,7 +24,7 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: https://agcosmosd4082.documents.azure.com:443/
+      endpoint: __cosmosEndpoint__
     point_of_sale:
       title: "Contoso Supermarket"
       cameras_enabled: "False"
