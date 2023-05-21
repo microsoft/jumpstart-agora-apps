@@ -1,7 +1,7 @@
 apiVersion: v2
 name: contosodb
 description: A helm chart to deploy the Contoso Supermarket application
-home: https://github.com/microsoft/jumpstart-agora-apps
+home: https://github.com/sebassem/jumpstart-agora-apps
 type: application
 version: 0.1.0
 sources:
