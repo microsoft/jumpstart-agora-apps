@@ -21,7 +21,7 @@ spec:
   eventSeverity: info
   eventSources:
     - kind: Kustomization
-      name: config-supermarket-pos
+      name: contosopos
   exclusionList:
     - ".*upgrade.*has.*started"
     - ".*is.*not.*ready"
