@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/contosoai
   values:
-    acr_name: agacrfcbd5
+    acr_name: agacrdee1b
     branch_name: "production"
     image_tag: v1.0
     github_User: sebassem
@@ -24,7 +24,7 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: https://agcosmosfcbd5.documents.azure.com:443/
+      endpoint: https://agcosmosdee1b.documents.azure.com:443/
     point_of_sale:
       title: "Contoso Supermarket"
       cameras_enabled: "False"
