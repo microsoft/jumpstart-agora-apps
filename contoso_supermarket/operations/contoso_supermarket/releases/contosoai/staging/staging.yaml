@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/contosoai
   values:
-    acr_name: agacre1410
+    acr_name: agacrcf142
     branch_name: "staging"
     image_tag: v1.0
     github_User: sebassem
