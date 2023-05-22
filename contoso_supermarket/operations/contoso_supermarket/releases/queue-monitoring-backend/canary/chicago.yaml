@@ -15,7 +15,7 @@ spec:
     acr_name: agacrb3e1b
     branch_name: "canary"
     image_tag: v1.0
-    github_User: __githubUser__
+    github_User: sebassem
     queue_monitoring:
       timezone: "Pacific Standard Time"
     postgres:
