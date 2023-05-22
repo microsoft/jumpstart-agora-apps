@@ -17,7 +17,7 @@ metadata:
 spec:
   providerRef:
     name: github
-  summary: env=${{ .Values.branch_name}}
+  summary: env={{ .Values.branch_name}}
   eventSeverity: info
   eventSources:
     - kind: Kustomization
@@ -28,3 +28,5 @@ spec:
     - "^Dependencies.*"
     - "*configured*"
     - "\\bconfigured\\b"
+    - "\\bfailed\\b"
+    - "*failed*"

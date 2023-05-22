@@ -116,7 +116,6 @@ def get_frame():
         #print(output)
         
         font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(frame, f"People Count: {person_count}", (50, 50), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
         #print(f"{fps:.3f} FPS")
         #cv2.imshow("Frame", frame)
         ret, buffer = cv2.imencode('.jpg', frame)
