@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/queue-monitoring-frontend
   values:
-    acr_name: agacr26969
+    acr_name: agacrefe53
     branch_name: "production"
     image_tag: v1.0
     github_User: sebassem
