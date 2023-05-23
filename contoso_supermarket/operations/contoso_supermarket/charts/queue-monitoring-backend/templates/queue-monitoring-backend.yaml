@@ -1,0 +1,55 @@
+# Create Contoso Supermarket Queue Monitoring Backend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: queue-monitoring-backend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: queue-monitoring-backend
+spec:
+  selector:
+    app: queue-monitoring-backend
+  ports:
+  - name: http
+    port: 4000
+    targetPort: 4000
+---
+# Create Contoso Supermarket Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-monitoring-backend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: queue-monitoring-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue-monitoring-backend
+  template:
+    metadata:
+      labels:
+        app: queue-monitoring-backend
+    spec:
+      containers:
+        - name: queue-monitoring-backend
+          image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/queue-monitoring-backend:v1.0
+          env:
+            - name: SQL_HOST
+              value: contosodb
+            - name: SQL_USERNAME
+              value: {{ .Values.postgres.username }}
+            - name: SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgrespw
+                  key: POSTGRES_PASSWORD
+            - name: SQL_DATABASE
+              value: {{ .Values.postgres.database }}
+            - name: ASPNETCORE_URLS
+              value : "http://*:4000/"
+          ports:
+            - containerPort: 4000
+      imagePullSecrets:
+            - name: acr-secret

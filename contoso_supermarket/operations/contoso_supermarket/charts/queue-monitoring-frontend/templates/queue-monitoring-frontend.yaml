@@ -1,0 +1,53 @@
+# Create Contoso Supermarket Queue Monitoring Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: queue-monitoring-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: queue-monitoring-frontend
+spec:
+  selector:
+    app: queue-monitoring-frontend
+  ports:
+  - name: http
+    port: 81
+    targetPort: 8080
+  type: LoadBalancer
+---
+# Create Contoso Supermarket Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-monitoring-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: queue-monitoring-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue-monitoring-frontend
+  template:
+    metadata:
+      labels:
+        app: queue-monitoring-frontend
+    spec:
+      containers:
+        - name: queue-monitoring-frontend
+          image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/queue-monitoring-frontend:v1.0
+          env:
+            - name: BACKEND_API_URL
+              value: "http://queue-monitoring-backend:4000"
+            - name: BACKEND_API_HOST
+              value: "queue-monitoring-backend"
+            - name: AI_API_URL
+              value: "http://contosoai:8000"
+            - name: AI_API_HOST
+              value: "contosoai"
+            - name: REACT_APP_LIVE_VIEW_ENABLED
+              value: "{{ .Values.queue_monitoring_frontend.live_view_enabled }}"
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: acr-secret
