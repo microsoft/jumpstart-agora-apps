@@ -97,7 +97,7 @@ spec:
           - name: init-db-sql
             mountPath: /var/initdb.sql
             subPath: initDB.sql
-      restartPolicy: "Never"
+      restartPolicy: "OnFailure"
       volumes:
         - name: init-db-sql
           configMap:
