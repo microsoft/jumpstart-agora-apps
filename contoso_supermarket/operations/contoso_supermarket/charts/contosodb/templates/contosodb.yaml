@@ -1,0 +1,107 @@
+# Postgre SQL Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: contosodb
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: contosodb
+  ports:
+  - name: postgresql
+    port: 5432
+    targetPort: 5432
+---
+# Create PostgreSQL Database Container with local storage
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contosodb
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contosodb
+  template:
+    metadata:
+      labels:
+        app: contosodb
+    spec:
+      containers:
+      - name: contosodb
+        image: postgres:15.0
+        env:
+        - name: POSTGRES_USER
+          value: {{ .Values.postgres.username }}
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgrespw
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_DB
+          value: contoso
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+          - name: postgresql-vol
+            mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgresql-vol
+          hostPath:
+            path: /var/postgresql-data
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-db-sql-file
+data:
+  initDB.sql: |-
+{{ .Files.Get "files/initdb.sql" | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-db
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    metadata:
+      name: init-db
+    spec:
+      containers:
+      - name: initdb
+        image: postgres:15.0
+        env:
+        - name: PGHOST
+          value: contosodb
+        - name: POSTGRES_USER
+          value: {{ .Values.postgres.username }}
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgrespw
+              key: POSTGRES_PASSWORD
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgrespw
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_DB
+          value: {{ .Values.postgres.database }}
+        command:
+          - sh
+          - -c
+          - psql -h $PGHOST -U $POSTGRES_USER -d $POSTGRES_DB -f /var/initdb.sql
+        volumeMounts:
+          - name: init-db-sql
+            mountPath: /var/initdb.sql
+            subPath: initDB.sql
+      restartPolicy: "OnFailure"
+      volumes:
+        - name: init-db-sql
+          configMap:
+            name: init-db-sql-file
+            items:
+            - key: initDB.sql
+              path: initDB.sql
