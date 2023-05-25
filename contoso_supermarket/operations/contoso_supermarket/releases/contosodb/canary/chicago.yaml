@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/contosodb
   values:
-    acr_name: agacrada1e
+    acr_name: agacr7c871
     branch_name: "canary"
     image_tag: v1.0
     github_User: charris-msft
