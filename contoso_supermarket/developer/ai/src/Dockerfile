@@ -1,4 +1,4 @@
-FROM openvino/ubuntu20_dev
+FROM openvino/ubuntu20_runtime
 
 USER root
 
