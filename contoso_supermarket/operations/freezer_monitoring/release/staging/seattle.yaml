@@ -12,6 +12,6 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/freezer_monitoring
   values:
-    acr_name: agacr7c871
+    acr_name: agacr4e25a
     branch_name: "staging"
     image_tag: v1.0

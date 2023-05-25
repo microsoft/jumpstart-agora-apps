@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/cloudsync
   values:
-    acr_name: agacr7c871
+    acr_name: agacr4e25a
     branch_name: "dev"
     image_tag: v1.0
     github_User: charris-msft
