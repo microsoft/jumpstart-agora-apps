@@ -103,12 +103,12 @@ Freezer Monitor combines a MQTT broker and MQTT simulator to simulate the sendin
 
 ### Test your own messages with `mosquitto_pub`
 
-- Follow one of the [Resources](#resources) links above to get the Baltimore.pem file
+- Follow one of the [Resources](#resources) links above to get the Cert.pem file
 
     ```shell
     export sas_token=$(az iot hub generate-sas-token -g charris-iot1 -d myEdgeDevice --duration $(60*20*24*365) -n charris-iot1 -o json | jq -r '.sas')
 
-    mosquitto_pub -t "devices/myEdgeDevice/messages/events/freezer" -i "myEdgeDevice" -u "charris-iot1.azure-devices.net/myEdgeDevice/?api-version=2020-09-30" -P $sas_token -h "charris-iot1.azure-devices.net" -V mqttv311 -p 8883 --cafile Baltimore.pem -m 'My Awesome Message' -d
+    mosquitto_pub -t "devices/myEdgeDevice/messages/events/freezer" -i "myEdgeDevice" -u "charris-iot1.azure-devices.net/myEdgeDevice/?api-version=2020-09-30" -P $sas_token -h "charris-iot1.azure-devices.net" -V mqttv311 -p 8883 --cafile DigiCertGlobalRootG2.crt.pem -m 'My Awesome Message' -d
     ```
 
 ### View the messages in IoT Hub
