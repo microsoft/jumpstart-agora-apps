@@ -1,0 +1,61 @@
+# Source: /templates/mqtt2prom-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sensor-monitor.fullname" . }}-mqtt2prom
+  labels:
+    io.kompose.service: mqtt2prom
+    {{- include "sensor-monitor.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.simulator.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: mqtt2prom
+    {{- include "sensor-monitor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mqtt2prom
+      {{- include "sensor-monitor.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - args:
+          - -config
+          - /jumpstart/config.yaml
+          - -log-level
+          - debug
+          name: mqtt2prom
+          image: "ghcr.io/hikhvar/mqtt2prometheus:v0.1.7"
+          imagePullPolicy: {{ .Values.mqtt2prom.mqtt2prom.imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: 9641
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: 
+          #     port: http
+          #   initialDelaySeconds: 45
+          #   periodSeconds: 30
+          # readinessProbe:
+          #   httpGet:
+          #     path: 
+          #     port: http
+          #   initialDelaySeconds: 45
+          #   periodSeconds: 10
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+          - name: mqtt2prom-config-volume
+            mountPath: jumpstart/config.yaml
+            subPath: config.yaml
+            readOnly: true
+      volumes:
+      - name: mqtt2prom-config-volume
+        configMap:
+          name: mqtt2prom-config
