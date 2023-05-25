@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/contosodb
   values:
-    acr_name: agacr4e25a
+    acr_name: agacr3c4af
     branch_name: "dev"
     image_tag: v1.0
     github_User: charris-msft
