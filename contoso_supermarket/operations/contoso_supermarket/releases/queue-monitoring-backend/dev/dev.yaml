@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/queue-monitoring-backend
   values:
-    acr_name: agacrb87b0
+    acr_name: agacrdecbc
     branch_name: "dev"
     image_tag: v1.0
     github_User: charris-msft
