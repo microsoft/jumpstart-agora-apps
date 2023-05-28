@@ -1,0 +1,8 @@
+apiVersion: v2
+name: sensor-monitor
+description: A helm chart to deploy the Freezer Monitoring application
+home: https://github.com/microsoft/jumpstart-agora-apps
+type: application
+version: 0.1.0
+sources:
+  - https://github.com/charris-msft/jumpstart-agora-apps

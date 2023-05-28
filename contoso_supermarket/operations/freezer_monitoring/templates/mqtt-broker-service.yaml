@@ -1,0 +1,16 @@
+# Create Freezer Monitoring mqtt-broker Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-broker
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-broker
+spec:
+  selector:
+    app: {{ .Release.Name }}-broker
+  ports:
+    - name: http
+      port: 1883
+      targetPort: 1883
+  type: LoadBalancer
