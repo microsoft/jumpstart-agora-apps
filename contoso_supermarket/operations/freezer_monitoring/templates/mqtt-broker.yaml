@@ -37,6 +37,4 @@ spec:
       - name: mqtt-broker-config-volume
         configMap:
           name: mqtt-broker-config
-      imagePullSecrets:
-      - name: charrisagoracr
       restartPolicy: Always
