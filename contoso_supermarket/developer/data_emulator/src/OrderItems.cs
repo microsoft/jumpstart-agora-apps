@@ -43,6 +43,6 @@ namespace DataEmulator
     public class Store
     {
         public string? StoreLocation { get; set; }
-        public int storeId { get; set; }
+        public string? id { get; set; }
     }
 }
