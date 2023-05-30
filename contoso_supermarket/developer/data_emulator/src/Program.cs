@@ -6,14 +6,22 @@ using Azure.ResourceManager;
 using Azure.ResourceManager.CosmosDB;
 using Azure.ResourceManager.CosmosDB.Models;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
-if (args?.Length > 0)
+Console.WriteLine("Please confirm if you wish to generate sample data! Yes (Y) or No (N): ");
+string? confirm = Console.ReadLine();
+if (string.IsNullOrEmpty(confirm))
 {
-    foreach (string arg in args)
-    {
-        Console.WriteLine(arg);
-    }
+    Console.WriteLine("Exiting application.");
+    Environment.Exit(0);
 }
+
+if (!Regex.IsMatch(confirm, "(?i)^[y|yes]$"))
+{
+    Console.WriteLine("Existing application.");
+    Environment.Exit(0);
+}
+
 
 // Get configuration values from environment varibles. These environment variables are setup as part of Agora deployment.
 var cosmosAccountName = Environment.GetEnvironmentVariable("cosmosDBName", EnvironmentVariableTarget.Machine);
@@ -168,7 +176,7 @@ try
 
     do
     {
-        Console.WriteLine("Generate sample data for: {0}", dataStartDate.ToString("MMM/dd/yyyyy"));
+        Console.WriteLine("Generate sample data for: {0}", dataStartDate.ToString("MMM/dd/yyyy"));
 
         // Create random order count based on the time of the day and day of the week
         int randomOrders = 0;
@@ -211,7 +219,7 @@ try
             // Select random store
             var storeIndex= random.Next(0, stores.Length-1);
             var order = new Order();
-            order.storeId = stores[storeIndex].storeId.ToString();
+            order.storeId = stores[storeIndex].id.ToString();
 
             order.orderDate = dataStartDate;
             order.id = string.Format("{0}{1:D2}", dataStartDate.ToString("yyyMMddHHmmss"), orderNo);
