@@ -6,16 +6,24 @@ using Azure.ResourceManager;
 using Azure.ResourceManager.CosmosDB;
 using Azure.ResourceManager.CosmosDB.Models;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
-if (args?.Length > 0)
+Console.WriteLine("Please confirm if you wish to generate sample data! Yes (Y) or No (N): ");
+string? confirm = Console.ReadLine();
+if (string.IsNullOrEmpty(confirm))
 {
-    foreach (string arg in args)
-    {
-        Console.WriteLine(arg);
-    }
+    Console.WriteLine("Exiting application.");
+    Environment.Exit(0);
 }
 
-// Get configuration values from environment varibles. These environment variables are setup as part of Agora deployment.
+if (!Regex.IsMatch(confirm, "(?i)^[y|yes]$"))
+{
+    Console.WriteLine("Existing application.");
+    Environment.Exit(0);
+}
+
+
+// Get configuration values from environment variables. These environment variables are setup as part of Agora deployment.
 var cosmosAccountName = Environment.GetEnvironmentVariable("cosmosDBName", EnvironmentVariableTarget.Machine);
 var spnTenantId = Environment.GetEnvironmentVariable("SPN_TENANT_ID", EnvironmentVariableTarget.Machine);
 var spnClientId = Environment.GetEnvironmentVariable("SPN_CLIENT_ID", EnvironmentVariableTarget.Machine);
@@ -26,7 +34,7 @@ var cosmosDatabaseName = Environment.GetEnvironmentVariable("cosmosDatabaseName"
 var containerName = Environment.GetEnvironmentVariable("containerName", EnvironmentVariableTarget.Machine);
 int NoOfDays = -30;
 
-// Use App.Config when running outside of Agore client VM. Configure thes values in App.Config to generate test data.
+// Use App.Config when running outside of Agora client VM. Configure thes values in App.Config to generate test data.
 if (String.IsNullOrEmpty(cosmosAccountName)){ cosmosAccountName = ConfigurationManager.AppSettings["cosmosDBName"]; }
 if (String.IsNullOrEmpty(spnTenantId)) { spnTenantId = ConfigurationManager.AppSettings["SPN_TENANT_ID"]; }
 if (String.IsNullOrEmpty(spnClientId)) { spnClientId = ConfigurationManager.AppSettings["SPN_CLIENT_ID"]; }
@@ -168,7 +176,7 @@ try
 
     do
     {
-        Console.WriteLine("Generate sample data for: {0}", dataStartDate.ToString("MMM/dd/yyyyy"));
+        Console.WriteLine("Generate sample data for: {0}", dataStartDate.ToString("MMM/dd/yyyy"));
 
         // Create random order count based on the time of the day and day of the week
         int randomOrders = 0;
@@ -211,7 +219,7 @@ try
             // Select random store
             var storeIndex= random.Next(0, stores.Length-1);
             var order = new Order();
-            order.storeId = stores[storeIndex].storeId.ToString();
+            order.storeId = stores[storeIndex].id.ToString();
 
             order.orderDate = dataStartDate;
             order.id = string.Format("{0}{1:D2}", dataStartDate.ToString("yyyMMddHHmmss"), orderNo);
