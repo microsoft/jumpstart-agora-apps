@@ -1,0 +1,40 @@
+# Create Freezer Monitoring mqtt-broker Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-broker
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-broker
+spec:
+  replicas: {{ .Values.broker.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-broker
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-broker
+    spec:
+      containers:
+      - name: mqtt-broker
+        image: {{ .Values.broker.mqttBroker.image.repository }}:{{ .Values.broker.mqttBroker.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.broker.mqttBroker.imagePullPolicy }}
+        args: 
+          - "-c"
+          - "/jumpstart/mosquitto.conf"
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        ports:
+        - containerPort: 1883
+        resources: {}
+        volumeMounts:
+        - name: mqtt-broker-config-volume
+          mountPath: /jumpstart
+          readOnly: true
+      volumes:
+      - name: mqtt-broker-config-volume
+        configMap:
+          name: mqtt-broker-config
+      restartPolicy: Always

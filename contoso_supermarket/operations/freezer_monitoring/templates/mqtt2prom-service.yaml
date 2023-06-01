@@ -1,0 +1,18 @@
+# Create Freezer Monitoring mqtt2prom Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-mqtt2prom
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+  labels:
+    app: {{ .Release.Name }}-mqtt2prom
+    io.kompose.service: mqtt2prom
+spec:
+  selector:
+    io.kompose.service: mqtt2prom
+  ports:
+    {{ .Values.mqtt2prom.ports | toYaml | nindent 4 }}
+  type: {{ .Values.mqtt2prom.type }}

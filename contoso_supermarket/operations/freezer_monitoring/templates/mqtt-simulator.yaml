@@ -1,0 +1,39 @@
+# Create Freezer Monitoring mqtt-simulator Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-simulator
+  namespace: {{ .Release.Namespace }}
+  labels:
+    io.kompose.service: mqtt-simulator
+spec:
+  replicas: {{ .Values.simulator.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-simulator
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-simulator
+        io.kompose.service: mqtt-simulator
+    spec:
+      containers:
+      - name: mqtt-simulator
+        image: {{ .Values.simulator.mqttSimulator.image.repository }}:{{ .Values.simulator.mqttSimulator.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.simulator.mqttSimulator.imagePullPolicy }}
+        args: 
+          - "--file"
+          - "/jumpstart/settings.json"
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        resources: {}
+        volumeMounts:
+        - name: mqtt-simulator-config-volume
+          mountPath: /jumpstart
+          readOnly: true
+      volumes:
+      - name: mqtt-simulator-config-volume
+        configMap:
+          name: mqtt-simulator-config
+      restartPolicy: Always

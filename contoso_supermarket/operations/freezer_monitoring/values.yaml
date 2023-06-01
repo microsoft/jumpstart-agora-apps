@@ -1,0 +1,32 @@
+broker:
+  mqttBroker:
+    image:
+      repository: jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker
+      tag: latest
+    imagePullPolicy: Always
+  ports:
+    - name: http
+      port: 1883
+      targetPort: 1883
+  replicas: 1
+  type: LoadBalancer
+kubernetesClusterDomain: cluster.local
+simulator:
+  mqttSimulator:
+    image:
+      repository: jumpstartagora.azurecr.io/contoso-supermarket/mqtt-simulator
+      tag: latest
+    imagePullPolicy: Always
+  replicas: 1
+mqtt2prom:
+  mqtt2prom:
+    image:
+      repository: ghcr.io/hikhvar/mqtt2prometheus
+      tag: latest
+    imagePullPolicy: Always
+  ports:
+    - name: mqtt2prom-agora-metrics
+      port: 9641
+      targetPort: 9641
+  replicas: 1
+  type: LoadBalancer
