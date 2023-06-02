@@ -14,5 +14,5 @@ spec:
   values:
     acr_name: agacr40ca5
     branch_name: "canary"
-    image_tag: v1.0
+    image_tag: v1.2
     github_user: __githubUser__
