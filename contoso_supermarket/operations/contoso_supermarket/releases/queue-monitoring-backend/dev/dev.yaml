@@ -14,7 +14,7 @@ spec:
   values:
     acr_name: agacr40ca5
     branch_name: "dev"
-    image_tag: v1.1
+    image_tag: v1.0
     github_User: __githubUser__
     queue_monitoring:
       timezone: "Pacific Standard Time"
