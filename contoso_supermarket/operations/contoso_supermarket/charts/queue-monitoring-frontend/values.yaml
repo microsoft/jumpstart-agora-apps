@@ -1,2 +1,2 @@
 queue_monitoring_frontend:
-  live_view_enabled: "False"
+  live_view_enabled: "True"
