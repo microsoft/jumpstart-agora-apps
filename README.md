@@ -16,7 +16,7 @@ Jumpstart Agora offers the following key features:
 
 ## Start contributing
 
-To start contributing to Jumpstart Agora apps repository, follow these steps:
+To start contributing to Jumpstart Agora apps repository follow these steps:
 
 1. This repo is part of [Jumpstart Agora](https://aka.ms/JumpstartAgora). Visit the page to learn more about it and its goals.
 
