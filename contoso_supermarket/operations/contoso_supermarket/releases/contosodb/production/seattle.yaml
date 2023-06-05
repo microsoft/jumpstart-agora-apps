@@ -16,20 +16,6 @@ spec:
     branch_name: "production"
     image_tag: v1.0
     github_User: __githubUser__
-    queue_monitoring:
-      timezone: "Pacific Standard Time"
     postgres:
       username: "postgres"
       database: "contoso"
-    cosmos:
-      container: "pos"
-      database: "contoso"
-      endpoint: __cosmosEndpoint__
-    point_of_sale:
-      title: "Contoso Supermarket"
-      cameras_enabled: "False"
-      cameras_url: ""
-      new_category: "True"
-      holiday_banner: "False"
-      store_id: 1
-      store_location: "Seattle"
