@@ -4,10 +4,17 @@ html {
 }
 
 /* holiday banner overlay positioning */
-#holiday-overlay{
-    right: 17rem;
-    height: 100%;
-    aspect-ratio: 6;
+#holiday-overlay {
+    opacity: 0.9;
+    height: 98.11px;
+    top: 0;
+    right: 0;
+}
+@media (min-width: 991.98px) {
+    /* add offset if greater than tablet sized screens */
+    #holiday-overlay {
+        right: 17rem;
+    }
 }
 
 /* page background color */
@@ -61,6 +68,10 @@ body {
     overflow: hidden;
 }
 
-.z-index-1{
+.z-index-1 {
     z-index: 1;
+}
+
+.background-cover {
+    background-size: cover;
 }
