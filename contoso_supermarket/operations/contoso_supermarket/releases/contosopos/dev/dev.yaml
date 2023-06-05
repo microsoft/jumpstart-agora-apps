@@ -24,7 +24,7 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: https://agcosmosd7397.documents.azure.com:443/
+      endpoint: https://agcosmosb971d.documents.azure.com:443/
     point_of_sale:
       title: "Contoso Supermarket"
       cameras_enabled: "True"
