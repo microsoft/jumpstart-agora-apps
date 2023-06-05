@@ -27,9 +27,7 @@ spec:
       endpoint: __cosmosEndpoint__
     point_of_sale:
       title: "Contoso Supermarket"
-      cameras_enabled: "True"
-      cameras_url: ""
       new_category: "True"
       holiday_banner: "False"
-      store_id: 4
+      store_id: 0
       store_location: "dev"
