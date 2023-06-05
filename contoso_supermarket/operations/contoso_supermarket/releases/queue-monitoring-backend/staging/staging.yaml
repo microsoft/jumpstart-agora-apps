@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/queue-monitoring-backend
   values:
-    acr_name: agacr576cd
+    acr_name: agacrd7397
     branch_name: "staging"
     image_tag: v1.0
     github_User: xwen11
