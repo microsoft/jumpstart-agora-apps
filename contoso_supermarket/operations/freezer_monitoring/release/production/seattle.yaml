@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/freezer_monitoring
   values:
-    acr_name: agacrd7397
+    acr_name: agacrb971d
     branch_name: "production"
     image_tag: v1.0
     github_user: __githubUser__

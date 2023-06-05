@@ -12,7 +12,7 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/contosoai
   values:
-    acr_name: agacrd7397
+    acr_name: agacrb971d
     branch_name: "canary"
     image_tag: v1.0
     github_User: xwen11
