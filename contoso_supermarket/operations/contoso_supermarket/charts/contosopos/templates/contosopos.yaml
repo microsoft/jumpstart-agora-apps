@@ -51,10 +51,6 @@ spec:
               value: {{ .Values.postgres.database }}
             - name: HEAD_TITLE
               value : {{ .Values.point_of_sale.title }}
-            - name: CAMERAS_ENABLED
-              value: "{{ .Values.point_of_sale.cameras_enabled }}"
-            - name: CAMERAS_BASEURL
-              value: {{ .Values.point_of_sale.cameras_url }}
             - name: NEW_CATEGORY
               value: "{{ .Values.point_of_sale.new_category }}"
             - name: STORE_ID

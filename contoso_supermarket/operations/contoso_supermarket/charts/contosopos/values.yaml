@@ -2,16 +2,7 @@ postgres:
   username: "postgres"
   database: "contoso"
 
-cosmos:
-  container: "pos"
-  database: "contoso" 
-
 point_of_sale:
   title: "Contoso Supermarket"
-  cameras_enabled: "False"
-  cameras_url: ""
   new_category: "True"
   holiday_banner: "False"
-
-queue_monitoring_frontend:
-  live_view_enabled: "False"

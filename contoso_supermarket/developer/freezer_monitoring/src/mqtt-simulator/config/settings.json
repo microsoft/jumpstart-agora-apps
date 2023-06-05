@@ -1,0 +1,52 @@
+{
+  "BROKER_URL": "sensor-monitor-broker.sensor-monitor.svc.cluster.local",
+  "BROKER_PORT": 1883,
+  "MQTT_USERNAME": "",
+  "MQTT_PASSWORD": "",
+  "TOPICS": [
+    {
+      "TYPE": "single",
+      "PREFIX": "freezer1/environmentSensor",
+      "TIME_INTERVAL": 5,
+      "RETAIN_PROBABILITY": 0.5,
+      "DATA": [
+        {
+          "NAME": "Temperature(F)",
+          "TYPE": "int",
+          "MIN_VALUE": -10,
+          "MAX_VALUE": 25,
+          "MAX_STEP": 2
+        },
+        {
+          "NAME": "Humidity(%)",
+          "TYPE": "int",
+          "MIN_VALUE": 20,
+          "MAX_VALUE": 60,
+          "MAX_STEP": 1
+        }
+      ]
+    },
+    {
+      "TYPE": "single",
+      "PREFIX": "freezer2/environmentSensor",
+      "TIME_INTERVAL": 5,
+      "RETAIN_PROBABILITY": 0.25,
+      "DATA": [
+        {
+          "NAME": "Temperature(F)",
+          "TYPE": "int",
+          "MIN_VALUE": -20,
+          "MAX_VALUE": 50,
+          "MAX_STEP": 20
+        },
+        {
+          "NAME": "Humidity(%)",
+          "TYPE": "int",
+          "MIN_VALUE": 20,
+          "MAX_VALUE": 80,
+          "MAX_STEP": 5
+        }
+      ]
+    }
+  ]
+}
