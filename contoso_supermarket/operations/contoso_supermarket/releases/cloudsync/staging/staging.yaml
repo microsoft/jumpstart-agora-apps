@@ -22,14 +22,6 @@ spec:
       username: "postgres"
       database: "contoso"
     cosmos:
-      container: "pos"
-      database: "contoso"
+      container: "Orders"
+      database: "Orders"
       endpoint: __cosmosEndpoint__
-    point_of_sale:
-      title: "Contoso Supermarket"
-      cameras_enabled: "False"
-      cameras_url: ""
-      new_category: "True"
-      holiday_banner: "False"
-      store_id: 3
-      store_location: "Staging"

@@ -3,5 +3,5 @@ postgres:
   database: "contoso"
 
 cosmos:
-  container: "pos"
-  database: "contoso" 
+  container: "Orders"
+  database: "Orders" 

@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: queue-monitoring-frontend
-          image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/queue-monitoring-frontend:{{ .Values.image_tag}}
+          image: {{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/queue-monitoring-frontend:v1.0
           env:
             - name: BACKEND_API_URL
               value: "http://queue-monitoring-backend:4000"
