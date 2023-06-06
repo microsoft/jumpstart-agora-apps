@@ -1,4 +1,4 @@
-<nav class="navbar sticky-top navbar-expand-lg px-4 py-0" data-bs-theme="light" style="background-image: url('static/img/wood.png');">
+<nav class="navbar sticky-top navbar-expand-lg px-4 py-0 background-cover" data-bs-theme="light" style="background-image: url('static/img/wood.png');">
     <div class="container-fluid">
       <a class="navbar-brand p-3 z-index-1" href="{{ url_for('index') }}">
         <img src="static/img/contoso.svg"  class="d-inline-block align-top" alt="">
@@ -7,7 +7,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       {% if config['HOLIDAY_BANNER'] == True %}
-      <img src="static/img/happy_holidays_overlay.png" class="position-absolute d-none d-xl-block shadow-lg" id="holiday-overlay" alt="Happy Holidays!"/>
+      <img src="static/img/happy_holidays_overlay.png" class="position-absolute d-block shadow-lg" id="holiday-overlay" alt="Happy Holidays!"/>
       {% endif %}
       <div class="collapse navbar-collapse z-index-1 mb-4 mb-lg-0" id="navbarSupportedContent">
         <div class="me-auto mb-2 mb-lg-0">
