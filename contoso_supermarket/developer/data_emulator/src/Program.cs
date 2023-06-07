@@ -148,7 +148,7 @@ try
     if (productList.Count <= 0)
     {
         // Import products from JSON file
-        string productsJsonFile = ConfigurationManager.AppSettings["productsJsonFile"];
+        string productsJsonFile = string.Format(@"{0}\{1}", AppContext.BaseDirectory, ConfigurationManager.AppSettings["productsJsonFile"]);
         if (System.IO.File.Exists(productsJsonFile))
         {
             string productsJson = System.IO.File.ReadAllText(productsJsonFile);
@@ -159,8 +159,8 @@ try
         }
         else
         {
-            System.Environment.Exit(-1);
             Console.WriteLine("No products available to generate sample data. Upload products information into Products container in CosmosDB.");
+            System.Environment.Exit(-1);
         }
     }
     else
@@ -191,7 +191,7 @@ try
     if (storeList.Count <= 0)
     {
         // Import products from JSON file
-        string storesJsonFile = ConfigurationManager.AppSettings["storesJsonFile"];
+        string storesJsonFile = string.Format(@"{0}\{1}", AppContext.BaseDirectory, ConfigurationManager.AppSettings["storesJsonFile"]);
         if (System.IO.File.Exists(storesJsonFile))
         {
             string storesJson = System.IO.File.ReadAllText(storesJsonFile);
