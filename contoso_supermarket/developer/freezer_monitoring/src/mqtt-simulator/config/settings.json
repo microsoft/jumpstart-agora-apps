@@ -13,14 +13,14 @@
         {
           "NAME": "Temperature(F)",
           "TYPE": "int",
-          "MIN_VALUE": -10,
-          "MAX_VALUE": 25,
+          "MIN_VALUE": -15,
+          "MAX_VALUE": 15,
           "MAX_STEP": 2
         },
         {
           "NAME": "Humidity(%)",
           "TYPE": "int",
-          "MIN_VALUE": 20,
+          "MIN_VALUE": 10,
           "MAX_VALUE": 60,
           "MAX_STEP": 1
         }
@@ -35,9 +35,9 @@
         {
           "NAME": "Temperature(F)",
           "TYPE": "int",
-          "MIN_VALUE": -20,
+          "MIN_VALUE": -10,
           "MAX_VALUE": 50,
-          "MAX_STEP": 20
+          "MAX_STEP": 10
         },
         {
           "NAME": "Humidity(%)",
