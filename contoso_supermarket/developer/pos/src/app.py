@@ -36,10 +36,16 @@ dbconfig = {
     #"database": "contoso"
 }
 
-conn = psycopg2.connect(**dbconfig)
-conn.autocommit= True # allows connection to recover on an error
+conn = None
+def get_conn():
+    global conn
+    if conn is None:
+        conn = psycopg2.connect(**dbconfig)
+        conn.autocommit= True # allows connection to recover on an error
+    return conn
 
 def get_cursor():
+    conn = get_conn()
     try:
         return conn.cursor()
     except psycopg2.InterfaceError:
