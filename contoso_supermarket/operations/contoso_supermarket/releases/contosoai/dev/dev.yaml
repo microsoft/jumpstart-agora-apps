@@ -8,6 +8,12 @@ metadata:
 spec:
   interval: 1m
   releaseName: contosoai
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
   chart:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/contosoai
