@@ -8,6 +8,12 @@ metadata:
 spec:
   interval: 1m
   releaseName: sensor-monitor
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
   chart:
     spec:
       chart: ./contoso_supermarket/operations/freezer_monitoring
