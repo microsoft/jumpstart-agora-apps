@@ -23,4 +23,4 @@ spec:
     image_tag: v1.0
     github_User: __githubUser__
     queue_monitoring_frontend:
-      live_view_enabled: "False"
+      live_view_enabled: "True"
