@@ -20,7 +20,7 @@ spec:
   values:
     acr_name: agacr6fdc3
     branch_name: "production"
-    image_tag: v1.0
+    image_tag: v1.1
     github_User: rlfmendes
     queue_monitoring:
       timezone: "Pacific Standard Time"
