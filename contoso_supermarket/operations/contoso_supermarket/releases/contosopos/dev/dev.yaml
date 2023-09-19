@@ -34,6 +34,6 @@ spec:
     point_of_sale:
       title: "Contoso Supermarket"
       new_category: "True"
-      holiday_banner: "false"
+      holiday_banner: "true"
       store_id: 0
       store_location: "dev"
