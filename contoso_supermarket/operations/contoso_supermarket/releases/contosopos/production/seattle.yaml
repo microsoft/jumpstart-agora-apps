@@ -30,7 +30,7 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: __cosmosEndpoint__
+      endpoint: https://agcosmosf0142.documents.azure.com:443/
     point_of_sale:
       title: "Contoso Supermarket"
       new_category: "True"
