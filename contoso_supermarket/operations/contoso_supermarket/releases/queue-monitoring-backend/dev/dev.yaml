@@ -20,7 +20,7 @@ spec:
   values:
     acr_name: agacrfbe17
     branch_name: "dev"
-    image_tag: v1.1
+    image_tag: v1.0
     github_User: __githubUser__
     postgres:
       username: "postgres"
