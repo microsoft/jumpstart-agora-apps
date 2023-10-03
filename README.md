@@ -2,7 +2,7 @@
 
 This applications source code repository is part of [Jumpstart Agora](https://aka.ms/JumpstartAgora). This repo holds the codebase for industry-based applications designed to showcase various industry applications and increase developer velocity using Azure Arc Jumpstart and serves as a comprehensive resource for developers looking to explore and leverage industry-specific applications built on Azure.
 
-## Features
+## Features 
 
 Jumpstart Agora offers the following key features:
 
