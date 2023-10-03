@@ -30,4 +30,4 @@ spec:
     cosmos:
       container: "Orders"
       database: "Orders"
-      endpoint: __cosmosEndpoint__
+      endpoint: https://agcosmos02937.documents.azure.com:443/
