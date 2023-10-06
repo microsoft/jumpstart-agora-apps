@@ -20,5 +20,5 @@ spec:
   values:
     acr_name: agacr02937
     branch_name: "dev"
-    image_tag: v1.0
+    image_tag: v1.1
     github_user: __githubUser__
