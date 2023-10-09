@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: contosoai
-          image: "{{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/contosoai:v1.0.1"
+          image: "{{ .Values.acr_name }}.azurecr.io/{{ .Values.branch_name}}/contoso-supermarket/contosoai:v1.1"
           ports:
             - containerPort: 8000
       imagePullSecrets:
