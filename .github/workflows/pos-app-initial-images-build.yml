@@ -76,8 +76,8 @@ jobs:
               if [ $branch == "main" ]; then
                 branch="dev"
               fi
-              docker build ./contoso_supermarket/developer/ai/src -t "${{ secrets.ACR_NAME }}.azurecr.io/$branch/contoso-supermarket/contosoai:v1.0"
-              docker push ${{ secrets.ACR_NAME }}.azurecr.io/$branch/contoso-supermarket/contosoai:v1.0
+              docker build ./contoso_supermarket/developer/ai/src -t "${{ secrets.ACR_NAME }}.azurecr.io/$branch/contoso-supermarket/contosoai:v1.1"
+              docker push ${{ secrets.ACR_NAME }}.azurecr.io/$branch/contoso-supermarket/contosoai:v1.1
             done
 
       - name: 'Build and push queue monitoring backend v1.0 images'
