@@ -13,8 +13,8 @@ import numpy as np
 
 app = Flask(__name__)
 
-model_xml = './models/person-detection-retail-0013.xml'
-model_bin = './models/person-detection-retail-0013.bin'
+model_xml = './models/yolov2-fp16.xml'
+model_bin = './models/yolov2-fp16.bin'
 video_path = 'https://agoravideos.blob.core.windows.net/videos/supermarket.mp4'
 
 # Load OpenVino model
