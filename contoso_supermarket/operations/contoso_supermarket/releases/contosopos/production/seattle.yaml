@@ -18,10 +18,10 @@ spec:
     spec:
       chart: ./contoso_supermarket/operations/contoso_supermarket/charts/contosopos
   values:
-    acr_name: __acrName__
+    acr_name: agacr02937
     branch_name: "production"
     image_tag: v1.0
-    github_User: __githubUser__
+    github_User: derekfernandez
     queue_monitoring:
       timezone: "Pacific Standard Time"
     postgres:
@@ -30,7 +30,7 @@ spec:
     cosmos:
       container: "pos"
       database: "contoso"
-      endpoint: __cosmosEndpoint__
+      endpoint: https://agcosmos02937.documents.azure.com:443/
     point_of_sale:
       title: "Contoso Supermarket"
       new_category: "True"
