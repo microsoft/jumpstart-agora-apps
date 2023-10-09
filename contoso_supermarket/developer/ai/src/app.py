@@ -18,8 +18,8 @@ app = Flask(__name__)
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Construct the path to the model files relative to the location of app.py
-model_xml = os.path.join(script_dir, 'models', 'yolov2-f16.xml')
-model_bin = os.path.join(script_dir, 'models', 'yolov2-f16.bin')
+model_xml = os.path.join(script_dir, 'models', 'yolov2-fp16.xml')
+model_bin = os.path.join(script_dir, 'models', 'yolov2-fp16.bin')
 
 video_path = os.path.join(script_dir, 'videos', 'supermarket.mp4')
 
