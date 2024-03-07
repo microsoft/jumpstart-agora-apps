@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage-influxdb-app
+  namespace: azure-iot-operations  # Added the namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storage-influxdb-app
+  template:
+    metadata:
+      labels:
+        app: storage-influxdb-app
+    spec:
+      containers:
+      - name: storage-influxdb-app
+        image: yourusername/storage-influxdb-app:latest  # Make sure to update this with your actual image path
+        ports:
+        - containerPort: 5000
+        env:
+        - name: INFLUXDB_URL
+          value: "http://your-influxdb-url:8086"  # Replace this with your InfluxDB URL
+        - name: INFLUXDB_TOKEN
+          value: "your-influxdb-token"  # Replace this with your InfluxDB token
+        - name: INFLUXDB_ORG
+          value: "your-influxdb-org"  # Replace this with your InfluxDB organization
+        - name: INFLUXDB_BUCKET
+          value: "your-influxdb-bucket"  # Replace this with your InfluxDB bucket
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storage-influxdb-svc
+  namespace: azure-iot-operations
+spec:
+  selector:
+    app: storage-influxdb-svc
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
