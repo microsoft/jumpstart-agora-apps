@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: decode
+  namespace: azure-iot-operations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: decode
+  template:
+    metadata:
+      labels:
+        app: decode
+    spec:
+      containers:
+      - name: decode
+        image: yourusername/rtsp-frame-capture-app:latest  # Replace with the path to your Docker image
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: decode
+  namespace: azure-iot-operations
+spec:
+  type: ClusterIP
+  selector:
+    app: decode
+  ports:
+  - port: 80
+    targetPort: 80
