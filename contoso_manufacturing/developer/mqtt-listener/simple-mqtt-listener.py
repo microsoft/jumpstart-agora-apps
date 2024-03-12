@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import json
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
+import random
 
 
 # MQTT Client configuration
@@ -71,7 +72,15 @@ print("InfluxDB Org: ", influx_org)
 print("InfluxDB Bucket: ", influx_bucket)
 print("Connecting to MQTT Broker...")
 
-client_mqtt = mqtt.Client()
+#client_mqtt = mqtt.Client()
+# UPDATE DERIVATED POF NEW PAHO LIB
+client_mqtt = f'python-mqtt-{random.randint(0, 1000)}'
+#client1 = mqtt.Client(client_id1)  PAHO LIB - UPDATE FEB 2024
+client_mqtt = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id1)
+
+#client_mqtt = mqtt.Client()
+    
+    
 client_mqtt.on_connect = on_connect
 client_mqtt.on_message = on_message
 

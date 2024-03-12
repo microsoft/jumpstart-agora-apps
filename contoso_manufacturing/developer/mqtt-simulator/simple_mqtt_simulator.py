@@ -9,6 +9,7 @@ import datetime
 import time
 import os
 import paho.mqtt.client as mqtt
+import random
 
 # MQTT broker details
 broker_address = "127.0.0.1"  # Replace with your MQTT broker's address
@@ -16,6 +17,8 @@ broker_address = "127.0.0.1"  # Replace with your MQTT broker's address
 
 broker_port = 1883  # MQTT broker port (default is 1883)
 #broker_port = int(os.environ.get("MQTT_PORT", 1883))
+
+frecuency=10
 
 # MQTT topics to publish to
 topic1 = "topic/fryer"  
@@ -26,8 +29,13 @@ topic1 = "topic/fryer"
 topic2 = "topic/productionline"  
 
 # Create MQTT clients for each topic
-client1 = mqtt.Client()
-client2 = mqtt.Client()
+client_id1 = f'python-mqtt-{random.randint(0, 1000)}'
+#client1 = mqtt.Client(client_id1)  PAHO LIB - UPDATE FEB 2024
+client1 = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id1)
+
+client_id2 = f'python-mqtt-{random.randint(0, 1000)}'
+#client2 = mqtt.Client(client_id2) PAHO LIB - UPDATE FEB 2024
+client2 = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id2)
 
 # Connect to the MQTT broker for each client
 client1.connect(broker_address, broker_port)

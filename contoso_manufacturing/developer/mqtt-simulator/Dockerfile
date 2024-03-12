@@ -11,7 +11,7 @@ WORKDIR /app
 RUN pip install paho-mqtt
 
 
-ENV MQTT_BROKER="mqtt.eclipse.org"
+ENV MQTT_BROKER="10.211.55.5"
 ENV MQTT_PORT=1883
 ENV FRECUENCY=10
 

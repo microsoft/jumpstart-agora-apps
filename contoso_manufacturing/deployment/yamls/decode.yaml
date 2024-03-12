@@ -26,9 +26,11 @@ metadata:
   name: decode
   namespace: azure-iot-operations
 spec:
-  type: ClusterIP
+  type: LoadBalancer 
   selector:
     app: decode
   ports:
-  - port: 80
+  - name: rtsp
+    port: 80
+    protocol: TCP
     targetPort: 80

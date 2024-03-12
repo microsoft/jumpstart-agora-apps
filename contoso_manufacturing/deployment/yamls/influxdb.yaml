@@ -77,7 +77,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -101,7 +101,7 @@ spec:
         resources:
           limits:
             memory: "1Gi"
-            cpu: 1
+            cpu: 0.5
         ports:
         - name: api
           containerPort: 9999
@@ -132,7 +132,7 @@ spec:
           args:
             - setup
             - --host
-            - http://10.211.55.23:8086
+            - http://10.211.55.5:8086
             - --bucket
             - manufacturing
             - --org
