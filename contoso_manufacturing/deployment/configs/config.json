@@ -1,0 +1,30 @@
+{
+   "model_config_list": [
+       {
+           "config": {
+               "name": "horizontal-text-detection",
+               "base_path": "/models/horizontal-text-detection",
+               "batch_size": "auto"
+           }
+       },
+       {
+           "config": {
+               "name": "weld-porosity-detection",
+               "base_path": "/models/weld-porosity-detection",
+               "batch_size": "auto"
+           }
+       },
+       {
+           "config": {
+               "name": "resnet-50",
+               "base_path": "/models/resnet-50",
+               "batch_size": "auto"
+           }
+       }
+   ],
+   "monitoring": {
+       "metrics": {
+           "enable": true
+       }
+   }
+}
