@@ -24,8 +24,14 @@ topic1 = "topic/fryer"
 topic2 = "topic/productionline"  
 
 # Create MQTT clients for each topic
-client1 = mqtt.Client()
-client2 = mqtt.Client()
+# UPDATE DERIVATED POF NEW PAHO LIB
+client_id1 = f'python-mqtt-{random.randint(0, 1000)}'
+#client1 = mqtt.Client(client_id1)  PAHO LIB - UPDATE FEB 2024
+client1 = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id1)
+
+client_id2 = f'python-mqtt-{random.randint(0, 1000)}'
+#client2 = mqtt.Client(client_id2) PAHO LIB - UPDATE FEB 2024
+client2 = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id2)
 
 # Connect to the MQTT broker for each client
 client1.connect(broker_address, broker_port)

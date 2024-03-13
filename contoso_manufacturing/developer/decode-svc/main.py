@@ -8,21 +8,25 @@ import cv2
 import os
 import time
 import math
+import os
 
 from ultralytics import YOLO
-model = YOLO("yolo-Weights/yolov8n.pt")
 
-classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
-              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
-              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
-              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
-              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
-              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
-              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
-              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
-              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
-              "teddy bear", "hair drier", "toothbrush"
-              ]
+model = YOLO("models/safety-yolo8.pt")
+#model = YOLO("yolo-Weights/yolov8n.pt")
+
+#classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
+#              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
+#              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
+#              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
+#              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
+#              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
+#              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
+#              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
+#              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
+#              "teddy bear", "hair drier", "toothbrush"
+#              ]
+classNames = ['helmet','head','person']
 
 # initialize the output frame and a lock used to ensure thread-safe
 # exchanges of the output frames (useful when multiple browsers/tabs are viewing the stream)
@@ -31,10 +35,12 @@ lock = threading.Lock()
  
 # initialize a flask object
 app = Flask(__name__)
- 
-source = "rtsp://127.0.0.1:8554/stream"
-esa_storage = "/Users/armbla/Documents/aio/jumpstart-agora-apps/contoso_manufacturing/developer/decode-svc/frames"
-print(str(esa_storage))
+
+source = os.environ.get("rtsp_url", "rtsp://10.211.55.5:8554/stream")
+esa_storage = os.environ.get("save_path", "frames")
+
+print("\nRTSP: "+ str(source))
+print("\nStorage: "+ str(esa_storage))
 
 cap = cv2.VideoCapture(source)
 time.sleep(2.0)
