@@ -1,10 +1,5 @@
 source storage.env
 
-ACR=agoraarmbladev.azurecr.io
-ACRUSER=agoraarmbladev
-ACRPWD=Cw8xeDNK6Bub2p6Gaq5ij/TiVvtBicpTj5rverVezv+ACRBPkEcx
-CONTAINER=storage-svc:latest
-
 #IF you are going to use docker to build and push the container, uncomment the following lines
 docker login $ACR -u $ACRUSER -p $ACRPWD
 docker build -t $CONTAINER .
