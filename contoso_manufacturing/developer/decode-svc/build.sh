@@ -1,12 +1,17 @@
 source decode.env
 
-CONTAINER=decode-svc:1.5
+ACR=agoraarmbladev.azurecr.io
+ACRUSER=agoraarmbladev
+ACRPWD=
 
-sudo docker login $ACR -u $ACRUSER -p $ACRPWD
 
-sudo docker build -t $CONTAINER .
-sudo docker tag $CONTAINER $ACR/$CONTAINER
-sudo docker push $ACR/$CONTAINER
+CONTAINER=decode-svc:1.6
+
+docker login $ACR -u $ACRUSER -p $ACRPWD
+
+docker build -t $CONTAINER .
+docker tag $CONTAINER $ACR/$CONTAINER
+docker push $ACR/$CONTAINER
 
 # Build the container
 #az login
