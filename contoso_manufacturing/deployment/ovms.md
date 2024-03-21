@@ -7,11 +7,6 @@
 ## Node setup
 These instructions are for configuring OVMS for AKS Edge Essentials. (Note that the Ubuntu + K3s deployment will be covered separately.) To set up the node correctly, you'll need to copy the [ovms-setup.sh](../scripts/ovms-setup.sh) script to the Linux node and then run it. This script performs the following actions:
 
-1. Create the models repository under `/var/lib/rancher/k3s/storage/models`
-1. Download three models (`horizontal-text-detection`, `weld-porosity-detection` and `resnet-50`)
-1. Create the model hosting configuration `config.json` file
-1. Installing [OpenVino Toolkit Operator](https://docs.openvino.ai/2022.3/openvino_docs_install_guides_overview.html)
-
 To setup the node, run the following steps:
 
 1. Run the OpenVino Operator Toolkit

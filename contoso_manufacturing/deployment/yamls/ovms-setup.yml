@@ -20,7 +20,7 @@ spec:
   volumeMounts:
   - name: models-volume
     mountPath: /models
-deployment_parameters:
+  deployment_parameters:
     replicas: 1
     openshift_service_mesh: false
     resources:
