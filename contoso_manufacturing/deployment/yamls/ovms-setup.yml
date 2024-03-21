@@ -11,8 +11,8 @@ spec:
     image: busybox
     command: ["/bin/sh", "-c"]
     args:
-    - wget -O /tmp/script.sh https://raw.githubusercontent.com/your-username/your-repo/master/script.sh; 
-      chmod +x /tmp/script.sh; /tmp/script.sh
+    - wget -O /tmp/ovms_config.sh https://github.com/microsoft/jumpstart-agora-apps/blob/manufacturing_ovms_fix/contoso_manufacturing/deployment/configs/ovms_config.sh; 
+      chmod +x ovms_config.sh; /tmp/ovms_config.sh
     volumeMounts:
     - name: models-volume
       mountPath: /models

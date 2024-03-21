@@ -14,25 +14,13 @@ These instructions are for configuring OVMS for AKS Edge Essentials. (Note that 
 
 To setup the node, run the following steps:
 
-1. Copy the `config.json` file to the AKS-EE node
+1. Run the OpenVino Operator Toolkit
     ```powershell
-    Copy-AksEdgeNodeFile -NodeType Linux -FromFile ..\scripts\ovms-setup.sh -ToFile /home/aksedge-user/ovms-setup.sh -PushFile
-    ```
-1. Run the `ovms-setup.sh`
-    ```powershell
-    Invoke-AksEdgeNodeCommand -NodeType Linux -command "sudo sh /home/aksedge-user/ovms-setup.sh"
+    Invoke-AksEdgeNodeCommand -NodeType Linux -command "curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.27.0/install.sh | bash -s v0.27.0"
     ```
 1. Check that the three models are downloaded
     ```powershell
-    Invoke-AksEdgeNodeCommand -NodeType Linux -command "sudo ls -la /var/lib/rancher/k3s/storage/models"
-    ```
-    You should see something similar to the following:
-    ```bash
-    PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> Invoke-AksEdgeNodeCommand -NodeType Linux -command "sudo ls -la /var/lib/rancher/k3s/storage/models"
-    total 24
-    drwxr-x--- 3 root root 4096 Mar 11 19:33 horizontal-text-detection
-    drwxr-x--- 3 root root 4096 Mar 11 19:33 resnet-50
-    drwxr-x--- 3 root root 4096 Mar 11 19:33 weld-porosity-detection
+    kubectl create -f https://operatorhub.io/install/ovms-operator.yaml
     ```
 
 ## OVMS Deployment
@@ -51,14 +39,6 @@ The following istructions will deploy OVMS using a Persistent Volume Claim (PVC)
     ```
 1. If everything was correctly deployed, you should see the following
     ```powershell
-    PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pvc
-    NAME              STATUS   VOLUME           CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-    models-path-pvc   Bound    models-path-pv   1Gi        RWO            local-path     7s
-
-    PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pv
-    NAME             CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                     STORAGECLASS   REASON   AGE
-    models-path-pv   1Gi        RWO            Retain           Bound    default/models-path-pvc   local-path              43s
-    
     PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pods
     NAME                        READY   STATUS    RESTARTS   AGE
     ovms-sample-8b68dc5-g59sd   1/1     Running   0          14s
