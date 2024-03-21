@@ -1,41 +1,26 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: models-path-pvc
-  namespace: default
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  volumeMode: Filesystem
-  storageClassName: local-path  
-  selector:
-    matchLabels:
-      type: local
-  volumeName: models-path-pv
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-    name: models-path-pv
-spec:
-  storageClassName: local-path  
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /var/lib/rancher/k3s/storage/models
----
 apiVersion: intel.com/v1alpha1
 kind: ModelServer
 metadata:
   name: ovms-sample
 spec:
+  volumes:
+  - name: models-volume
+    emptyDir: {}
+  initContainers:
+  - name: download-script
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+    - wget -O /tmp/script.sh https://raw.githubusercontent.com/your-username/your-repo/master/script.sh; 
+      chmod +x /tmp/script.sh; /tmp/script.sh
+    volumeMounts:
+    - name: models-volume
+      mountPath: /models
   image_name: openvino/model_server:latest
-  deployment_parameters:
+  volumeMounts:
+  - name: models-volume
+    mountPath: /models
+deployment_parameters:
     replicas: 1
     openshift_service_mesh: false
     resources:
@@ -50,7 +35,7 @@ spec:
     config_configmap_name: "ovms-config"
     config_path: ""
     model_name: ""
-    model_path: ""
+    model_path: "/models"
     nireq: 0
     plugin_config: '{"CPU_THROUGHPUT_STREAMS":"1"}'
     batch_size: ""
@@ -72,5 +57,3 @@ spec:
     service_type: LoadBalancer
   models_repository:
     storage_type: "cluster"
-    models_volume_claim : "models-path-pvc"
- 
