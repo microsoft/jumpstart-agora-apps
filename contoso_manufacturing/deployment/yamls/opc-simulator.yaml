@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: opc-simulator
-        image: jumpstartprod.azurecr.io:latest
+        image: jumpstartprod.azurecr.io/opc-simulator:latest
         volumeMounts:
         - name: config-volume
           mountPath: /config
