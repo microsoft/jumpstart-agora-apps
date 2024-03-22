@@ -1,0 +1,444 @@
+{
+  "RunSettings": {
+    "PollIntervalSeconds": 0.001,
+    "ReportUsageIntervalSeconds": 5.0,
+    "AsyncuaLoggingLevel": "ERROR",
+    "ReplayDataFrameFilePath": "data/frames.dat",
+    "RecordFrameDataPath": "data/frames2.dat",
+    "ReplayInALoop": false
+  },
+  "Server": {
+    "Name": "FluidDemo OPCUA server",
+    "Endpoint": "opc.tcp://0.0.0.0:4841",
+    "CustomNamespace": "http://microsoft.com/Opc/FluidDemo/"
+  },
+  "DeviceTypes": [
+    {
+      "DeviceType": "RockwellPLC",
+      "Variables": [
+        {
+          "Name": "Heater_Outlet_Temp",
+          "Type": "Float",
+          "Value": 99.6099624633789,
+          "Writable": false
+        },
+        {
+          "Name": "Pump1_Flow_Totalizer",
+          "Type": "Float",
+          "Value": 47744.4921875,
+          "Writable": false
+        },
+        {
+          "Name": "Pump2_Flow_Totalizer",
+          "Type": "Float",
+          "Value": 37650.82421875,
+          "Writable": false
+        },
+        {
+          "Name": "Pump3_Flow_Totalizer",
+          "Type": "Float",
+          "Value": 69958.4296875,
+          "Writable": false
+        },
+        {
+          "Name": "Pump1_Temperature_Flow",
+          "Type": "Float",
+          "Value": 29.200000762939453,
+          "Writable": false
+        },
+        {
+          "Name": "Pump2_Temperature_Flow",
+          "Type": "Float",
+          "Value": 36.599998474121094,
+          "Writable": false
+        },
+        {
+          "Name": "Pump3_Temperature_Flow",
+          "Type": "Float",
+          "Value": 32.400001525878906,
+          "Writable": false
+        },
+        {
+          "Name": "Pumps_Total_Flow",
+          "Type": "Float",
+          "Value": 31.522268295288086,
+          "Writable": false
+        },
+        {
+          "Name": "Pressure_Filter_Inlet",
+          "Type": "Float",
+          "Value": 1.4670000076293945,
+          "Writable": false
+        },
+        {
+          "Name": "Pressure_Filter_Outlet",
+          "Type": "Float",
+          "Value": 0.6974945068359375,
+          "Writable": false
+        },
+        {
+          "Name": "RobotPosition_J0",
+          "Type": "Float",
+          "Value": 3.473337173461914,
+          "Writable": false
+        },
+        {
+          "Name": "RobotPosition_J1",
+          "Type": "Float",
+          "Value": -1.7331629991531372,
+          "Writable": false
+        },
+        {
+          "Name": "RobotPosition_J2",
+          "Type": "Float",
+          "Value": -2.1341772079467773,
+          "Writable": false
+        },
+        {
+          "Name": "RobotPosition_J3",
+          "Type": "Float",
+          "Value": -2.452561140060425,
+          "Writable": false
+        },
+        {
+          "Name": "RobotPosition_J4",
+          "Type": "Float",
+          "Value": -1.239416480064392,
+          "Writable": false
+        },
+        {
+          "Name": "RobotPosition_J5",
+          "Type": "Float",
+          "Value": -6.274634838104248,
+          "Writable": false
+        },
+        {
+          "Name": "Tank_Level",
+          "Type": "Float",
+          "Value": 64.05000305175781,
+          "Writable": false
+        },
+        {
+          "Name": "Drive1_Current",
+          "Type": "Float",
+          "Value": 0.0,
+          "Writable": false
+        },
+        {
+          "Name": "Drive1_Frequency",
+          "Type": "Float",
+          "Value": 10.0,
+          "Writable": false
+        },
+        {
+          "Name": "Drive1_Speed",
+          "Type": "Float",
+          "Value": 10.0,
+          "Writable": true
+        },
+        {
+          "Name": "Drive1_Voltage",
+          "Type": "Float",
+          "Value": 0.0,
+          "Writable": false
+        },
+        {
+          "Name": "Drive2_Current",
+          "Type": "Float",
+          "Value": 0.5059999823570251,
+          "Writable": false
+        },
+        {
+          "Name": "Drive2_Frequency",
+          "Type": "Float",
+          "Value": 0.0,
+          "Writable": false
+        },
+        {
+          "Name": "Drive2_Speed",
+          "Type": "Float",
+          "Value": 0.0,
+          "Writable": true
+        },
+        {
+          "Name": "Drive2_Voltage",
+          "Type": "Float",
+          "Value": 197.3000030517578,
+          "Writable": false
+        },
+        {
+          "Name": "Drive3_Current",
+          "Type": "Float",
+          "Value": 0.0,
+          "Writable": false
+        },
+        {
+          "Name": "Drive3_Frequency",
+          "Type": "Float",
+          "Value": 30.0,
+          "Writable": false
+        },
+        {
+          "Name": "Drive3_Speed",
+          "Type": "Float",
+          "Value": 30.0,
+          "Writable": true
+        },
+        {
+          "Name": "Drive3_Voltage",
+          "Type": "Float",
+          "Value": 0.0,
+          "Writable": false
+        },
+        {
+          "Name": "Cooler_Inlet_Temp",
+          "Type": "Float",
+          "Value": 98.37100219726562,
+          "Writable": false
+        },
+        {
+          "Name": "Cooler_Outlet_Temp",
+          "Type": "Float",
+          "Value": 98.51126098632812,
+          "Writable": false
+        },
+        {
+          "Name": "Dynamix_Ch1_Acceleration",
+          "Type": "Float",
+          "Value": 0.11661991477012634,
+          "Writable": false
+        },
+        {
+          "Name": "Dynamix_Ch1_Velocity",
+          "Type": "Float",
+          "Value": 0.09298644959926605,
+          "Writable": false
+        },
+        {
+          "Name": "Dynamix_Ch2_Acceleration",
+          "Type": "Float",
+          "Value": 0.21075299382209778,
+          "Writable": false
+        },
+        {
+          "Name": "Dynamix_Ch2_Velocity",
+          "Type": "Float",
+          "Value": 0.008216310292482376,
+          "Writable": false
+        },
+        {
+          "Name": "Dynamix_Ch3_Acceleration",
+          "Type": "Float",
+          "Value": 0.008337944746017456,
+          "Writable": false
+        },
+        {
+          "Name": "Dynamix_Ch3_Velocity",
+          "Type": "Float",
+          "Value": 0.026022087782621384,
+          "Writable": false
+        },
+        {
+          "Name": "Flow001",
+          "Type": "Float",
+          "Value": 0.0,
+          "Writable": false
+        },
+        {
+          "Name": "Flow002",
+          "Type": "Float",
+          "Value": 31.522268295288086,
+          "Writable": false
+        },
+        {
+          "Name": "Flow003",
+          "Type": "Float",
+          "Value": 0.0,
+          "Writable": false
+        },
+        {
+          "Name": "Pressure001",
+          "Type": "Float",
+          "Value": 1.4670000076293945,
+          "Writable": false
+        },
+        {
+          "Name": "Pressure002",
+          "Type": "Float",
+          "Value": 0.9870004653930664,
+          "Writable": false
+        },
+        {
+          "Name": "Heater_Inlet_Temp",
+          "Type": "Float",
+          "Value": 98.5212631225586,
+          "Writable": false
+        },
+        {
+          "Name": "Pump1_Conductivity",
+          "Type": "Float",
+          "Value": 19.69632911682129,
+          "Writable": false
+        },
+        {
+          "Name": "Pump2_Conductivity",
+          "Type": "Float",
+          "Value": 22.833364486694336,
+          "Writable": false
+        },
+        {
+          "Name": "Pump3_Conductivity",
+          "Type": "Float",
+          "Value": 19.00242805480957,
+          "Writable": false
+        },
+        {
+          "Name": "Valve_000_Pump1",
+          "Type": "Boolean",
+          "Value": true,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_001_Pump2",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_002_Pump3",
+          "Type": "Boolean",
+          "Value": true,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_003_HeaterBypass",
+          "Type": "Boolean",
+          "Value": true,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_004_Heater_In",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_005_Heater_Out",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_006_FilterBypass",
+          "Type": "Boolean",
+          "Value": true,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_007_Filter_In",
+          "Type": "Boolean",
+          "Value": true,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_008_Filter_Out",
+          "Type": "Boolean",
+          "Value": true,
+          "Writable": true
+        },
+        {
+          "Name": "Valve_009_CoolerBypass",
+          "Type": "Boolean",
+          "Value": true,
+          "Writable": false
+        },
+        {
+          "Name": "Valve_010_Cooler_In",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": false
+        },
+        {
+          "Name": "Valve_011_Cooler_Out",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": false
+        },
+        {
+          "Name": "Cooler_ON",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": false
+        },
+        {
+          "Name": "Fan001_On",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": false
+        },
+        {
+          "Name": "Heater_ON",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": true
+        },
+        {
+          "Name": "Filter_Chg_Required",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": false
+        },
+        {
+          "Name": "Filter_Reset",
+          "Type": "Boolean",
+          "Value": false,
+          "Writable": true
+        },
+        {
+          "Name": "Filter_Override",
+          "Type": "Boolean",
+          "Value": true,
+          "Writable": true
+        }
+      ],
+      "Properties": {}
+    }
+  ],
+  "Devices": [
+    {
+      "Name": "FluidDemoPLC",
+      "DeviceType": "RockwellPLC",
+      "Properties": [
+        {
+          "Name": "SerialNumber",
+          "Type": "String",
+          "Value": "0x601fc654"
+        },
+        {
+          "Name": "HardwareRevision",
+          "Value": "35.11"
+        },
+        {
+          "Name": "SoftwareRevision",
+          "Value": "35.11"
+        },
+        {
+          "Name": "Manufacturer",
+          "Type": "LocalizedText",
+          "Value": {
+            "Text": "Rockwell Automation/Allen-Bradley",
+            "Locale": "en_US"
+          }
+        },
+        {
+          "Name": "Model",
+          "Type": "LocalizedText",
+          "Value": {
+            "Text": "Emulate 5580 Controller",
+            "Locale": "en_US"
+          }
+        }
+      ]
+    }
+  ]
+}

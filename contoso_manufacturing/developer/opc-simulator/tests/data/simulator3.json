@@ -1,0 +1,95 @@
+{
+  "DeviceTypes": [
+    {
+      "DeviceType": "Device1Type",
+      "Variables": [
+        {
+          "Name": "Var1",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var2",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var3",
+          "Type": "Int32",
+          "Value": -1
+        }
+      ]
+    }
+  ],
+  "Devices": [
+    {
+      "Name": "Device1",
+      "DeviceType": "Device1Type",
+      "Properties": [
+        {
+          "Name": "SerialNumber",
+          "Value": "42424242",
+          "Type": "String"
+        }
+      ],
+      "UseStringNodeIds": true
+    }
+  ],
+  "Server": {
+    "Name": "A very cool OPCUA server",
+    "Endpoint": "opc.tcp://0.0.0.0:4840",
+    "CustomNamespace": "http://microsoft.com/Opc/Simulator/"
+  },
+  "RunSettings": {
+    "PollIntervalSeconds": 0.05,
+    "ReportUsageIntervalSeconds": 5.0,
+    "AsyncuaLoggingLevel": "WARNING",
+    "StopSimulatorAfterFullLoop": false,
+    "SimulationSources": [
+      {
+        "TargetDevices": [
+          "Device1"
+        ],
+        "TargetVariables": [
+          "Var1",
+          "Var2"
+        ],
+        "ValueSequence": [
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "UpdatePeriodSeconds": [
+          0.1
+        ],
+        "RepeatForever": true
+      },
+      {
+        "TargetDevices": [
+          "Device1"
+        ],
+        "TargetVariables": [
+          "Var3"
+        ],
+        "ValueSequence": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "UpdatePeriodSeconds": [
+          0.05
+        ],
+        "RepeatForever": false
+      }
+    ]
+  }
+}

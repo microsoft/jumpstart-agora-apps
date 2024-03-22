@@ -1,0 +1,42 @@
+{
+    "PLCSettings": {
+        "IPAddress": "192.168.111.48",
+        "DeviceTypeName": "RockwellPLC",
+        "UseStringNodeIds": true,
+        "DeviceInstanceName": "MagneMotion.5583E.Hub",
+        "LogLevel": "INFO",
+        "TagPlcToOpcuaMapping": {
+            "GenFault": "GeneralFault",
+            "pin": "CarriageClamp",
+            "RobotLoading": "RobotState",
+            "Local:2:O.DATA.13": "RobotVacuum",
+            "Local:2:O.DATA.6": "PowerOn",
+            "RobotPosition[0]": "RobotPositionJ0",
+            "RobotPosition[1]": "RobotPositionJ1",
+            "RobotPosition[2]": "RobotPositionJ2",
+            "RobotPosition[3]": "RobotPositionJ3",
+            "RobotPosition[4]": "RobotPositionJ4",
+            "RobotPosition[5]": "RobotPositionJ5",
+            "EStopCounter": "EstopCounter",
+            "FaultTimeReal": "FaultTime",
+            "LoadedCounter": "LoadedCounter",
+            "LoadingCycleTime": "LoadingCycleTime",
+            "PalletCounter": "PalletCounter",
+            "Quality": "Quality",
+            "RobotFault": "RobotFault",
+            "RobotFaultCounter": "RobotFaultCounter",
+            "UnloadedCounter": "UnloadedCounter",
+            "UnloadingcycleTime": "UnloadingCycleTime"
+        }
+    },
+    "RunSettings": {
+        "PollIntervalSeconds": 0.1,
+        "ReportUsageIntervalSeconds": 5.0,
+        "AsyncuaLoggingLevel": "ERROR"
+    },
+    "Server": {
+        "Name": "Magnemotion OPCUA server",
+        "Endpoint": "opc.tcp://0.0.0.0:4840",
+        "CustomNamespace": "http://microsoft.com/Opc/Magnemotion/"
+    }
+}

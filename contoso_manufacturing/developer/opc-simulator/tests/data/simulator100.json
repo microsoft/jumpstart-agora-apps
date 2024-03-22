@@ -1,0 +1,658 @@
+{
+  "DeviceTypes": [
+    {
+      "DeviceType": "Device1Type",
+      "Variables": [
+        {
+          "Name": "Var00",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var01",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var02",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var03",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var04",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var05",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var06",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var07",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var08",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var09",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var10",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var11",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var12",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var13",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var14",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var15",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var16",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var17",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var18",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var19",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var20",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var21",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var22",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var23",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var24",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var25",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var26",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var27",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var28",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var29",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var30",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var31",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var32",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var33",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var34",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var35",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var36",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var37",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var38",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var39",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var40",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var41",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var42",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var43",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var44",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var45",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var46",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var47",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var48",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var49",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var50",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var51",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var52",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var53",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var54",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var55",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var56",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var57",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var58",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var59",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var60",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var61",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var62",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var63",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var64",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var65",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var66",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var67",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var68",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var69",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var70",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var71",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var72",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var73",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var74",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var75",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var76",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var77",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var78",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var79",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var80",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var81",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var82",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var83",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var84",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var85",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var86",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var87",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var88",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var89",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var90",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var91",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var92",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var93",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var94",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var95",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var96",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var97",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var98",
+          "Type": "Double",
+          "Value": -1.0
+        },
+        {
+          "Name": "Var99",
+          "Type": "Double",
+          "Value": -1.0
+        }
+      ]
+    }
+  ],
+  "Devices": [
+    {
+      "Name": "Device1",
+      "DeviceType": "Device1Type",
+      "Properties": [
+        {
+          "Name": "SerialNumber",
+          "Value": "42424242",
+          "Type": "String"
+        }
+      ],
+      "UseStringNodeIds": true
+    }
+  ],
+  "Server": {
+    "Name": "A very cool OPCUA server",
+    "Endpoint": "opc.tcp://0.0.0.0:4840",
+    "CustomNamespace": "http://microsoft.com/Opc/Simulator/"
+  },
+  "RunSettings": {
+    "PollIntervalSeconds": 0.0,
+    "ReportUsageIntervalSeconds": 5.0,
+    "AsyncuaLoggingLevel": "WARNING",
+    "SimulationSources": [
+      {
+        "TargetDevices": [
+          "Device1"
+        ],
+        "TargetVariables": [
+          "Var00",
+          "Var01",
+          "Var02",
+          "Var03",
+          "Var04",
+          "Var05",
+          "Var06",
+          "Var07",
+          "Var08",
+          "Var09",
+          "Var10",
+          "Var11",
+          "Var12",
+          "Var13",
+          "Var14",
+          "Var15",
+          "Var16",
+          "Var17",
+          "Var18",
+          "Var19",
+          "Var20",
+          "Var21",
+          "Var22",
+          "Var23",
+          "Var24",
+          "Var25",
+          "Var26",
+          "Var27",
+          "Var28",
+          "Var29",
+          "Var30",
+          "Var31",
+          "Var32",
+          "Var33",
+          "Var34",
+          "Var35",
+          "Var36",
+          "Var37",
+          "Var38",
+          "Var39",
+          "Var40",
+          "Var41",
+          "Var42",
+          "Var43",
+          "Var44",
+          "Var45",
+          "Var46",
+          "Var47",
+          "Var48",
+          "Var49",
+          "Var50",
+          "Var51",
+          "Var52",
+          "Var53",
+          "Var54",
+          "Var55",
+          "Var56",
+          "Var57",
+          "Var58",
+          "Var59",
+          "Var60",
+          "Var61",
+          "Var62",
+          "Var63",
+          "Var64",
+          "Var65",
+          "Var66",
+          "Var67",
+          "Var68",
+          "Var69",
+          "Var70",
+          "Var71",
+          "Var72",
+          "Var73",
+          "Var74",
+          "Var75",
+          "Var76",
+          "Var77",
+          "Var78",
+          "Var79",
+          "Var80",
+          "Var81",
+          "Var82",
+          "Var83",
+          "Var84",
+          "Var85",
+          "Var86",
+          "Var87",
+          "Var88",
+          "Var89",
+          "Var90",
+          "Var91",
+          "Var92",
+          "Var93",
+          "Var94",
+          "Var95",
+          "Var96",
+          "Var97",
+          "Var98",
+          "Var99"
+        ],
+        "ValueSequence": [
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0,
+          9.0,
+          10.0
+        ],
+        "UpdatePeriodSeconds": [
+          0.1
+        ],
+        "RepeatForever": true
+      }
+    ]
+  }
+}
