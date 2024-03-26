@@ -64,7 +64,6 @@ To deploy the solution, follow these steps:
     kubernetes   ClusterIP      10.43.0.1     <none>        443/TCP                         26m
     ovms         LoadBalancer   10.43.75.87   192.168.0.4   8080:32060/TCP,8081:31634/TCP   2m36s
     ```
-
 1. Check that models are being loaded correctly
     ```powershell
     Invoke-AksEdgeNodeCommand -NodeType Linux -command "curl http://<ovms-service-ip>:8081/v1/config"
@@ -73,8 +72,7 @@ To deploy the solution, follow these steps:
     If all models are loaded correctly, you should see something similir to the following:
     ```powershell
     {
-        "horizontal-text-detection": 
-        {
+        "head-pose-estimation": {
             "model_version_status": [
                 {
                     "version": "1",
@@ -86,8 +84,7 @@ To deploy the solution, follow these steps:
                 }
             ]
         },
-        "resnet-50": 
-        {
+        "human-pose-estimation": {
             "model_version_status": [
                 {
                     "version": "1",
@@ -99,8 +96,43 @@ To deploy the solution, follow these steps:
                 }
             ]
         },
-        "weld-porosity-detection":
-        {
+        "safety-yolo8": {
+            "model_version_status": [
+                {
+                    "version": "1",
+                    "state": "AVAILABLE",
+                    "status": {
+                        "error_code": "OK",
+                        "error_message": "OK"
+                    }
+                }
+            ]
+        },
+        "time-series-forecasting-electricity": {
+            "model_version_status": [
+                {
+                    "version": "1",
+                    "state": "AVAILABLE",
+                    "status": {
+                        "error_code": "OK",
+                        "error_message": "OK"
+                    }
+                }
+            ]
+        },
+        "weld-porosity-detection": {
+            "model_version_status": [
+                {
+                    "version": "1",
+                    "state": "AVAILABLE",
+                    "status": {
+                        "error_code": "OK",
+                        "error_message": "OK"
+                    }
+                }
+            ]
+        },
+        "yolov8n": {
             "model_version_status": [
                 {
                     "version": "1",
@@ -112,7 +144,7 @@ To deploy the solution, follow these steps:
                 }
             ]
         }
-    } 
+    }
     ```
 
 ## Check OVMS inferencing
