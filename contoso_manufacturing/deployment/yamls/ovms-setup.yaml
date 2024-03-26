@@ -1,38 +1,7 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: models-path-pvc
-  namespace: default
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  volumeMode: Filesystem
-  storageClassName: local-path  
-  selector:
-    matchLabels:
-      type: local
-  volumeName: models-path-pv
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-    name: models-path-pv
-spec:
-  storageClassName: local-path  
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /var/lib/rancher/k3s/storage/models
----
 apiVersion: intel.com/v1alpha1
 kind: ModelServer
 metadata:
-  name: ovms-sample
+  name: ovms
 spec:
   image_name: openvino/model_server:latest
   deployment_parameters:
@@ -72,5 +41,4 @@ spec:
     service_type: LoadBalancer
   models_repository:
     storage_type: "cluster"
-    models_volume_claim : "models-path-pvc"
- 
+    models_volume_claim : "ovms-pvc"

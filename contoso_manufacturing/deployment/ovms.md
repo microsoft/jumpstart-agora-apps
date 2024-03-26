@@ -7,70 +7,63 @@
 ## Node setup
 These instructions are for configuring OVMS for AKS Edge Essentials. (Note that the Ubuntu + K3s deployment will be covered separately.) To set up the node correctly, you'll need to copy the [ovms-setup.sh](../scripts/ovms-setup.sh) script to the Linux node and then run it. This script performs the following actions:
 
-1. Create the models repository under `/var/lib/rancher/k3s/storage/models`
-1. Download three models (`horizontal-text-detection`, `weld-porosity-detection` and `resnet-50`)
-1. Create the model hosting configuration `config.json` file
-1. Installing [OpenVino Toolkit Operator](https://docs.openvino.ai/2022.3/openvino_docs_install_guides_overview.html)
-
 To setup the node, run the following steps:
 
-1. Copy the `config.json` file to the AKS-EE node
+1. Run the OpenVino Operator Toolkit
     ```powershell
-    Copy-AksEdgeNodeFile -NodeType Linux -FromFile ..\scripts\ovms-setup.sh -ToFile /home/aksedge-user/ovms-setup.sh -PushFile
+    Invoke-AksEdgeNodeCommand -NodeType Linux -command "curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.27.0/install.sh | bash -s v0.27.0"
     ```
-1. Run the `ovms-setup.sh`
+1. Install prerequisistes (ovms-operator and local-path-storage)
     ```powershell
-    Invoke-AksEdgeNodeCommand -NodeType Linux -command "sudo sh /home/aksedge-user/ovms-setup.sh"
-    ```
-1. Check that the three models are downloaded
-    ```powershell
-    Invoke-AksEdgeNodeCommand -NodeType Linux -command "sudo ls -la /var/lib/rancher/k3s/storage/models"
-    ```
-    You should see something similar to the following:
-    ```bash
-    PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> Invoke-AksEdgeNodeCommand -NodeType Linux -command "sudo ls -la /var/lib/rancher/k3s/storage/models"
-    total 24
-    drwxr-x--- 3 root root 4096 Mar 11 19:33 horizontal-text-detection
-    drwxr-x--- 3 root root 4096 Mar 11 19:33 resnet-50
-    drwxr-x--- 3 root root 4096 Mar 11 19:33 weld-porosity-detection
+    kubectl apply -f https://raw.githubusercontent.com/Azure/AKS-Edge/main/samples/storage/local-path-provisioner/local-path-storage.yaml
+    kubectl create -f https://operatorhub.io/install/ovms-operator.yaml
     ```
 
 ## OVMS Deployment
 
-The following istructions will deploy OVMS using a Persistent Volume Claim (PVC) and mounts the models that were previously downloaded as part of [Node setup](#node-setup) steps.
+The following istructions will do the following:
 
+1. Create the ovms-config map using the **config.json** file to set up the models to be loaded and path for each model 
+1. Create the **ovms-pvc** Persistent Volume Claim (PVC)
+1. Run the **model-downloader** to download all teh required models
+1. Deploy OVMS using a Persistent Volume Claim (PVC) and mounts the models that were previously downloaded.
+
+To deploy the solution, follow these steps:
 
 1. Create the **ovms-config** configMap
     ```powershell
     kubectl create configmap ovms-config --from-file=.\configs\config.json
     ```
 
-1. Apply the [ovms-setup.yml](./yamls/ovms-setup.yml)
+1. Apply the [ovms-models-setup.yaml](./yamls/ovms-models-setup.yaml)
     ```powershell
-    kubectl apply -f .\yamls\ovms-setup.yml
+    kubectl apply -f .\yamls\ovms-models-setup.yaml
+    ```
+1. Wait until the **model-downloader-job** status changes from *Pending* to *Completed*.
+    ```powershell
+    PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pods -w
+    NAME                         READY   STATUS      RESTARTS   AGE
+    model-downloader-job-4n765   0/1     Completed   0          7s
+    ```
+
+1. Apply the [ovms-setup.yaml](./yamls/ovms-setup.yaml)
+    ```powershell
+    kubectl apply -f .\yamls\ovms-setup.yaml
     ```
 1. If everything was correctly deployed, you should see the following
     ```powershell
-    PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pvc
-    NAME              STATUS   VOLUME           CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-    models-path-pvc   Bound    models-path-pv   1Gi        RWO            local-path     7s
-
-    PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pv
-    NAME             CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                     STORAGECLASS   REASON   AGE
-    models-path-pv   1Gi        RWO            Retain           Bound    default/models-path-pvc   local-path              43s
-    
     PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pods
     NAME                        READY   STATUS    RESTARTS   AGE
-    ovms-sample-8b68dc5-g59sd   1/1     Running   0          14s
+    model-downloader-job-pdjwj   0/1     Completed   0          8m5s
+    ovms-6f4b579c7b-2rwl8        1/1     Running     0          2m5s
     ```
 1. Check the **ovms-sample** service IP
     ```powershell
     PS C:\Users\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get svc
-    NAME          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
-    kubernetes    ClusterIP   10.43.0.1      <none>        443/TCP             29m
-    ovms-sample   ClusterIP   10.43.84.192   <none>        8080/TCP,8081/TCP   2m55s
+    NAME         TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)                         AGE
+    kubernetes   ClusterIP      10.43.0.1     <none>        443/TCP                         26m
+    ovms         LoadBalancer   10.43.75.87   192.168.0.4   8080:32060/TCP,8081:31634/TCP   2m36s
     ```
-
 1. Check that models are being loaded correctly
     ```powershell
     Invoke-AksEdgeNodeCommand -NodeType Linux -command "curl http://<ovms-service-ip>:8081/v1/config"
@@ -79,8 +72,7 @@ The following istructions will deploy OVMS using a Persistent Volume Claim (PVC)
     If all models are loaded correctly, you should see something similir to the following:
     ```powershell
     {
-        "horizontal-text-detection": 
-        {
+        "head-pose-estimation": {
             "model_version_status": [
                 {
                     "version": "1",
@@ -92,8 +84,7 @@ The following istructions will deploy OVMS using a Persistent Volume Claim (PVC)
                 }
             ]
         },
-        "resnet-50": 
-        {
+        "human-pose-estimation": {
             "model_version_status": [
                 {
                     "version": "1",
@@ -105,8 +96,43 @@ The following istructions will deploy OVMS using a Persistent Volume Claim (PVC)
                 }
             ]
         },
-        "weld-porosity-detection":
-        {
+        "safety-yolo8": {
+            "model_version_status": [
+                {
+                    "version": "1",
+                    "state": "AVAILABLE",
+                    "status": {
+                        "error_code": "OK",
+                        "error_message": "OK"
+                    }
+                }
+            ]
+        },
+        "time-series-forecasting-electricity": {
+            "model_version_status": [
+                {
+                    "version": "1",
+                    "state": "AVAILABLE",
+                    "status": {
+                        "error_code": "OK",
+                        "error_message": "OK"
+                    }
+                }
+            ]
+        },
+        "weld-porosity-detection": {
+            "model_version_status": [
+                {
+                    "version": "1",
+                    "state": "AVAILABLE",
+                    "status": {
+                        "error_code": "OK",
+                        "error_message": "OK"
+                    }
+                }
+            ]
+        },
+        "yolov8n": {
             "model_version_status": [
                 {
                     "version": "1",
@@ -118,7 +144,7 @@ The following istructions will deploy OVMS using a Persistent Volume Claim (PVC)
                 }
             ]
         }
-    } 
+    }
     ```
 
 ## Check OVMS inferencing

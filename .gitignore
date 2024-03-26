@@ -137,3 +137,6 @@ videos/
 helpers.txt
 flask_session/
 *.local
+*.cache
+*.editorconfig
+contoso_supermarket/developer/data_emulator/src/obj/
