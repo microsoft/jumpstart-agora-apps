@@ -31,4 +31,10 @@ cd /models/safety-yolo8/1
 wget https://jsfiles.blob.core.windows.net/ai-models/safety-yolo8.bin
 wget https://jsfiles.blob.core.windows.net/ai-models/safety-yolo8.xml
 
+echo "Pulling forecasting-electricity"
+mkdir -p /models/forecasting-electricity/1
+cd /models/forecasting-electricity/1
+wget https://jsfiles.blob.core.windows.net/ai-models/time-series-forecasting-electricity-0001.bin
+wget https://jsfiles.blob.core.windows.net/ai-models/time-series-forecasting-electricity-0001.xml
+
 echo "Finished pulling models"
