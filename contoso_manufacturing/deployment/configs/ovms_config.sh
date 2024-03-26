@@ -3,7 +3,7 @@ echo "Starting model pulling"
 
 echo "Pulling head-pose-estimation"
 mkdir -p /models/head-pose-estimation/1
-cd /models/head-pose-estimation-adas-0001/1
+cd /models/head-pose-estimation/1
 wget https://jsfiles.blob.core.windows.net/ai-models/head-pose-estimation-adas-0001.bin
 wget https://jsfiles.blob.core.windows.net/ai-models/head-pose-estimation-adas-0001.xml
 

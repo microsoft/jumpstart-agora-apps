@@ -1,25 +1,9 @@
 apiVersion: intel.com/v1alpha1
 kind: ModelServer
 metadata:
-  name: ovms-sample
+  name: ovms
 spec:
-  volumes:
-  - name: models-volume
-    emptyDir: {}
-  initContainers:
-  - name: download-script
-    image: busybox
-    command: ["/bin/sh", "-c"]
-    args:
-    - wget -O /tmp/ovms_config.sh https://github.com/microsoft/jumpstart-agora-apps/blob/manufacturing_ovms_fix/contoso_manufacturing/deployment/configs/ovms_config.sh; 
-      chmod +x ovms_config.sh; /tmp/ovms_config.sh
-    volumeMounts:
-    - name: models-volume
-      mountPath: /models
   image_name: openvino/model_server:latest
-  volumeMounts:
-  - name: models-volume
-    mountPath: /models
   deployment_parameters:
     replicas: 1
     openshift_service_mesh: false
@@ -35,7 +19,7 @@ spec:
     config_configmap_name: "ovms-config"
     config_path: ""
     model_name: ""
-    model_path: "/models"
+    model_path: ""
     nireq: 0
     plugin_config: '{"CPU_THROUGHPUT_STREAMS":"1"}'
     batch_size: ""
@@ -57,3 +41,4 @@ spec:
     service_type: LoadBalancer
   models_repository:
     storage_type: "cluster"
+    models_volume_claim : "ovms-pvc"

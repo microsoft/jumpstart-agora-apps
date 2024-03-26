@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ovms-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: model-downloader-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: model-downloader
+        image: alpine
+        command: ["/bin/sh", "-c"]
+        args:
+        - wget -O /tmp/ovms_config.sh https://github.com/microsoft/jumpstart-agora-apps/blob/manufacturing_ovms_fix/contoso_manufacturing/deployment/configs/ovms_config.sh; 
+        chmod +x ovms_config.sh; /tmp/ovms_config.sh
+        volumeMounts:
+        - name: models-volume
+          mountPath: /models
+      volumes:
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: ovms-pvc
+      restartPolicy: Never
+  backoffLimit: 0
