@@ -34,6 +34,13 @@
                 "base_path": "/models/safety-yolo8",
                 "batch_size": "auto"
             }
+        },
+        {
+            "config": {
+                "name": "time-series-forecasting-electricity",
+                "base_path": "/models/forecasting-electricity",
+                "batch_size": "auto"
+            }
         }
     ],
     "monitoring": {
