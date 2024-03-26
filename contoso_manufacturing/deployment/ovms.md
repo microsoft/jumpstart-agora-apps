@@ -13,24 +13,35 @@ To setup the node, run the following steps:
     ```powershell
     Invoke-AksEdgeNodeCommand -NodeType Linux -command "curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.27.0/install.sh | bash -s v0.27.0"
     ```
-1. Check that the three models are downloaded
+1. Install prerequisistes (ovms-operator and local-path-storage)
     ```powershell
+    kubectl apply -f https://raw.githubusercontent.com/Azure/AKS-Edge/main/samples/storage/local-path-provisioner/local-path-storage.yaml
     kubectl create -f https://operatorhub.io/install/ovms-operator.yaml
     ```
 
 ## OVMS Deployment
 
-The following istructions will deploy OVMS using a Persistent Volume Claim (PVC) and mounts the models that were previously downloaded as part of [Node setup](#node-setup) steps.
+The following istructions will do the following:
 
+1. Create the ovms-config map using the **config.json** file to set up the models to be loaded and path for each model 
+1. Create the **ovms-pvc** Persistent Volume Claim (PVC)
+1. Run the **model-downloader** to download all teh required models
+1. Deploy OVMS using a Persistent Volume Claim (PVC) and mounts the models that were previously downloaded.
+
+To deploy the solution, follow these steps:
 
 1. Create the **ovms-config** configMap
     ```powershell
     kubectl create configmap ovms-config --from-file=.\configs\config.json
     ```
 
-1. Apply the [ovms-setup.yml](./yamls/ovms-setup.yml)
+1. Apply the [ovms-models-setup.yaml](./yamls/ovms-models-setup.yaml)
     ```powershell
-    kubectl apply -f .\yamls\ovms-setup.yml
+    kubectl apply -f .\yamls\ovms-models-setup.yaml
+    ```
+1. Wait until the job from previous step completes and then apply the [ovms-setup.yaml](./yamls/ovms-setup.yaml)
+    ```powershell
+    kubectl apply -f .\yamls\ovms-setup.yaml
     ```
 1. If everything was correctly deployed, you should see the following
     ```powershell
