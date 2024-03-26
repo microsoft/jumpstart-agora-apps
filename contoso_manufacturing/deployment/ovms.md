@@ -39,7 +39,14 @@ To deploy the solution, follow these steps:
     ```powershell
     kubectl apply -f .\yamls\ovms-models-setup.yaml
     ```
-1. Wait until the job from previous step completes and then apply the [ovms-setup.yaml](./yamls/ovms-setup.yaml)
+1. Wait until the **model-downloader-job** status changes from *Pending* to *Completed*.
+    ```powershell
+    PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pods -w
+    NAME                         READY   STATUS      RESTARTS   AGE
+    model-downloader-job-4n765   0/1     Completed   0          7s
+    ```
+
+1. Apply the [ovms-setup.yaml](./yamls/ovms-setup.yaml)
     ```powershell
     kubectl apply -f .\yamls\ovms-setup.yaml
     ```
@@ -47,14 +54,15 @@ To deploy the solution, follow these steps:
     ```powershell
     PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pods
     NAME                        READY   STATUS    RESTARTS   AGE
-    ovms-sample-8b68dc5-g59sd   1/1     Running   0          14s
+    model-downloader-job-pdjwj   0/1     Completed   0          8m5s
+    ovms-6f4b579c7b-2rwl8        1/1     Running     0          2m5s
     ```
 1. Check the **ovms-sample** service IP
     ```powershell
     PS C:\Users\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get svc
-    NAME          TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
-    kubernetes    ClusterIP   10.43.0.1      <none>        443/TCP             29m
-    ovms-sample   ClusterIP   10.43.84.192   <none>        8080/TCP,8081/TCP   2m55s
+    NAME         TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)                         AGE
+    kubernetes   ClusterIP      10.43.0.1     <none>        443/TCP                         26m
+    ovms         LoadBalancer   10.43.75.87   192.168.0.4   8080:32060/TCP,8081:31634/TCP   2m36s
     ```
 
 1. Check that models are being loaded correctly

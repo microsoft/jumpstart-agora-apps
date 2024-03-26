@@ -23,8 +23,10 @@ spec:
         image: alpine
         command: ["/bin/sh", "-c"]
         args:
-        - wget -O /tmp/ovms_config.sh https://github.com/microsoft/jumpstart-agora-apps/blob/manufacturing_ovms_fix/contoso_manufacturing/deployment/configs/ovms_config.sh; 
-        chmod +x ovms_config.sh; /tmp/ovms_config.sh
+        - |
+          wget -O /models/ovms_config.sh https://raw.githubusercontent.com/microsoft/jumpstart-agora-apps/manufacturing_ovms_fix/contoso_manufacturing/deployment/configs/ovms_config.sh 
+          chmod +x /models/ovms_config.sh
+          /models/ovms_config.sh
         volumeMounts:
         - name: models-volume
           mountPath: /models
