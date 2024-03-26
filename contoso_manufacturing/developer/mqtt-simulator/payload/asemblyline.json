@@ -1,0 +1,167 @@
+{
+    "date": "2024-03-26",
+    "assembly_line_info": {
+        "line_id": "AL-789",
+        "location": "Detroit, MI",
+        "shift": "night",
+        "employees_on_shift": [
+            {"employee_id": "E-001", "name": "John Doe", "role": "supervisor"},
+            {"employee_id": "E-002", "name": "Jane Smith", "role": "engineer"},
+            {"employee_id": "E-003", "name": "Mike Johnson", "role": "technician"}
+        ],
+        "cars_produced": [
+            {
+                "car_id": "C-001",
+                "model": "Sedan",
+                "color": "red",
+                "engine_type": "electric",
+                "assembly_status": "completed"
+            },
+            {
+                "car_id": "C-002",
+                "model": "SUV",
+                "color": "blue",
+                "engine_type": "hybrid",
+                "assembly_status": "completed"
+            },
+            {
+                "car_id": "C-003",
+                "model": "Coupe",
+                "color": "black",
+                "engine_type": "gasoline",
+                "assembly_status": "in_progress"
+            }
+        ]
+    },
+    "production_schedule": {
+        "scheduled_start": "20:00",
+        "scheduled_end": "08:00",
+        "total_production_time_hours": 12
+    },
+    
+    "actual_production": {
+        "start_time": "20:00",
+        "end_time": "07:30",
+        "actual_production_time_hours": 11.5,
+        "production_downtime_hours": 0.5,
+        "units_manufactured": 698,
+        "units_rejected": 35,
+        "details": [
+            {
+                "hour": "20-21",
+                "units_produced": 58,
+                "units_rejected": 3
+            },
+            {
+                "hour": "06-07",
+                "units_produced": 59,
+                "units_rejected": 2
+            }
+        ]
+    },
+    "equipment_telemetry": [
+        {
+            "equipment_id": "EQ-001",
+            "type": "assembly_robot",
+            "status": "operational",
+            "operational_time_hours": 11.5,
+            "cycles_completed": 3450,
+            "efficiency": "95%",
+            "maintenance_alert": "none",
+            "last_maintenance": "2024-03-20",
+            "next_scheduled_maintenance": "2024-04-01",
+    
+            "equipment_id01": "EQ-002",
+            "type_id01": "conveyor_belt",
+            "status_id01": "operational",
+            "operational_time_hours_id01": 11.5,
+            "distance_covered_meters_id01": 11500,
+            "efficiency_id01": "99%",
+            "maintenance_alert_id01": "scheduled_check",
+            "last_maintenance_id01": "2024-03-15",
+            "next_scheduled_maintenance_id01": "2024-03-30",
+        
+            "equipment_id02": "EQ-003",
+            "type_id02": "paint_station",
+            "status_id02": "maintenance_required",
+            "operational_time_hours_id02": 8,
+            "units_processed_id02": 450,
+            "efficiency_id02": "92%",
+            "maintenance_alert_id02": "urgent_maintenance_required",
+            "last_maintenance_id02": "2024-02-25",
+            "next_scheduled_maintenance_id02": "Overdue",
+
+            "equipment_id03": "EQ-004",
+            "type_id03": "welding-assembly_robot",
+            "model_id03": "RoboArm X2000",
+            "status_id03": "operational",
+            "operational_time_hours_id03": 11.5,
+            "cycles_completed_id03": 3450,
+            "efficiency_id03": "95%",
+            "maintenance_alert_id03": "none",
+            "last_maintenance_id03": "2024-03-20",
+            "next_scheduled_maintenance_id03": "2024-04-01",
+            "technical_specs_id03": {
+                "arm_reach_id03": "1.5 meters",
+                "load_capacity_id03": "10 kg",
+                "precision_id03": "0.02 mm",
+                "rotation_id03": "360 degrees"
+            },
+            "operation_stats_id03": {
+                "average_cycle_time_id03": "10 seconds",
+                "failures_last_month_id03": 2,
+                "success_rate_id03": "99.9%"
+            },
+            "maintenance_history_id03": [
+                {
+                    "date": "2024-03-20",
+                    "type": "routine_check",
+                    "notes": "All systems operational, no issues found."
+                },
+                {
+                    "date": "2024-01-15",
+                    "type": "repair",
+                    "notes": "Replaced servo motor in joint 3."
+                }
+            ],
+            "equipment_id04": "WLD-001",
+            "type_id04": "welding_robot",
+            "model_id04": "WeldMaster 3000",
+            "status_id04": "operational",
+            "operational_time_hours_id04": 11,
+            "welds_completed_id04": 5200,
+            "efficiency_id04": "98%",
+            "maintenance_alert_id04": "none",
+            "last_maintenance_id04": "2024-03-22",
+            "next_scheduled_maintenance_id04": "2024-04-05",
+            "technical_specs_id04": {
+                "welding_speed": "1.5 meters per minute",
+                "welding_technologies": ["MIG", "TIG"],
+                "maximum_thickness": "10 mm",
+                "precision": "+/- 0.5 mm"
+            },
+            "operation_stats_id04": {
+                "average_weld_time": "30 seconds",
+                "failures_last_month": 3,
+                "success_rate": "99.8%"
+            },
+            "maintenance_history_id04": [
+                {
+                    "date": "2024-03-22",
+                    "type": "routine_check",
+                    "notes": "Checked welding nozzles and gas supply. All systems go."
+                },
+                {
+                    "date": "2024-02-28",
+                    "type": "repair",
+                    "notes": "Repaired gas flow regulator."
+                }
+            ]
+        }
+    ],
+    "performance_metrics": {
+        "availability_oee": 0.9583,
+        "reject_rate": 0.0501,
+        "comments": "Minor downtime due to equipment maintenance. Overall production efficiency remains high."
+    }
+}

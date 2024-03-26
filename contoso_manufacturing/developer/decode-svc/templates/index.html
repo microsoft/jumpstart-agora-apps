@@ -20,6 +20,29 @@
     <div class="row">
       <img src="{{ url_for('video_feed') }}" class="video-feed">
     </div>
+
+    Configuration
+    <div class="row" style="margin-top:50px; margin-left: 100px; margin-right: 100px;">
+      <h2>Select Model and classNames</h2>
+      <form action="/configure" method="post">
+          <label for="model">Model:</label>
+          <select name="model" id="model">
+            <option value="safety-yolo8.pt">safety-yolo8.pt</option>
+            <option value="yolov8n.pt">yolov8n.pt</option>
+            <option value="{{ model }}">{{ model }}</option>
+              <!-- Models will be filled in by Flask -->
+              {% for model in models %}
+              <option value="{{ model }}">{{ model }}</option>
+              {% endfor %}
+          </select>
+          
+          <label for="classNames">classNames (comma-separated):</label>
+          <input type="text" id="classNames" name="classNames">
+          <input type="submit" value="Save Configuration">
+      </form>
+    </div>
+    Infrecence results:
+
     <div class="row" style="margin-top:50px; margin-left: 100px; margin-right: 100px;">
       <table id="file-table" class="table table-sm table-responsive pb-3" width="100%">
         <thead>
