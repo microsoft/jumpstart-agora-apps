@@ -1,0 +1,5 @@
+apiVersion: v2
+name: ovms
+description: this chart deploys the OpenVINO Model Server (OVMS) and Agora-specific models
+type: application
+version: 0.1.0
