@@ -15,9 +15,14 @@ spec:
     spec:
       containers:
       - name: decode
-        image: yourusername/rtsp-frame-capture-app:latest  # Replace with the path to your Docker image
+        image: agoraarmbladev.azurecr.io/decode-svc:1.6
         ports:
         - containerPort: 80
+        env:
+        - name: rtsp_url
+          value: "rtsp://10.211.55.5:8554/stream"
+        - name: save_path
+          value: "frames"
 
 ---
 apiVersion: v1

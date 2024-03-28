@@ -1,6 +1,8 @@
 # Original code taken from: https://gist.github.com/raiever/df5b6c48217df521094cbe2d12c32c66
 # import the necessary packages
+# Modified Armando Blanco
 from flask import Response, Flask, render_template, jsonify
+from flask import request
 import threading
 import argparse 
 import datetime, time
@@ -157,6 +159,24 @@ def data():
             files.append({'name': filename, 'size': size, 'modified': modified})
     files.sort(key=lambda f: f['modified'], reverse=True)
     return jsonify({'files': files})
+
+@app.route("/configuration")
+def configuration():
+    models = os.listdir("models")  # Make sure this path is correct
+    return render_template("index.html", models=models)
+
+@app.route("/configure", methods=["POST"])
+def configure():
+    global model, classNames
+    selected_model = request.form["model"]
+    selected_classNames = request.form["classNames"].split(",")  # Convert to list
+    model_path = os.path.join("models", selected_model)
+    if os.path.exists(model_path):
+        model = YOLO(model_path)
+        classNames = selected_classNames
+        return "Configuration saved successfully."
+    else:
+        return "Error loading model."
 
 # check to see if this is the main thread of execution
 if __name__ == '__main__':

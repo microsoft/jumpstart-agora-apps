@@ -1,12 +1,17 @@
 source decode.env
 
-CONTAINER=decode-svc:1.5
+ACR=agoraarmbladev.azurecr.io
+ACRUSER=agoraarmbladev
+ACRPWD=
 
-sudo docker login $ACR -u $ACRUSER -p $ACRPWD
 
-sudo docker build -t $CONTAINER .
-sudo docker tag $CONTAINER $ACR/$CONTAINER
-sudo docker push $ACR/$CONTAINER
+CONTAINER=decode-svc:1.6
+
+docker login $ACR -u $ACRUSER -p $ACRPWD
+
+docker build -t $CONTAINER .
+docker tag $CONTAINER $ACR/$CONTAINER
+docker push $ACR/$CONTAINER
 
 # Build the container
 #az login
@@ -14,3 +19,5 @@ sudo docker push $ACR/$CONTAINER
 #az acr build --image  $ACR/$CONTAINER --registry $REGISTRY --file Dockerfile .
 
 # sudo docker run -e rtsp_url="rtsp://10.211.55.5:8554/stream" -e save_path="frames" -p 80:80 -it agoraarmbladev.azurecr.io/decode-svc:1.1
+Test the container
+docker run -e rtsp_url="rtsp://127.0.0.1:8554/stream" -e save_path="frames" -p 80:80 -it agoraarmbladev.azurecr.io/decode-svc:1.6

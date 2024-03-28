@@ -18,17 +18,16 @@ broker_address = "127.0.0.1"  # Replace with your MQTT broker's address
 broker_port = 1883  # MQTT broker port (default is 1883)
 #broker_port = int(os.environ.get("MQTT_PORT", 1883))
 
+# Frecuency to send data in seconds
 frecuency=10
 
 # MQTT topics to publish to
 topic1 = "topic/fryer"  
-topic2 = "topic/productionline"  
-
-# MQTT topics to publish to
-topic1 = "topic/fryer"  
-topic2 = "topic/productionline"  
+topic2 = "topic/productionline"
+topic3 = "topic/assemblyline"  
 
 # Create MQTT clients for each topic
+# UPDATE DERIVATED POF NEW PAHO LIB
 client_id1 = f'python-mqtt-{random.randint(0, 1000)}'
 #client1 = mqtt.Client(client_id1)  PAHO LIB - UPDATE FEB 2024
 client1 = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id1)
@@ -37,9 +36,14 @@ client_id2 = f'python-mqtt-{random.randint(0, 1000)}'
 #client2 = mqtt.Client(client_id2) PAHO LIB - UPDATE FEB 2024
 client2 = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id2)
 
+client_id3 = f'python-mqtt-{random.randint(0, 1000)}'
+#client2 = mqtt.Client(client_id2) PAHO LIB - UPDATE FEB 2024
+client3 = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id3)
+
 # Connect to the MQTT broker for each client
 client1.connect(broker_address, broker_port)
 client2.connect(broker_address, broker_port)
+client3.connect(broker_address, broker_port)
 
 # Function to generate simulated data
 def generate_dataFryer():
@@ -164,8 +168,242 @@ def generate_productionlinedata():
         "OEENightShift": random.uniform(88, 90)
     }
 
+def simulate_assembly_line_data():
+    current_time = datetime.datetime.utcnow().isoformat() + "Z"
+    employees = [
+        {"employee_id": "E-001", "name": "John Doe", "role": "supervisor"},
+        {"employee_id": "E-002", "name": "Jane Smith", "role": "engineer"},
+        {"employee_id": "E-003", "name": "Mike Johnson", "role": "technician"}
+    ]
+
+    cars_produced = [
+        {"car_id": "C-001", "model": "Sedan", "color": "red", "engine_type": "electric", "assembly_status": "completed"},
+        {"car_id": "C-002", "model": "SUV", "color": "blue", "engine_type": "hybrid", "assembly_status": "completed"},
+        {"car_id": "C-003", "model": "Coupe", "color": "black", "engine_type": "gasoline", "assembly_status": "in_progress"}
+    ]
+
+    # Randomly update the assembly status for the cars
+    for car in cars_produced:
+        car['assembly_status'] = random.choice(["completed", "in_progress"])
+
+
+    equipment_telemetry = [
+        # Assembly Robot
+        {
+            "equipment_id": "EQ-001",
+            "type": "assembly_robot",
+            "status": random.choice(["operational", "maintenance_required"]),
+            "operational_time_hours": random.uniform(10, 12),
+            "cycles_completed": random.randint(3400, 3500),
+            "efficiency": random.uniform(93, 97),
+            "maintenance_alert": random.choice(["none", "scheduled_check", "urgent_maintenance_required"]),
+            "last_maintenance": "2024-02-20",
+            "next_scheduled_maintenance": "2024-04-01"
+        },
+        # Conveyor Belt
+        {
+            "equipment_id": "EQ-002",
+            "type": "conveyor_belt",
+            "status": random.choice(["operational", "maintenance_required"]),
+            "operational_time_hours": random.uniform(10, 12),
+            "distance_covered_meters": random.randint(10000, 12000),
+            "efficiency": random.uniform(98, 99),
+            "maintenance_alert": random.choice(["none", "scheduled_check"]),
+            "last_maintenance": "2024-03-15",
+            "next_scheduled_maintenance": "2024-03-30"
+        },
+        # Paint Station
+        {
+            "equipment_id": "EQ-003",
+            "type": "paint_station",
+            "status": random.choice(["operational", "maintenance_required"]),
+            "operational_time_hours": random.uniform(7, 9),
+            "units_processed": random.randint(400, 500),
+            "efficiency": random.uniform(90, 93),
+            "maintenance_alert": random.choice(["none", "urgent_maintenance_required"]),
+            "last_maintenance": "2024-02-25",
+            "next_scheduled_maintenance": "Overdue"
+        },
+        # Welding-Assembly Robot
+        {
+            "equipment_id": "EQ-004",
+            "type": "welding-assembly_robot",
+            "model": "RoboArm X2000",
+            "status": random.choice(["operational", "maintenance_required"]),
+            "operational_time_hours": random.uniform(10, 12),
+            "cycles_completed": random.randint(3400, 3500),
+            "efficiency": random.uniform(94, 96),
+            "maintenance_alert": random.choice(["none", "scheduled_check"]),
+            "last_maintenance": "2024-03-20",
+            "next_scheduled_maintenance": "2024-04-01",
+            "technical_specs": {
+                "arm_reach": "1.5 meters",
+                "load_capacity": "10 kg",
+                "precision": "0.02 mm",
+                "rotation": "360 degrees"
+            },
+            "operation_stats": {
+                "average_cycle_time": "10 seconds",
+                "failures_last_month": random.randint(1, 3),
+                "success_rate": random.uniform(98.5, 99.9)
+            },
+            "maintenance_history": [
+                {
+                    "date": "2024-03-20",
+                    "type": "routine_check",
+                    "notes": "All systems operational, no issues found."
+                },
+                {
+                    "date": "2024-01-15",
+                    "type": "repair",
+                    "notes": "Replaced servo motor in joint 3."
+                }
+            ]
+        },
+        # Welding Robot
+        {
+            "equipment_id": "WLD-001",
+            "type": "welding_robot",
+            "model": "WeldMaster 3000",
+            "status": random.choice(["operational", "maintenance_required"]),
+            "operational_time_hours": random.uniform(9, 11),
+            "welds_completed": random.randint(5100, 5300),
+            "efficiency": random.uniform(97, 99),
+            "maintenance_alert": random.choice(["none", "scheduled_check"]),
+            "last_maintenance": "2024-03-22",
+            "next_scheduled_maintenance": "2024-04-05",
+            "technical_specs": {
+                "welding_speed": "1.5 meters per minute",
+                "welding_technologies": ["MIG", "TIG"],
+                "maximum_thickness": "10 mm",
+                "precision": "+/- 0.5 mm"
+        },
+            "operation_stats": {
+            "average_weld_time": "30 seconds",
+            "failures_last_month": random.randint(0, 3),
+            "success_rate": random.uniform(98, 99.9)
+        },
+        "maintenance_history": [
+                {
+                    "date": "2024-03-22",
+                    "type": "routine_check",
+                    "notes": "Checked welding nozzles and gas supply. All systems go."
+                },
+                {
+                    "date": "2024-02-28",
+                    "type": "repair",
+                    "notes": "Repaired gas flow regulator."
+                }
+            ]
+        }
+    ]
+
+    production_schedule = {"scheduled_start": "20:00", "scheduled_end": "08:00", "total_production_time_hours": 12}
+
+    actual_production = {
+        "start_time": "20:00",
+        "end_time": "07:30",
+        "actual_production_time_hours": 11.5,
+        "production_downtime_hours": 0.5,
+        "units_manufactured": random.randint(690, 710),
+        "units_rejected": random.randint(30, 40),
+        "details": [
+            {"hour": "20-21", "units_produced": random.randint(55, 60), "units_rejected": random.randint(2, 4)},
+            # Additional hourly details can be added here
+        ]
+    }
+
+    performance_metrics = {
+        "availability_oee": random.uniform(0.95, 0.99),
+        "reject_rate": random.uniform(0.04, 0.06),
+        "comments": "Minor downtime due to equipment maintenance. Overall production efficiency remains high."
+    }
+
+    simulation_data = {
+        "date": current_time,
+        "assembly_line_info": {
+            "line_id": "AL-789",
+            "location": "Detroit, MI",
+            "shift": "night",
+            "employees_on_shift": employees,
+            "cars_produced": cars_produced
+        },
+        "production_schedule": production_schedule,
+        "actual_production": actual_production,
+        "equipment_telemetry": equipment_telemetry,
+        "performance_metrics": performance_metrics
+    }
+
+    return simulation_data
+    
+
+def simulate_assembly_line_data_old():
+    current_time = datetime.datetime.utcnow().isoformat() + "Z"
+    employees = [
+        {"employee_id": "E-001", "name": "John Doe", "role": "supervisor"},
+        {"employee_id": "E-002", "name": "Jane Smith", "role": "engineer"},
+        {"employee_id": "E-003", "name": "Mike Johnson", "role": "technician"}
+    ]
+
+    cars_produced = [
+        {"car_id": "C-001", "model": "Sedan", "color": "red", "engine_type": "electric", "assembly_status": "completed"},
+        {"car_id": "C-002", "model": "SUV", "color": "blue", "engine_type": "hybrid", "assembly_status": "completed"},
+        {"car_id": "C-003", "model": "Coupe", "color": "black", "engine_type": "gasoline", "assembly_status": "in_progress"}
+    ]
+
+    # Randomly update the assembly status for the cars
+    for car in cars_produced:
+        car['assembly_status'] = random.choice(["completed", "in_progress"])
+
+    equipment_telemetry = [
+        {"equipment_id": "EQ-001", "type": "assembly_robot", "status": "operational", "operational_time_hours": 11.5,
+         "cycles_completed": random.randint(3400, 3500), "efficiency": random.uniform(94, 96),
+         "maintenance_alert": random.choice(["none", "scheduled_check"]),
+         "last_maintenance": "2024-03-20", "next_scheduled_maintenance": "2024-04-01"},
+        # Additional equipment can be added here with randomized data
+    ]
+
+    production_schedule = {"scheduled_start": "20:00", "scheduled_end": "08:00", "total_production_time_hours": 12}
+
+    actual_production = {
+        "start_time": "20:00",
+        "end_time": "07:30",
+        "actual_production_time_hours": 11.5,
+        "production_downtime_hours": 0.5,
+        "units_manufactured": random.randint(690, 710),
+        "units_rejected": random.randint(30, 40),
+        "details": [
+            {"hour": "20-21", "units_produced": random.randint(55, 60), "units_rejected": random.randint(2, 4)},
+            # Additional hourly details can be added here
+        ]
+    }
+
+    performance_metrics = {
+        "availability_oee": random.uniform(0.95, 0.99),
+        "reject_rate": random.uniform(0.04, 0.06),
+        "comments": "Minor downtime due to equipment maintenance. Overall production efficiency remains high."
+    }
+
+    simulation_data = {
+        "date": current_time,
+        "assembly_line_info": {
+            "line_id": "AL-789",
+            "location": "Detroit, MI",
+            "shift": "night",
+            "employees_on_shift": employees,
+            "cars_produced": cars_produced
+        },
+        "production_schedule": production_schedule,
+        "actual_production": actual_production,
+        "equipment_telemetry": equipment_telemetry,
+        "performance_metrics": performance_metrics
+    }
+
+    return simulation_data
+
+
 # Function to send data to MQTT broker
-def send_to_mqtt(data1, data2):
+def send_to_mqtt(data1, data2, data3):
 
     try:
         # Prepare the JSON payload for the first topic
@@ -182,6 +420,13 @@ def send_to_mqtt(data1, data2):
         }
         payload_json2 = json.dumps(payload2)
 
+        # Prepare the JSON payload for the second topic
+        payload3 = {
+            "Content-Type": "application/json",  # Property "Content-Type"
+            "data": data3  # Data in JSON format
+        }
+        payload_json3 = json.dumps(payload3)
+
         # Publish the data to the first topic
         client1.publish(topic1, payload=payload_json1.encode('utf-8'))
         print(f"Published to {topic1}: {payload_json1}")
@@ -189,6 +434,10 @@ def send_to_mqtt(data1, data2):
         # Publish the data to the second topic
         client2.publish(topic2, payload=payload_json2.encode('utf-8'))
         print(f"Published to {topic2}: {payload_json2}")
+
+        # Publish the data to the second topic
+        client3.publish(topic3, payload=payload_json3.encode('utf-8'))
+        print(f"Published to {topic3}: {payload_json3}")
     
     except Exception as e:
         print(f"\n Error sending data:", e)
@@ -205,9 +454,10 @@ if __name__ == "__main__":
             # Generate simulated data
             simulated_data = generate_dataFryer()
             simulated_dataPL = generate_productionlinedata()
+            simulated_data_assembly_line = simulate_assembly_line_data()
 
             # Send the data to the MQTT broker
-            send_to_mqtt(simulated_data, simulated_dataPL)
+            send_to_mqtt(simulated_data, simulated_dataPL, simulated_data_assembly_line)
 
             # Wait for the next cycle
             time.sleep(frecuency) 
