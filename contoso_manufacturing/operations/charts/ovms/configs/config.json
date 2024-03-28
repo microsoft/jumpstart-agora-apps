@@ -1,0 +1,51 @@
+{
+    "model_config_list": [
+         {
+            "config": {
+                "name": "yolov8n",
+                "base_path": "/models/yolov8n",
+                "batch_size": "auto"
+            }
+         },
+         {
+            "config": {
+                "name": "human-pose-estimation",
+                "base_path": "/models/human-pose-estimation",
+                "batch_size": "auto"
+            }
+        },
+        {
+            "config": {
+                "name": "weld-porosity-detection",
+                "base_path": "/models/weld-porosity-detection",
+                "batch_size": "auto"
+            }
+        },
+        {
+            "config": {
+                "name": "head-pose-estimation",
+                "base_path": "/models/head-pose-estimation",
+                "batch_size": "auto"
+            }
+        },
+        {
+            "config": {
+                "name": "safety-yolo8",
+                "base_path": "/models/safety-yolo8",
+                "batch_size": "auto"
+            }
+        },
+        {
+            "config": {
+                "name": "time-series-forecasting-electricity",
+                "base_path": "/models/forecasting-electricity",
+                "batch_size": "auto"
+            }
+        }
+    ],
+    "monitoring": {
+        "metrics": {
+            "enable": true
+        }
+    }
+ }
