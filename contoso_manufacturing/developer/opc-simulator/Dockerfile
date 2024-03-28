@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt --no-cache-dir
 
-COPY eclipse_opcua/ .
+COPY app/ .
 
 EXPOSE 4840
 CMD [ "python3",  "sim_server_controller.py", "/config/simulator.json" ]
