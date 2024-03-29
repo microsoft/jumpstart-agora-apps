@@ -5,7 +5,7 @@ import pytest
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, this_dir)
-sys.path.insert(0, os.path.join(this_dir, "../eclipse_opcua"))
+sys.path.insert(0, os.path.join(this_dir, "../app"))
 
 # pylint: disable=wrong-import-position
 from di_opcua_server import DiOpcUaServer
