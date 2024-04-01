@@ -7,23 +7,38 @@
 ## Node setup
 These instructions are for configuring OVMS for AKS Edge Essentials. (Note that the Ubuntu + K3s deployment will be covered separately.) To set up the node correctly, you'll need to copy the [ovms-setup.sh](../scripts/ovms-setup.sh) script to the Linux node and then run it. This script performs the following actions:
 
-To setup the node, run the following steps:
+To set the node, run the following steps:
 
 1. Run the OpenVino Operator Toolkit
+
+   If you are using AKS Ede Essentials, run the following from the host machine:
     ```powershell
     Invoke-AksEdgeNodeCommand -NodeType Linux -command "curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.27.0/install.sh | bash -s v0.27.0"
     ```
-1. Install prerequisistes (ovms-operator and local-path-storage)
+
+    If you are using Ubuntu/Linux, run the following inside the node:
+   ```bash
+   curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.27.0/install.sh | bash -s v0.27.0
+   ```
+    
+1. Install prerequisites (ovms-operator and local-path-storage)
+
+    If you are using AKS Ede Essentials, run the following from the host machine:
     ```powershell
     kubectl apply -f https://raw.githubusercontent.com/Azure/AKS-Edge/main/samples/storage/local-path-provisioner/local-path-storage.yaml
     kubectl create -f https://operatorhub.io/install/ovms-operator.yaml
     ```
 
+   If you are using Ubuntu/Linux, run the following inside the node:
+   ```bash
+    kubectl create -f https://operatorhub.io/install/ovms-operator.yaml
+   ```
+
 ## OVMS Deployment
 
-The following istructions will do the following:
+The following instructions will do the following:
 
-1. Create the ovms-config map using the **config.json** file to set up the models to be loaded and path for each model 
+1. Create the ovms-config map using the **config.json** file to set up the models to be loaded and the path for each model 
 1. Create the **ovms-pvc** Persistent Volume Claim (PVC)
 1. Run the **model-downloader** to download all teh required models
 1. Deploy OVMS using a Persistent Volume Claim (PVC) and mounts the models that were previously downloaded.
@@ -39,6 +54,7 @@ To deploy the solution, follow these steps:
     ```powershell
     kubectl apply -f .\yamls\ovms-models-setup.yaml
     ```
+    
 1. Wait until the **model-downloader-job** status changes from *Pending* to *Completed*.
     ```powershell
     PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pods -w
@@ -50,6 +66,7 @@ To deploy the solution, follow these steps:
     ```powershell
     kubectl apply -f .\yamls\ovms-setup.yaml
     ```
+    
 1. If everything was correctly deployed, you should see the following
     ```powershell
     PS C:\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get pods
@@ -57,6 +74,7 @@ To deploy the solution, follow these steps:
     model-downloader-job-pdjwj   0/1     Completed   0          8m5s
     ovms-6f4b579c7b-2rwl8        1/1     Running     0          2m5s
     ```
+    
 1. Check the **ovms-sample** service IP
     ```powershell
     PS C:\Users\jumpstart-agora-apps\contoso_manufacturing\deployment> kubectl get svc
@@ -65,10 +83,17 @@ To deploy the solution, follow these steps:
     ovms         LoadBalancer   10.43.75.87   192.168.0.4   8080:32060/TCP,8081:31634/TCP   2m36s
     ```
 1. Check that models are being loaded correctly
+
+    If you are using AKS Ede Essentials, run the following from the host machine:
     ```powershell
-    Invoke-AksEdgeNodeCommand -NodeType Linux -command "curl http://<ovms-service-ip>:8081/v1/config"
+    Invoke-AksEdgeNodeCommand -NodeType Linux -command "curl http://<ovms-external-service-ip>:<extenral-service-port/v1/config"
     ```
 
+    If you are using Ubuntu/Linux, run the following inside the node:
+   ```bash
+    curl http://<ovms-external-service-ip>:<extenral-service-port>/v1/config
+   ```
+    
     If all models are loaded correctly, you should see something similir to the following:
     ```powershell
     {
