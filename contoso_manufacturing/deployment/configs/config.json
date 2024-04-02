@@ -41,6 +41,13 @@
                 "base_path": "/models/forecasting-electricity",
                 "batch_size": "auto"
             }
+        },
+        {
+            "config": {
+                "name": "yolov8-pose",
+                "base_path": "/models/yolo-pose-estimation",
+                "batch_size": "auto"
+            }
         }
     ],
     "monitoring": {
