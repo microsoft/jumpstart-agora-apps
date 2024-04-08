@@ -1,0 +1,17 @@
+# formatting and linting
+black
+pylint
+
+# unit testing
+pytest
+pytest-asyncio
+
+flake8 
+pytest-azurepipelines 
+pytest-cov 
+pylint
+# package distribution
+# wheel
+# twine
+# keyring
+# artifacts-keyring

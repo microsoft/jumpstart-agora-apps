@@ -1,0 +1,6 @@
+apiVersion: v2
+name: opcsimulator
+description: A Helm chart to deploy the OPC Simulator
+type: application
+version: 0.1.0
+home: https://github.com/microsoft/jumpstart-agora-apps
