@@ -37,4 +37,10 @@ cd /models/forecasting-electricity/1
 wget https://jsfiles.blob.core.windows.net/ai-models/time-series-forecasting-electricity-0001.bin
 wget https://jsfiles.blob.core.windows.net/ai-models/time-series-forecasting-electricity-0001.xml
 
+echo "Pulling Yolo8-PoseEstimation"
+mkdir -p /models/yolo-pose-estimation/1
+cd /models/yolo-pose-estimation/1
+wget https://jsfiles.blob.core.windows.net/ai-models/yolov8n-pose.bin
+wget https://jsfiles.blob.core.windows.net/ai-models/yolov8n-pose.xml
+
 echo "Finished pulling models"
