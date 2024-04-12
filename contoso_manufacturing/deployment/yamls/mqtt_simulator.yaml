@@ -18,7 +18,7 @@ spec:
           image: agoraarmbladev.azurecr.io/mqtt-simulator:latest
           env:
             - name: MQTT_BROKER
-              value: "172.20.1.71"  
+              value: "172.20.1.31"  
             - name: MQTT_PORT
               value: "1883"
             - name: FRECUENCY
