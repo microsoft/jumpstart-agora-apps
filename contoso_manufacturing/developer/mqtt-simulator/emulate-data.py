@@ -4,14 +4,23 @@ from datetime import date, timedelta, time, datetime
 import time
 import os
 from azure.eventhub import EventHubProducerClient, EventData
-from dotenv import dotenv_values
+import sys
 
-config = dotenv_values(".env")
+# Create following environment variables to publish events to Event Hub
+# EVENTHUB_CONNECTION_STRING = ''
+# EVENTHUB_NAME = 'manufacturing'
+# HISTORICAL_DATA_DAYS = 7
 
-EVENTHUB_CONNECTION_STRING = config.get('EVENTHUB_CONNECTION_STRING', None)
-EVENTHUB_NAME = config.get('EVENTHUB_NAME', None)
-HISTORICAL_DATA_DAYS = (0-int(config.get('HISTORICAL_DATA_DAYS', 7)))  # This is to generate date prior to current date for dashboards.
+EVENTHUB_CONNECTION_STRING = os.environ.get('EVENTHUB_CONNECTION_STRING')
+EVENTHUB_NAME = os.environ.get('EVENTHUB_NAME')
+HISTORICAL_DATA_DAYS = (0-int(os.environ.get('HISTORICAL_DATA_DAYS', 7)))  # This is to generate date prior to current date for dashboards.
 
+# Create event producer as a global object to avoid connection creation overhead for each event.
+if EVENTHUB_CONNECTION_STRING == "" or EVENTHUB_NAME == "":
+    print('Event Hub connection string and/or Event Hub name not configured.')
+    sys.exit()
+
+# Initialize EventHub connection to send events
 event_producer = EventHubProducerClient.from_connection_string(conn_str=EVENTHUB_CONNECTION_STRING, eventhub_name=EVENTHUB_NAME)
 
 maintenance_last_generated = datetime.now()
@@ -309,27 +318,40 @@ def send_product_to_event_hub(simulation_data):
 if __name__ == "__main__":
 
     # Generate batch and continue with live data
-    number_of_days = HISTORICAL_DATA_DAYS
-    production_datetime = datetime.now() + timedelta(days=number_of_days)
+    user_option = input("Would you like generate past data (1) or current data (2) choose your option: ")
+    if user_option == "":
+        user_option = 1
+    else:
+        user_option = int(user_option)
+
+    if user_option == 1:
+        number_of_days = input("Enter number of days to generate past data (default is 7 days): ")
+        if number_of_days == "":
+            number_of_days = -7
+        else:
+            number_of_days = (0 - int(number_of_days))
+    
+        production_datetime = datetime.now() + timedelta(days=number_of_days)
 
     try:
-        while production_datetime <= datetime.now():
-            print('Generating for: ', production_datetime)
-            simulated_data = simulate_assembly_line_data(production_datetime)
-            send_product_to_event_hub(simulated_data)
+        if user_option == 1:
+            while production_datetime <= datetime.now():
+                print('Generating for: ', production_datetime)
+                simulated_data = simulate_assembly_line_data(production_datetime)
+                send_product_to_event_hub(simulated_data)
 
-            # Increment time
-            production_datetime += timedelta(minutes=1)
+                # Increment time
+                production_datetime += timedelta(minutes=1)
+        else:
+            # Generate live data
+            print('Now generating live date...')
+            while True:
+                current_time = datetime.now()
+                # Produce equipment telemetry data every 30 seconds
+                print('Generating for: ', current_time)
+                simulated_data = simulate_assembly_line_data(current_time)
+                send_product_to_event_hub(simulated_data)
 
-        # Generate live data
-        print('Now generating live date...')
-        while True:
-            current_time = datetime.now()
-            # Produce equipment telemetry data every 30 seconds
-            print('Generating for: ', production_datetime)
-            simulated_data = simulate_assembly_line_data(current_time)
-            send_product_to_event_hub(simulated_data)
-
-            time.sleep(30)  # send data every 60 seconds
+                time.sleep(30)  # send data every 60 seconds
     finally:
         event_producer.close()
