@@ -14,8 +14,9 @@ RUN pip install influxdb-client
 # Set environment variables
 ENV MQTT_BROKER="10.211.55.23"
 ENV MQTT_PORT=1883
-ENV MQTT_TOPIC1="topic/productionline"
-ENV MQTT_TOPIC2="topic/fryer"
+ENV MQTT_TOPIC1="topic/weldingrobot"
+ENV MQTT_TOPIC2="topic/assemblybatteries"
+ENV MQTT_TOPIC3="topic/assemblyline"
 ENV INFLUX_URL="http://10.211.55.23:8086"
 ENV INFLUX_TOKEN="secret-token"
 ENV INFLUX_ORG="InfluxData"

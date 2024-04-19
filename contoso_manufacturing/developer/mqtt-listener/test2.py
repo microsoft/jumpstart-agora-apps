@@ -1,3 +1,4 @@
+
 from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
@@ -6,20 +7,19 @@ import random
 import time
 from datetime import datetime
 from influxdb_client.client.exceptions import InfluxDBError
-import os
 
+# MQTT Configuration
+mqtt_broker = "127.0.0.1"
+mqtt_port = 1883
+mqtt_topic1 = "topic/weldingrobot"
+mqtt_topic2 = "topic/assemblybatteries"
+mqtt_topic3 = "topic/assemblyline"
 
-mqtt_broker = os.environ.get("MQTT_BROKER", "")
-mqtt_port = int(os.environ.get("MQTT_PORT", ""))
-mqtt_topic1 = os.environ.get("MQTT_TOPIC1", "")
-mqtt_topic2 = os.environ.get("MQTT_TOPIC2", "")
-mqtt_topic3 = os.environ.get("MQTT_TOPIC3", "")
-
-influx_url = os.environ.get("INFLUX_URL", "")
-influx_token = os.environ.get("INFLUX_TOKEN", "")
-influx_org = os.environ.get("INFLUX_ORG", "")
-influx_bucket = os.environ.get("INFLUX_BUCKET", "")
-
+# InfluxDB Configuration
+influx_url = "http://10.211.55.5:8086"
+influx_token = "secret-token"
+influx_org = "InfluxData"
+influx_bucket = "manufacturing"
 
 # Initialize InfluxDB Client
 client_influx = InfluxDBClient(url=influx_url, token=influx_token, org=influx_org)
