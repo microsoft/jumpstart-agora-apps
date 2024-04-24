@@ -11,3 +11,12 @@ dependencies:
   - name: ovms
     version: 0.1.0
     repository: "file://../ovms"
+  - name: influxdb
+    version: 0.1.0
+    repository: "file://../influxdb"
+  - name: mqtt
+    version: 0.1.0
+    repository: "file://../mqtt"
+  - name: rtsp-simulator  
+    version: 0.1.0
+    repository: "file://../rtsp-simulator"
