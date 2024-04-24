@@ -1,0 +1,7 @@
+# Default values for opcsimulator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+mqBrokerEndpoint: "dmqtt-frontend.azure-iot-operations.svc.cluster.local"
+mqBrokerEndpointPort: "1883"
+influxDBEndpoint: "http://influxdb.azure-iot-operations.svc.cluster.local:8086"
