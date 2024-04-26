@@ -1,0 +1,6 @@
+apiVersion: v2
+name: rtsp-simulator
+description: A Helm chart to deploy the RTSP simulator
+type: application
+version: 0.1.0
+home: https://github.com/microsoft/jumpstart-agora-apps
