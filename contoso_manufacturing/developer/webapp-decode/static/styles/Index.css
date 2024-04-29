@@ -1,0 +1,53 @@
+.level0 svg {
+    width: 70%;
+    height: auto;
+}
+
+.level1 svg {
+    width: 95%;
+    height: auto;
+}
+
+.level2 svg {
+    width: 80%;
+    height: auto;
+}
+
+.level3 svg {
+    width: 100%;
+    height: auto;
+}
+
+#svg-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#svg-container img {
+    width: 100%;
+    height: auto;
+}
+
+#svg-container-floor {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#svg-container-floor img {
+    width: 100%;
+    height: auto;
+}
+
+
+.level2 .col-md-6 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Optional: Adjust the height of the image container */
+.level2 .col-md-6 img {
+    max-height: 80vh;
+    margin: auto;
+    width: 80%;
+}
