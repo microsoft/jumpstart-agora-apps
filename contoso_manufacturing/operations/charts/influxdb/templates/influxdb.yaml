@@ -96,7 +96,7 @@ metadata:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "8"
 spec:
-  storageClassName: manual
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   resources:

@@ -2,6 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-mqBrokerEndpoint: "dmqtt-frontend.contoso-motors.svc.cluster.local"
+mqBrokerEndpoint: "dmqtt-frontend.azure-iot-operations.svc.cluster.local"
 mqBrokerEndpointPort: "1883"
 influxDBEndpoint: "http://influxdb.contoso-motors.svc.cluster.local:8086"
