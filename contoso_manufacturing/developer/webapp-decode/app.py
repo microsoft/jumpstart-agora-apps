@@ -53,19 +53,19 @@ def video_feed():
 @app.route('/')
 def index():
     # Get the paths to to the SVG files and the load the content
-    contoso_path = os.path.join(app.root_path, 'static\images', 'contoso.svg')
+    contoso_path = os.path.join(app.root_path, 'static/images', 'contoso.svg')
     with open(contoso_path, 'r') as f:
         contoso = f.read()
 
-    site_enterprise_path = os.path.join(app.root_path, 'static\images', 'site_enterprise.svg')
+    site_enterprise_path = os.path.join(app.root_path, 'static/images', 'site_enterprise.svg')
     with open(site_enterprise_path, 'r') as f:
         site_enterprise = f.read()
 
-    site_path = os.path.join(app.root_path, 'static\images', 'site.svg') 
+    site_path = os.path.join(app.root_path, 'static/images', 'site.svg') 
     with open(site_path, 'r') as f:
         site = f.read()
 
-    enterprise_path = os.path.join(app.root_path, 'static\images', 'enterprise.svg')
+    enterprise_path = os.path.join(app.root_path, 'static/images', 'enterprise.svg')
     with open(enterprise_path, 'r') as f:
         enterprise = f.read()
 

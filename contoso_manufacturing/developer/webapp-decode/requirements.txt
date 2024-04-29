@@ -1,2 +1,2 @@
-Flask==2.0.2
+Flask
 opencv-python-headless==4.5.5.62
