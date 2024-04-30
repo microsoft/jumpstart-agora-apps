@@ -4,4 +4,4 @@
 
 mqBrokerEndpoint: "dmqtt-frontend.azure-iot-operations.svc.cluster.local"
 mqBrokerEndpointPort: "1883"
-influxDBEndpoint: "http://influxdb.azure-iot-operations.svc.cluster.local:8086"
+influxDBEndpoint: "http://influxdb.contoso-motors.svc.cluster.local:8086"
