@@ -2,7 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-rtsp
-  namespace: azure-iot-operations
+  namepsace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "rtsp"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
   replicas: 1
   selector:
@@ -50,8 +56,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: virtual-rtsp
-  namespace: azure-iot-operations
+  namespace: {{ .Release.Namespace }}
   labels:
+    app.kubernetes.io/name: "rtsp"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     app: virtual-rtsp
 spec:
   type: LoadBalancer
