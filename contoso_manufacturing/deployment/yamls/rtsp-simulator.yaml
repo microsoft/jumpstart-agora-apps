@@ -25,7 +25,7 @@ spec:
           command:
           - wget
           - "-O"
-          - "/samples/cars.mp4"
+          - "/samples/video.mp4"
           - https://github.com/armandoblanco/jumpstart-agora-apps/raw/main/contoso_manufacturing/developer/rtsp-simulator/worker-zone-detection.mp4
           volumeMounts:
           - name: tmp-samples
@@ -38,7 +38,7 @@ spec:
             - containerPort: 8554
           env:
             - name: SOURCE_URL
-              value: "file:///samples/cars.mp4"
+              value: "file:///samples/video.mp4"
           volumeMounts:
             - name: tmp-samples
               mountPath: /samples
