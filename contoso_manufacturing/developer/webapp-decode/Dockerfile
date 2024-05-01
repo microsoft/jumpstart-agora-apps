@@ -10,6 +10,9 @@ COPY requirements.txt .
 # Install any needed packages specified in requirements.txt
 RUN pip install Flask
 RUN pip install opencv-python-headless==4.5.5.62
+RUN pip install ovmsclient
+RUN pip install tabulate
+#RUN pip install torch
 
 # Copy the rest of the application's code into the container
 COPY . .
