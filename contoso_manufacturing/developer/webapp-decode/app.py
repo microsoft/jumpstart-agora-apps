@@ -4,47 +4,89 @@ import cv2
 import json
 import numpy as np
 from yolov8 import YOLOv8OVMS
-
-
+from welding import WeldPorosity
 
 app = Flask(__name__)
 
-OVMS_URL = "10.0.0.4:8080"
-MODEL_NAME = ''
-
 camera = None  # Initialized later based on the selected video
+latest_choice_detector = None # Global variable to keep track of the latest choice of the user
+ovms_url = "192.168.0.4:31640"
+frame_number = 0
+skip_mod = 2 # Define the modulus to skip frames
 
-# Global variable to keep track of the latest choice of the user
-latest_choice = None
+# Init the config.file.json
+with open('config_file.json') as config_file:
+    config = json.load(config_file)
 
-def gen_frames(video_name):  
-    print(video_name)
-
-    MODEL_NAME = video_name
-    print(MODEL_NAME)
-    with open('config_file.json') as config_file:
-        config = json.load(config_file)
-    model_config = config[MODEL_NAME]
-
+def init_yolo_detector():
+    model_config = config["yolov8n"]
     color_palette = np.random.uniform(0, 255, size=(len(model_config['class_names']), 3))
-
-    detector = YOLOv8OVMS(
+    return YOLOv8OVMS(
         rtsp_url=model_config['rtsp_url'],
         class_names=model_config['class_names'],
         input_shape=model_config['input_shape'],
         color_palette=color_palette,
         confidence_thres=model_config['conf_thres'],
         iou_thres=model_config['iou_thres'],
-        MODEL_NAME=MODEL_NAME, 
-        OVMS_URL=OVMS_URL, 
-        SAVE_IMG_LOC=False
+        model_name="yolov8n", 
+        ovms_url=ovms_url, 
+        save_img_loc=False,
+        verbose=False,
+        skip_rate=10
     )
-    while True:
-        processed_frame = detector.run()
-        ret, buffer = cv2.imencode('.jpg', processed_frame)
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+def init_yolo_safety_detector():
+    model_config = config["safety-yolo8"]
+    color_palette = np.random.uniform(0, 255, size=(len(model_config['class_names']), 3))
+    return YOLOv8OVMS(
+        rtsp_url=model_config['rtsp_url'],
+        class_names=model_config['class_names'],
+        input_shape=model_config['input_shape'],
+        color_palette=color_palette,
+        confidence_thres=model_config['conf_thres'],
+        iou_thres=model_config['iou_thres'],
+        model_name="safety-yolo8", 
+        ovms_url=ovms_url, 
+        save_img_loc=False,
+        verbose=False,
+        skip_rate=2
+    )
+
+def init_welding_detector():
+    model_config = config["weld-porosity-detection"]
+    color_palette = np.random.uniform(0, 255, size=(len(model_config['class_names']), 3))
+    return WeldPorosity(
+        rtsp_url=model_config['rtsp_url'],
+        class_names=model_config['class_names'],
+        input_shape=model_config['input_shape'],
+        confidence_thres=model_config['conf_thres'],
+        iou_thres=model_config['iou_thres'],
+        model_name="weld-porosity-detection", 
+        ovms_url=ovms_url, 
+        verbose=False,
+        skip_rate=10
+    )
+
+def gen_frames(video_name): 
+    global latest_choice_detector  
+
+    if(latest_choice_detector is None or latest_choice_detector.model_name != video_name):
+        # Call the destructor first
+        del latest_choice_detector
+        if video_name == "yolov8n":
+            latest_choice_detector = init_yolo_detector()
+        elif video_name == "safety-yolo8":
+            latest_choice_detector = init_yolo_safety_detector()
+        elif video_name == "welding":
+            latest_choice_detector = init_welding_detector()
+
+    while video_name != "":
+        processed_frame = latest_choice_detector.run()
+        if processed_frame is not None:
+            ret, buffer = cv2.imencode('.jpg', processed_frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @app.route('/video_feed')
 def video_feed():

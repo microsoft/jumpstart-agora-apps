@@ -7,7 +7,7 @@ from tabulate import tabulate
 import os
 
 # Define the OVMS URL directly in the code
-OVMS_URL = "10.0.0.4:8080"
+OVMS_URL = "192.168.0.4:31640"
 MODEL_NAME = 'safety-yolo8'
 
 class YOLOv8OVMS:
@@ -46,7 +46,6 @@ class YOLOv8OVMS:
         image_data = np.expand_dims(image_data, axis=0).astype(np.float32)
         return image_data
 
- #   def postprocess(self, frame, outputs):
     def postprocess(self, input_image, output):
         print("Postprocessing the output...")
         # Transpose and squeeze the output to match the expected shape
@@ -185,7 +184,7 @@ class YOLOv8OVMS:
         print("Released video capture and destroyed all windows.")
 
 if __name__ == "__main__":
-    with open('config_file.json') as config_file:
+    with open('..\\config_file.json') as config_file:
         config = json.load(config_file)
     model_config = config[MODEL_NAME]
 

@@ -173,7 +173,6 @@ class YOLOv8OVMS:
         # Perform post-processing on the outputs to obtain output image.
         return self.postprocess(self.img, outputs)  # output image
 
-
 if __name__ == "__main__":
     # Create an argument parser to handle command-line arguments
     parser = argparse.ArgumentParser()

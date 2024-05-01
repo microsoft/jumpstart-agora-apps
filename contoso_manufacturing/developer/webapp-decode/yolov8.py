@@ -8,7 +8,7 @@ import os
 import datetime
 
 class YOLOv8OVMS:
-    def __init__(self, rtsp_url, class_names, input_shape, color_palette, confidence_thres, iou_thres, MODEL_NAME, OVMS_URL, SAVE_IMG_LOC, VERBOSE=False):
+    def __init__(self, rtsp_url, class_names, input_shape, color_palette, confidence_thres, iou_thres, model_name, ovms_url, save_img_loc, skip_rate, verbose=False):
         print(f"Initializing YOLOv8OVMS with RTSP URL: {rtsp_url}")
         self.rtsp_url = rtsp_url
         self.class_names = class_names
@@ -16,13 +16,15 @@ class YOLOv8OVMS:
         self.color_palette = np.random.uniform(0, 255, size=(len(class_names), 3))
         self.confidence_thres=confidence_thres
         self.iou_thres=iou_thres
-        self.MODEL_NAME=MODEL_NAME
-        self.OVMS_URL=OVMS_URL
-        self.SAVE_IMG_LOC=SAVE_IMG_LOC
-        self.VERBOSE=VERBOSE
+        self.model_name=model_name
+        self.ovms_url=ovms_url
+        self.save_img_loc=save_img_loc
+        self.verbose=verbose
+        self.frame_number =0
+        self.skip_rate=skip_rate
 
         self.cap = cv2.VideoCapture(rtsp_url)
-        self.grpc_client = make_grpc_client(OVMS_URL)
+        self.grpc_client = make_grpc_client(ovms_url)
         
         if not self.cap.isOpened():
             print("Error: Unable to open video source.")
@@ -33,11 +35,11 @@ class YOLOv8OVMS:
                 self.img_height, self.img_width = frame.shape[:2]
             else:
                 print("Failed to grab frame to set image dimensions")
-
-    
-            
+  
     def preprocess(self):
-        print("Preprocessing the frame...")
+        if(self.verbose):
+            print("Preprocessing the frame...")
+
         ret, img = self.cap.read()
         if not ret:
             print("Failed to grab frame")
@@ -50,9 +52,10 @@ class YOLOv8OVMS:
         image_data = np.expand_dims(image_data, axis=0).astype(np.float32)
         return image_data
 
- #   def postprocess(self, frame, outputs):
     def postprocess(self, input_image, output):
-        print("Postprocessing the output...")
+        if(self.verbose):
+            print("Postprocessing the output...")
+
         # Transpose and squeeze the output to match the expected shape
         outputs = np.transpose(np.squeeze(output[0]))
 
@@ -101,7 +104,7 @@ class YOLOv8OVMS:
         # Check if indices are returned as a numpy array and access them correctly
         if len(indices) > 0:
             indices = indices.flatten()  # This ensures indices are flattened properly
-        else:
+        elif(self.verbose):
             print("No boxes to display after NMS.")
 
         # Prepare data for tabulate
@@ -127,8 +130,6 @@ class YOLOv8OVMS:
         return input_image
 
     def draw_detections(self, img, box, score, class_id):
-        #self.log(self , str(f"Drawing detection: Class ID = {class_id}, Score = {score:.2f}"))
-
         # Extract the coordinates of the bounding box
         x1, y1, w, h = box
 
@@ -136,56 +137,47 @@ class YOLOv8OVMS:
         color = self.color_palette[class_id]
 
         # Draw the bounding box on the image
-        cv2.rectangle(img, (int(x1), int(y1)), (int(x1 + w), int(y1 + h)), color, 2)
+        cv2.rectangle(img, (int(x1), int(y1)), (int(x1 + w), int(y1 + h)), (0,0,255), 5)
 
         # Create the label text with class name and score
         label = f"{self.class_names[class_id]}: {score:.2f}"
 
         # Calculate the dimensions of the label text
-        (label_width, label_height), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
+        (label_width, label_height), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 1.2, 1)
 
         # Calculate the position of the label text
         label_x = x1
-        label_y = y1 - 10 if y1 - 10 > label_height else y1 + 10
+        label_y = y1 - 10 if y1 - 10 > label_height else y1 + 20
 
         # Draw a filled rectangle as the background for the label text
-        cv2.rectangle(
-            img, (label_x, label_y - label_height), (label_x + label_width, label_y + label_height), color, cv2.FILLED
-        )
+        cv2.rectangle(img, (label_x, label_y - label_height - 10), (label_x + label_width, label_y + label_height), (0,0,255), cv2.FILLED)
 
-        # Draw the label text on the image
-        cv2.putText(img, label, (label_x, label_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-
+         # Draw the label text on the image
+        cv2.putText(img, label, (label_x, label_y), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 0), 1, cv2.LINE_AA)
 
     def run(self):
-        print("Running detection...")
-        output_directory = f'./{self.MODEL_NAME}_output'
-        if not os.path.exists(output_directory):
-            os.makedirs(output_directory)
+        if(self.verbose):
+            print("Running detection...")
 
+        self.frame_number += 1
+        # If mod = 0, i will get the frame and skip it
+        if self.frame_number % self.skip_rate == 0:
+            self.cap.read()
+            return None
         
-        print("Step 1")
         image_data = self.preprocess()
 
-        outputs = self.grpc_client.predict({"images": image_data}, self.MODEL_NAME)
+        outputs = self.grpc_client.predict({"images": image_data}, self.model_name)
         frame = self.postprocess(self.cap.read()[1], outputs)
-        print("Postprocessing complete")
-
-        timestamp = int(time.time())
-        filename = os.path.join(output_directory, f'{self.MODEL_NAME}_{timestamp}.jpg')
-        if(self.SAVE_IMG_LOC):
-            cv2.imwrite(filename, frame)
-            print(f"Saved frame to {filename}")
 
         return frame
 
     def log(self, message):
-        """Logs a message with a timestamp if VERBOSE is true."""
-        if self.VERBOSE:
+        """Logs a message with a timestamp if verbose is true."""
+        if self.verbose:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"{timestamp} - {message}")
             
-
     def __del__(self):
         print("Releasing resources...")
         self.cap.release()
