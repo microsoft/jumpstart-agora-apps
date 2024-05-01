@@ -108,7 +108,7 @@ class YOLOv8OVMS:
         table_data = []
 
         # Iterate over the selected indices after non-maximum suppression
-        for i in indices.flatten():
+        for i in indices:
             # Get the box, score, and class ID corresponding to the index
             
             box = boxes[i]
