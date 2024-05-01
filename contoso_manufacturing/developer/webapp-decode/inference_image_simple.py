@@ -123,6 +123,11 @@ class YOLOv8OVMS:
         # Apply non-maximum suppression to filter out overlapping bounding boxes
         indices = cv2.dnn.NMSBoxes(boxes, scores, self.confidence_thres, self.iou_thres)
 
+        if len(indices) > 0:
+            indices = indices.flatten()  # This ensures indices are flattened properly
+        else:
+            print("No boxes to display after NMS.")
+
         # Prepare data for tabulate
         table_data = []
 
