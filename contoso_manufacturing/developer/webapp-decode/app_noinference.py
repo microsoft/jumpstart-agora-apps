@@ -1,50 +1,46 @@
 from flask import Flask, render_template, Response, request
 import os
 import cv2
-import json
-import numpy as np
-from yolov8 import YOLOv8OVMS
-
-
 
 app = Flask(__name__)
 
-OVMS_URL = "10.0.0.4:8080"
-MODEL_NAME = ''
+# Dictionary mapping video names to their paths
+video_paths = {
+    'welding': './videos/welding.mp4',
+    'pose': './videos/pose.avi',
+    'helmet': './videos/helmet.mp4',
+}
 
+# Capture video from the mp4 file
 camera = None  # Initialized later based on the selected video
 
 # Global variable to keep track of the latest choice of the user
 latest_choice = None
 
 def gen_frames(video_name):  
-    print(video_name)
+    video_path = video_paths.get(video_name)
+    if video_path is None:
+        return Response('Video not found', status=404)
 
-    MODEL_NAME = video_name
-    print(MODEL_NAME)
-    with open('config_file.json') as config_file:
-        config = json.load(config_file)
-    model_config = config[MODEL_NAME]
+    global camera, latest_choice
+    if camera is None or camera.get(cv2.CAP_PROP_POS_FRAMES) >= camera.get(cv2.CAP_PROP_FRAME_COUNT) or latest_choice != video_name:
+        latest_choice = video_name
+        # Create a new video capture object if it's the first request or if the previous video has ended
+        camera = cv2.VideoCapture(video_path)
 
-    color_palette = np.random.uniform(0, 255, size=(len(model_config['class_names']), 3))
-
-    detector = YOLOv8OVMS(
-        rtsp_url=model_config['rtsp_url'],
-        class_names=model_config['class_names'],
-        input_shape=model_config['input_shape'],
-        color_palette=color_palette,
-        confidence_thres=model_config['conf_thres'],
-        iou_thres=model_config['iou_thres'],
-        MODEL_NAME=MODEL_NAME, 
-        OVMS_URL=OVMS_URL, 
-        SAVE_IMG_LOC=False
-    )
     while True:
-        processed_frame = detector.run()
-        ret, buffer = cv2.imencode('.jpg', processed_frame)
+        success, frame = camera.read()  # read the camera frame
+        if not success:
+            camera.set(cv2.CAP_PROP_POS_FRAMES, 0)  # reset the video capture object's position to the beginning
+            continue
+        ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
+
+        ## Code for inference
+        ## TO-DO
+
         yield (b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
 
 @app.route('/video_feed')
 def video_feed():

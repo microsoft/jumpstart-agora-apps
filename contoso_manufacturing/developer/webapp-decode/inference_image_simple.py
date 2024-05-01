@@ -1,28 +1,10 @@
-# Ultralytics YOLO 🚀, AGPL-3.0 license
-
 import argparse
 
 import cv2
 import numpy as np
-#import onnxruntime as ort
-import torch
-
-#from ultralytics.utils import ASSETS, yaml_load
-#from ultralytics.utils.checks import check_requirements, check_yaml
 from ovmsclient import make_grpc_client
 from tabulate import tabulate
 
-#classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
-#              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
-#              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
-#              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
-#              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
-#              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
-#              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
-#              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
-#              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
-#              "teddy bear", "hair drier", "toothbrush"
-#              ]
 classNames = ['helmet','head','person']
 
 
@@ -35,11 +17,6 @@ class YOLOv8OVMS:
         self.confidence_thres = confidence_thres
         self.iou_thres = iou_thres
 
-        # Load the class names from the COCO dataset
-        #self.classes = yaml_load(check_yaml("coco128.yaml"))["names"]
-
-        # Generate a color palette for the classes
-        #self.color_palette = np.random.uniform(0, 255, size=(len(self.classes), 3))
         self.color_palette = np.random.uniform(0, 255, size=(len(classNames), 3))
 
     def draw_detections(self, img, box, score, class_id):

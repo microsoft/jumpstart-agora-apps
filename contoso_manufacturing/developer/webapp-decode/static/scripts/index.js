@@ -12,11 +12,11 @@ $( document ).ready(function() {
     });
 
     $('.level2 .site #RoboticArm').on("click", function(){ 
-        zoomToLevel(3, 'site', "pose", "Pose Estimation" )
+        zoomToLevel(3, 'site', "yolov8n", "Pose Estimation" )
     });
 
     $('.level2 .site [id^="Field_Maintenance"]').on("click", function(){ 
-        zoomToLevel(3, 'site', "helmet", "Helmet Detection" );
+        zoomToLevel(3, 'site', "safety-yolo8", "Helmet Detection" );
     });
 
     $('.level2 .enterprise #SystemAdmin').on("click", function(){ 
