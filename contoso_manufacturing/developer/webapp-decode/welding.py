@@ -1,10 +1,6 @@
 import cv2
 import numpy as np
-import json
-import time
 from ovmsclient import make_grpc_client
-from tabulate import tabulate
-import os
 import datetime
 
 class WeldPorosity:

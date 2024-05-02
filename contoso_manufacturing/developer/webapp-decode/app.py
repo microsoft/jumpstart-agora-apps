@@ -5,6 +5,7 @@ import json
 import numpy as np
 from yolov8 import YOLOv8OVMS
 from welding import WeldPorosity
+from pose_estimator import PoseEstimator
 
 app = Flask(__name__)
 
@@ -67,6 +68,19 @@ def init_welding_detector():
         skip_rate=10
     )
 
+def init_pose_estimator():
+    model_config = config["human-pose-estimation"]
+    return PoseEstimator(
+        rtsp_url=model_config['rtsp_url'],
+        class_names=model_config['class_names'],
+        input_shape=model_config['input_shape'],
+        confidence_thres=model_config['conf_thres'],
+        iou_thres=model_config['iou_thres'],
+        model_name="human-pose-estimation",
+        ovms_url="192.168.0.4:31640",
+        skip_rate=2
+    )
+
 def gen_frames(video_name): 
     global latest_choice_detector  
 
@@ -79,6 +93,8 @@ def gen_frames(video_name):
             latest_choice_detector = init_yolo_safety_detector()
         elif video_name == "welding":
             latest_choice_detector = init_welding_detector()
+        elif video_name == "human-pose-estimation":
+              latest_choice_detector = init_pose_estimator()
 
     while video_name != "":
         processed_frame = latest_choice_detector.run()

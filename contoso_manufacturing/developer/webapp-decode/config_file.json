@@ -19,6 +19,13 @@
       "iou_thres": 0.5,
       "input_shape": [224, 224],
       "class_names": [ "no weld", "normal weld", "porosity"]
-    }
+    },
+    "human-pose-estimation" :{
+      "rtsp_url": "rtsp://192.168.0.6:8554/stream",
+      "conf_thres": 0.1,
+      "iou_thres": 0.5,
+      "input_shape": [448, 448],
+      "class_names": []
+    }   
   }
   

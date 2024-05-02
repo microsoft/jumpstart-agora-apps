@@ -12,7 +12,7 @@ $( document ).ready(function() {
     });
 
     $('.level2 .site #RoboticArm').on("click", function(){ 
-        zoomToLevel(3, 'site', "yolov8n", "Pose Estimation" )
+        zoomToLevel(3, 'site', "human-pose-estimation", "Pose Estimation" )
     });
 
     $('.level2 .site [id^="Field_Maintenance"]').on("click", function(){ 

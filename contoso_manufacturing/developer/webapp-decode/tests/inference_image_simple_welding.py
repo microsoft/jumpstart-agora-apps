@@ -33,13 +33,6 @@ class WeldPorosity:
                 print("Failed to grab frame to set image dimensions")
 
     def preprocess(self):
-
-        # Get the FPS of the video
-        fps = self.cap.get(cv2.CAP_PROP_FPS)
-
-        # Print the FPS
-        print("FPS:", fps)
-
         print("Preprocessing the frame...")
         ret, img = self.cap.read()
         if not ret:
