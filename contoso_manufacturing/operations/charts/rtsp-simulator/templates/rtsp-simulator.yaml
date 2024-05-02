@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-rtsp-helmet
-  namepsace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: "rtsp"
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
@@ -56,7 +56,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: virtual-rtsp-helmet-svc
-  namepsace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: "rtsp"
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
@@ -78,7 +78,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-rtsp-welding
-  namepsace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: "rtsp"
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
@@ -132,7 +132,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: virtual-rtsp-welding-svc
-  namepsace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: "rtsp"
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
@@ -154,7 +154,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-rtsp-pose
-  namepsace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: "rtsp"
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
@@ -208,7 +208,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: virtual-rtsp-pose-svc
-  namepsace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: "rtsp"
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
