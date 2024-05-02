@@ -11,9 +11,7 @@ app = Flask(__name__)
 
 camera = None  # Initialized later based on the selected video
 latest_choice_detector = None # Global variable to keep track of the latest choice of the user
-ovms_url = "192.168.0.4:31640"
-frame_number = 0
-skip_mod = 2 # Define the modulus to skip frames
+ovms_url = os.environ.get('OVMS_URL', '192.168.0.4:31640')
 
 # Init the config.file.json
 with open('config_file.json') as config_file:
@@ -55,7 +53,6 @@ def init_yolo_safety_detector():
 
 def init_welding_detector():
     model_config = config["weld-porosity-detection"]
-    color_palette = np.random.uniform(0, 255, size=(len(model_config['class_names']), 3))
     return WeldPorosity(
         rtsp_url=model_config['rtsp_url'],
         class_names=model_config['class_names'],
@@ -77,7 +74,7 @@ def init_pose_estimator():
         confidence_thres=model_config['conf_thres'],
         iou_thres=model_config['iou_thres'],
         model_name="human-pose-estimation",
-        ovms_url="192.168.0.4:31640",
+        ovms_url=ovms_url,
         skip_rate=2
     )
 

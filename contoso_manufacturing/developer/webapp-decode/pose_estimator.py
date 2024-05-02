@@ -3,7 +3,7 @@ import numpy as np
 from ovmsclient import make_grpc_client
 import datetime
 import json
-from decoder import AssociativeEmbeddingDecoder, OutputTransform, resize_image
+from pose_decoder import AssociativeEmbeddingDecoder, resize_image
 
 class PoseEstimator:
     def __init__(self, rtsp_url, class_names, input_shape, confidence_thres, iou_thres, model_name, ovms_url, skip_rate, verbose=False):

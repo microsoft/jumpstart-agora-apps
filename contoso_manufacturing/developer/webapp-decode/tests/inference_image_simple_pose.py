@@ -3,7 +3,7 @@ import numpy as np
 from ovmsclient import make_grpc_client
 import datetime
 import json
-from decoder import AssociativeEmbeddingDecoder, OutputTransform, resize_image
+from pose_decoder import AssociativeEmbeddingDecoder, resize_image
 import os
 import time
 
