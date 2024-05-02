@@ -65,7 +65,6 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     app: virtual-rtsp-helmet
 spec:
-  type: LoadBalancer
   ports:
     - port: 8554
       targetPort: 8554
@@ -141,7 +140,6 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     app: virtual-rtsp-welding
 spec:
-  type: LoadBalancer
   ports:
     - port: 8554
       targetPort: 8554
@@ -217,7 +215,6 @@ metadata:
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     app: virtual-rtsp-pose
 spec:
-  type: LoadBalancer
   ports:
     - port: 8554
       targetPort: 8554
