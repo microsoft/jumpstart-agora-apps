@@ -3,7 +3,7 @@ name: contoso-motors
 description: A Helm chart to deploy components for the Contoso Motors scenario
 type: application
 version: 0.1.1
-appVersion: "1.16.0"
+appVersion: "1.16.1"
 dependencies:
   - name: opcsimulator
     version: 0.1.0
