@@ -6,7 +6,7 @@ import json
 from pose_decoder import AssociativeEmbeddingDecoder, resize_image
 
 class PoseEstimator:
-    def __init__(self, rtsp_url, class_names, input_shape, confidence_thres, iou_thres, model_name, ovms_url, skip_rate, verbose=False):
+    def __init__(self, rtsp_url, class_names, input_shape, confidence_thres, iou_thres, model_name, ovms_url, skip_rate, default_skeleton, colors, verbose=False):
         print(f"Initializing PoseEstimator with RTSP URL: {rtsp_url}")
         self.rtsp_url = rtsp_url
         self.class_names = class_names
@@ -19,9 +19,8 @@ class PoseEstimator:
         self.verbose=verbose
         self.frame_number =0
         self.skip_rate=skip_rate
-        self.default_skeleton = ((15, 13), (13, 11), (16, 14), (14, 12), (11, 12), (5, 11), (6, 12), (5, 6), (5, 7), (6, 8), (7, 9), (8, 10), (1, 2), (0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6))
-        self.colors = ((255, 0, 0), (255, 0, 255), (170, 0, 255), (255, 0, 85),(255, 0, 170), (85, 255, 0), (255, 170, 0), (0, 255, 0),
-            (255, 255, 0), (0, 255, 85), (170, 255, 0), (0, 85, 255), (0, 255, 170), (0, 0, 255), (0, 255, 255), (85, 0, 255),(0, 170, 255))
+        self.default_skeleton = default_skeleton
+        self.colors = colors
 
         self.cap = cv2.VideoCapture(rtsp_url)
         self.grpc_client = make_grpc_client(ovms_url)

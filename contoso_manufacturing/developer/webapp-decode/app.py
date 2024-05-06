@@ -75,7 +75,9 @@ def init_pose_estimator():
         iou_thres=model_config['iou_thres'],
         model_name="human-pose-estimation",
         ovms_url=ovms_url,
-        skip_rate=2
+        skip_rate=2,
+        default_skeleton=model_config['default_skeleton'],
+        colors=model_config['colors']
     )
 
 def gen_frames(video_name): 
