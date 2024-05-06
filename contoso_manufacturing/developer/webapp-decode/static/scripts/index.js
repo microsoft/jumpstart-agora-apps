@@ -19,6 +19,11 @@ $( document ).ready(function() {
         zoomToLevel(3, 'site', "safety-yolo8", "Helmet Detection" );
     });
 
+    $('.level2 .site [id^="Site_IT_Engineer"]').on("click", function(){ 
+        console.log("Site_IT_Engineer clicked");
+        zoomToLevel(3, 'site', "yolov8n", "Object Detection" );
+    });
+
     $('.level2 .enterprise #SystemAdmin').on("click", function(){ 
         zoomToLevel(3, 'enterprise', "infra", "Infrastructure Monitoring" )
     });
