@@ -11,9 +11,15 @@ app = Flask(__name__)
 
 camera = None  # Initialized later based on the selected video
 latest_choice_detector = None # Global variable to keep track of the latest choice of the user
+<<<<<<< HEAD
 ovms_url = os.environ.get('OVMS_URL', '192.168.0.4:31640')
 ai_metrics_iframe_url = os.environ.get('AI_METRICS_IFRAME_URL', 'http://localhost:5002')
 infra_metrics_iframe_url = os.environ.get('INFRA_METRICS_IFRAME_URL', 'http://localhost:5003')
+=======
+ovms_url = os.environ.get('OVMS_URL', '10.0.0.52:8080')
+influx_url = os.environ.get('INFLUX_URL', '10.0.0.52:8080')
+adx_url = os.environ.get('ADX_URL', '10.0.0.52:8080')
+>>>>>>> 4628a86 (testing web app)
 
 # Init the config.file.json
 with open('config_file.json') as config_file:
@@ -109,7 +115,14 @@ def init_pose_estimator():
         colors=model_config['colors']
     )
 
+@app.route('/show_iframe')
+def show_iframe():
+    print("show_iframe")
+    url = request.args.get('url', 'https://google.com')
+    return render_template('index.html', iframe_url=url)
+
 def gen_frames(video_name): 
+<<<<<<< HEAD
     """
     Generate frames from a video stream.
 
@@ -122,6 +135,11 @@ def gen_frames(video_name):
     Returns:
         None
     """
+=======
+    
+
+    
+>>>>>>> 4628a86 (testing web app)
     global latest_choice_detector  
 
     if(latest_choice_detector is None or latest_choice_detector.model_name != video_name):
