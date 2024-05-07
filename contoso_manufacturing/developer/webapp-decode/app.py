@@ -12,12 +12,20 @@ app = Flask(__name__)
 camera = None  # Initialized later based on the selected video
 latest_choice_detector = None # Global variable to keep track of the latest choice of the user
 ovms_url = os.environ.get('OVMS_URL', '192.168.0.4:31640')
+ai_metrics_iframe_url = os.environ.get('AI_METRICS_IFRAME_URL', 'http://localhost:5002')
+infra_metrics_iframe_url = os.environ.get('INFRA_METRICS_IFRAME_URL', 'http://localhost:5003')
 
 # Init the config.file.json
 with open('config_file.json') as config_file:
     config = json.load(config_file)
 
 def init_yolo_detector():
+    """
+    Initializes and returns a YOLOv8OVMS object for object detection.
+
+    Returns:
+        YOLOv8OVMS: The initialized YOLOv8OVMS object.
+    """
     model_config = config["yolov8n"]
     color_palette = np.random.uniform(0, 255, size=(len(model_config['class_names']), 3))
     return YOLOv8OVMS(
@@ -35,6 +43,15 @@ def init_yolo_detector():
     )
 
 def init_yolo_safety_detector():
+    """
+    Initializes and returns a YOLOv8OVMS object for safety detection.
+
+    Returns:
+        YOLOv8OVMS: The initialized YOLOv8OVMS object.
+
+    Raises:
+        KeyError: If the required configuration values are missing.
+    """
     model_config = config["safety-yolo8"]
     color_palette = np.random.uniform(0, 255, size=(len(model_config['class_names']), 3))
     return YOLOv8OVMS(
@@ -52,6 +69,12 @@ def init_yolo_safety_detector():
     )
 
 def init_welding_detector():
+    """
+    Initializes the welding detector.
+
+    Returns:
+        WeldPorosity: An instance of the WeldPorosity class representing the welding detector.
+    """
     model_config = config["weld-porosity-detection"]
     return WeldPorosity(
         rtsp_url=model_config['rtsp_url'],
@@ -66,6 +89,12 @@ def init_welding_detector():
     )
 
 def init_pose_estimator():
+    """
+    Initializes the pose estimator with the specified configuration.
+
+    Returns:
+        PoseEstimator: The initialized pose estimator object.
+    """
     model_config = config["human-pose-estimation"]
     return PoseEstimator(
         rtsp_url=model_config['rtsp_url'],
@@ -81,6 +110,18 @@ def init_pose_estimator():
     )
 
 def gen_frames(video_name): 
+    """
+    Generate frames from a video stream.
+
+    Args:
+        video_name (str): The name of the video.
+
+    Yields:
+        bytes: The processed frame in JPEG format.
+
+    Returns:
+        None
+    """
     global latest_choice_detector  
 
     if(latest_choice_detector is None or latest_choice_detector.model_name != video_name):
@@ -105,6 +146,12 @@ def gen_frames(video_name):
 
 @app.route('/video_feed')
 def video_feed():
+    """
+    Stream video frames based on the provided video name parameter.
+
+    Returns:
+        Response: The response object containing the video frames.
+    """
     video_name = request.args.get('video')
     if video_name is None:
         return Response('Video name parameter is missing', status=400)
@@ -113,7 +160,13 @@ def video_feed():
 
 @app.route('/')
 def index():
-    # Get the paths to to the SVG files and the load the content
+    """
+    Render the index.html template with the content of SVG files.
+
+    Returns:
+        A rendered HTML template with the content of SVG files passed as variables.
+    """
+    # Get the paths to the SVG files and load the content
     contoso_path = os.path.join(app.root_path, 'static/images', 'contoso.svg')
     with open(contoso_path, 'r') as f:
         contoso = f.read()
@@ -131,6 +184,32 @@ def index():
         enterprise = f.read()
 
     return render_template('index.html', contoso=contoso, site_enterprise=site_enterprise, site=site, enterprise=enterprise)
+
+@app.route('/iframe')
+def get_iframe_url():
+    """
+    Retrieves the URL for the specified iframe name.
+
+    Returns:
+        Response: The response object containing the iframe URL.
+
+    Raises:
+        Response: If the iframe name parameter is missing or the iframe URL is not set.
+    """
+    iframe_name = request.args.get('name')
+    if iframe_name is None:
+        return Response('Iframe name parameter is missing', status=400)
+    
+    if iframe_name == 'aimetrics':
+        iframe_url = ai_metrics_iframe_url
+    elif iframe_name == 'infra':
+        iframe_url = infra_metrics_iframe_url
+
+    if iframe_url is None:
+        return Response(f'Iframe URL for {iframe_name} is not set', status=400)
+
+    return Response(iframe_url, status=200)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
