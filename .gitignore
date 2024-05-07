@@ -140,3 +140,4 @@ flask_session/
 *.cache
 *.editorconfig
 contoso_supermarket/developer/data_emulator/src/obj/
+/contoso_manufacturing/developer/webapp-decode/.vscode
