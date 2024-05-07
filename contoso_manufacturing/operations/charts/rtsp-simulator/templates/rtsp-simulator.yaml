@@ -32,10 +32,16 @@ spec:
           - wget
           - "-O"
           - "/samples/helmet.mp4"
-          - https://jsfiles.blob.core.windows.net/video/agora/helmet-detection.mp4
+          - $(HELMET_DOWNLOAD_URL)
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
+          env:
+            - name: HELMET_DOWNLOAD_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rtsp-config
+                  key: helmet_DOWNLOAD_URL
       containers:
         - name: virtual-rtsp-helmet
           image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
@@ -44,7 +50,10 @@ spec:
             - containerPort: 8554
           env:
             - name: SOURCE_URL
-              value: "file:///samples/helmet.mp4"
+              valueFrom:
+                configMapKeyRef:
+                  name: rtsp-config
+                  key: helmet_SOURCE_URL
           volumeMounts:
             - name: tmp-samples
               mountPath: /samples
@@ -107,10 +116,16 @@ spec:
           - wget
           - "-O"
           - "/samples/welding.mp4"
-          - https://jsfiles.blob.core.windows.net/video/agora/welding.mp4
+          - $(WELDING_DOWNLOAD_URL)
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
+          env:
+            - name: WELDING_DOWNLOAD_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rtsp-config
+                  key: welding_DOWNLOAD_URL
       containers:
         - name: virtual-rtsp-welding
           image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
@@ -119,7 +134,10 @@ spec:
             - containerPort: 8554
           env:
             - name: SOURCE_URL
-              value: "file:///samples/welding.mp4"
+              valueFrom:
+                configMapKeyRef:
+                  name: rtsp-config
+                  key: welding_SOURCE_URL
           volumeMounts:
             - name: tmp-samples
               mountPath: /samples
@@ -182,10 +200,16 @@ spec:
           - wget
           - "-O"
           - "/samples/pose.mp4"
-          - https://jsfiles.blob.core.windows.net/video/agora/pose-estimation.mp4
+          - $(POSE_DOWNLOAD_URL)
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
+          env:
+            - name: POSE_DOWNLOAD_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rtsp-config
+                  key: pose_DOWNLOAD_URL
       containers:
         - name: virtual-rtsp-pose
           image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
@@ -194,7 +218,10 @@ spec:
             - containerPort: 8554
           env:
             - name: SOURCE_URL
-              value: "file:///samples/pose.mp4"
+              valueFrom:
+                configMapKeyRef:
+                  name: rtsp-config
+                  key: pose_SOURCE_URL
           volumeMounts:
             - name: tmp-samples
               mountPath: /samples
@@ -222,3 +249,88 @@ spec:
       protocol: TCP  
   selector:
     app: virtual-rtsp-pose
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-rtsp-object
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: virtual-rtsp-object
+    app.kubernetes.io/name: "rtsp"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtual-rtsp-object
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: virtual-rtsp-object
+    spec:
+      initContainers:
+        - name: init-samples
+          image: alpine
+          command:
+          - wget
+          - "-O"
+          - "/samples/object-detection.mp4"
+          - $(OBJECT_DOWNLOAD_URL)
+          volumeMounts:
+          - name: tmp-samples
+            mountPath: /samples
+          env:
+            - name: OBJECT_DOWNLOAD_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rtsp-config
+                  key: object_DOWNLOAD_URL
+      containers:
+        - name: virtual-rtsp-object
+          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8554
+          env:
+            - name: SOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: rtsp-config
+                  key: object_SOURCE_URL
+          volumeMounts:
+            - name: tmp-samples
+              mountPath: /samples
+      volumes:
+        - name: tmp-samples
+          emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtual-rtsp-object-svc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "rtsp"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app: virtual-rtsp-object
+spec:
+  ports:
+    - port: 8554
+      targetPort: 8554
+      name: rtsp
+      protocol: TCP  
+  selector:
+    app: virtual-rtsp-object
