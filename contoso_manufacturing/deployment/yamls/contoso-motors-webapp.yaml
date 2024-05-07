@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: contosowebapp
-        image: agoraarmbladev.azurecr.io/contosowebapp:latest
+        image: jumpstartprod.azurecr.io/ag_mfg_webui:latest
         ports:
         - containerPort: 5000
         env:

@@ -8,12 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
-RUN pip install Flask
-RUN pip install opencv-python-headless==4.5.5.62
-RUN pip install ovmsclient
-RUN pip install tabulate
-RUN pip install scipy
-#RUN pip install torch
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application's code into the container
 COPY . .
@@ -24,11 +19,5 @@ EXPOSE 5000
 # Define environment variable to specify the host for Flask
 ENV FLASK_RUN_HOST=0.0.0.0
 
-# Define additional environment variables
-ENV OVMS_URL="10.0.0.52:8080"
-ENV INFLUX_URL="http://default-influx-url:port"
-ENV ADX_URL="http://default-adx-url:port"
-
 # Run the application when the container launches
-#CMD ["flask", "run", "--host=0.0.0.0"]
 CMD ["python", "app.py"]

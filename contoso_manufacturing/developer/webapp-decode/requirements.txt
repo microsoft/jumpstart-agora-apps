@@ -1,2 +1,5 @@
-Flask
+Flask==3.0.3
 opencv-python-headless==4.5.5.62
+ovmsclient==2023.1
+tabulate==0.9.0
+scipy==1.13.0
