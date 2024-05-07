@@ -37,8 +37,6 @@ spec:
           items:
           - key: config_file.json
             path: config_file.json
-
-
 ---
 apiVersion: v1
 kind: Service
@@ -53,4 +51,3 @@ spec:
     port: 80
     targetPort: 5000
   type: LoadBalancer
-
