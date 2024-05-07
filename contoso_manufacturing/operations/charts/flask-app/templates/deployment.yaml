@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+  namespace:  {{ .Release.Namespace }}
+  labels:
+    app: contosowebapp
+    app.kubernetes.io/name: "rtsp"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: 2  
+  selector:
+    matchLabels:
+      app: contosowebapp
+  template:
+    metadata:
+      labels:
+        app: contosowebapp
+    spec:
+      containers:
+      - name: contosowebapp
+        image: agoraarmbladev.azurecr.io/contosowebapp:latest
+        ports:
+        - containerPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app-service
+  namespace:  {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "flask-app"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  selector:
+    app: contosowebapp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5001
+  type: LoadBalancer
+
