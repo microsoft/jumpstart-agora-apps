@@ -5,7 +5,7 @@ metadata:
   namespace:  {{ .Release.Namespace }}
   labels:
     app: contosowebapp
-    app.kubernetes.io/name: "rtsp"
+    app.kubernetes.io/name: "contosowebapp"
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
@@ -22,9 +22,27 @@ spec:
     spec:
       containers:
       - name: contosowebapp
-        image: agoraarmbladev.azurecr.io/contosowebapp:latest
+        image: jumpstartprod.azurecr.io/ag_mfg_webui:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 5001
+        env:
+        - name: OVMS_URL
+          value: {{ .Values.ovmsURL }}
+        - name: INFLUX_URL
+          value: {{ .Values.influxdbURL }}
+        - name: ADX_URL
+          value: "http://default-adx-url:port"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: model-configs
+          items:
+          - key: config_file.json
+            path: config_file.json
 ---
 apiVersion: v1
 kind: Service
@@ -42,7 +60,6 @@ spec:
     app: contosowebapp
   ports:
   - protocol: TCP
-    port: 80
+    port: 8888
     targetPort: 5001
   type: LoadBalancer
-
