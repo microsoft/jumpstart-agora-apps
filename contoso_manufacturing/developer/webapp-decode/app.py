@@ -216,9 +216,8 @@ def get_iframe_url():
 
     return Response(iframe_url, status=200)
 
-
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=False, host="0.0.0.0", port=5001)
 
 # Release the video capture object and close all windows
 camera.release()
