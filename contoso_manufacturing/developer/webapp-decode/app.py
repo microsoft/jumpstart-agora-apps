@@ -16,7 +16,7 @@ ai_metrics_iframe_url = os.environ.get('AI_METRICS_IFRAME_URL', '')
 infra_metrics_iframe_url = os.environ.get('INFRA_METRICS_IFRAME_URL', '')
 
 # Init the config.file.json
-with open('config_file.json') as config_file:
+with open('./config/config_file.json') as config_file:
     config = json.load(config_file)
 
 def init_yolo_detector():
