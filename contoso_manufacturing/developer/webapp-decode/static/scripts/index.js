@@ -77,13 +77,18 @@ function getIframeUrl(iframeName){
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/iframe?name=' + iframeName);
     xhr.onload = function() {
-    if (xhr.status === 200) {
-        var url = xhr.responseText;
-        var iframe = document.getElementById('iframeDiv');
-        iframe.src = url;
-    } else {
-        console.log('Request failed.  Returned status of ' + xhr.status);
-    }
+        if (xhr.status === 200) {
+            var url = xhr.responseText;
+            if (iframeName == "infra_monitoring") {
+                window.open(url, '_blank');
+            }
+            else{
+                var iframe = document.getElementById('iframeDiv');
+                iframe.src = url;
+            }
+        } else {
+            console.log('Request failed.  Returned status of ' + xhr.status);
+        }
     };
     xhr.send();
 }
@@ -147,13 +152,23 @@ function zoomToLevel(level, type = "", video = "", scenario = "") {
             $("#imgContainer").show();
             $("#iframeContainer").hide();
             $("#imgVideoPreview").attr("src", `/video_feed?video=${video}`);
-        } else {
+        } 
+        else {
             $(".bd-level2.enterprise").show();
             $(".level2 .site").hide();
             $(".level2 .enterprise").show();
-            $("#imgContainer").hide();
-            $("#iframeContainer").show();
+            if(video == "infra"){
+                video = "infra_monitoring";
+                $("#imgContainer").show();
+                $("#iframeContainer").hide();
+                $("#imgVideoPreview").attr("src", "/static/images/adx.png");
+            }
+            else{
+                $("#imgContainer").hide();
+                $("#iframeContainer").show();
+            }
             getIframeUrl(video);
+          
         }
         $("#caseContainer").addClass("col-md-6");
         $("#caseContainer").removeClass("col-md-12");
