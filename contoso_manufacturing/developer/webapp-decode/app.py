@@ -9,7 +9,6 @@ from pose_estimator import PoseEstimator
 
 app = Flask(__name__)
 
-camera = None  # Initialized later based on the selected video
 latest_choice_detector = None # Global variable to keep track of the latest choice of the user
 ovms_url = os.environ.get('OVMS_URL', '')
 ai_metrics_iframe_url = os.environ.get('AI_METRICS_IFRAME_URL', '')
@@ -208,7 +207,7 @@ def get_iframe_url():
     
     if iframe_name == 'aimetrics':
         iframe_url = ai_metrics_iframe_url
-    elif iframe_name == 'infra':
+    elif iframe_name == 'infra_monitoring':
         iframe_url = infra_metrics_iframe_url
 
     if iframe_url is None:
@@ -220,5 +219,4 @@ if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0", port=5001)
 
 # Release the video capture object and close all windows
-camera.release()
 cv2.destroyAllWindows()
