@@ -4,6 +4,10 @@ FROM python:3.11-slim
 # Set the working directory in the container
 WORKDIR /app
 
+# Add depencecies
+RUN apt update
+RUN apt install libgtk2.0-dev pkg-config libgl1 -y
+
 # Copy the requirements file into the container to leverage Docker layer caching
 COPY requirements.txt .
 
