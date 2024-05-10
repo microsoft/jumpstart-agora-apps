@@ -11,8 +11,8 @@ app = Flask(__name__)
 
 latest_choice_detector = None # Global variable to keep track of the latest choice of the user
 ovms_url = os.environ.get('OVMS_URL', '')
-ai_metrics_iframe_url = os.environ.get('AI_METRICS_IFRAME_URL', '')
-infra_metrics_iframe_url = os.environ.get('INFRA_METRICS_IFRAME_URL', '')
+influx_iframe_url = os.environ.get('INFLUX_URL', '')
+adx_iframe_url = os.environ.get('ADX_URL', '')
 
 # Init the config.file.json
 with open('./config/config_file.json') as config_file:
@@ -206,9 +206,9 @@ def get_iframe_url():
         return Response('Iframe name parameter is missing', status=400)
     
     if iframe_name == 'aimetrics':
-        iframe_url = ai_metrics_iframe_url
+        iframe_url = influx_iframe_url
     elif iframe_name == 'infra_monitoring':
-        iframe_url = infra_metrics_iframe_url
+        iframe_url = adx_iframe_url
 
     if iframe_url is None:
         return Response(f'Iframe URL for {iframe_name} is not set', status=400)
