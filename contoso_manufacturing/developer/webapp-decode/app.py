@@ -136,6 +136,11 @@ def gen_frames(video_name):
     """
     global latest_choice_detector  
 
+    # Add a check in case of failed intit model
+    if 'latest_choice_detector' not in locals() and 'latest_choice_detector' not in globals():
+        latest_choice_detector = None
+
+    # Check if the video name is different from the current model name
     if(latest_choice_detector is None or latest_choice_detector.model_name != video_name):
         # Call the destructor first
         del latest_choice_detector

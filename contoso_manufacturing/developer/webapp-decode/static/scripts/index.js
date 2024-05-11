@@ -79,13 +79,7 @@ function getIframeUrl(iframeName){
     xhr.onload = function() {
         if (xhr.status === 200) {
             var url = xhr.responseText;
-            if (iframeName == "infra_monitoring") {
-                window.open(url, '_blank');
-            }
-            else{
-                var iframe = document.getElementById('iframeDiv');
-                iframe.src = url;
-            }
+            window.open(url, '_blank');   
         } else {
             console.log('Request failed.  Returned status of ' + xhr.status);
         }
@@ -126,13 +120,11 @@ function zoomToLevel(level, type = "", video = "", scenario = "") {
             $(".level2 .site").show();
             $(".level2 .enterprise").hide();
             $("#imgContainer").hide();
-            $("#iframeContainer").hide();
         } else {
             $(".bd-level2.enterprise").show();
             $(".level2 .site").hide();
             $(".level2 .enterprise").show();
             $("#imgContainer").hide();
-            $("#iframeContainer").hide();
         }
         $("#caseContainer").addClass("col-md-12");
         $("#caseContainer").removeClass("col-md-6");
@@ -150,8 +142,9 @@ function zoomToLevel(level, type = "", video = "", scenario = "") {
             $(".level2 .site").show();
             $(".level2 .enterprise").hide();
             $("#imgContainer").show();
-            $("#iframeContainer").hide();
             $("#imgVideoPreview").attr("src", `/video_feed?video=${video}`);
+            $("#caseContainer").addClass("col-md-6");
+            $("#caseContainer").removeClass("col-md-12");
         } 
         else {
             $(".bd-level2.enterprise").show();
@@ -159,19 +152,15 @@ function zoomToLevel(level, type = "", video = "", scenario = "") {
             $(".level2 .enterprise").show();
             if(video == "infra"){
                 video = "infra_monitoring";
-                $("#imgContainer").show();
-                $("#iframeContainer").hide();
+                $("#imgContainer").show();;
                 $("#imgVideoPreview").attr("src", "/static/images/adx.png");
             }
             else{
                 $("#imgContainer").hide();
-                $("#iframeContainer").show();
             }
             getIframeUrl(video);
-          
         }
-        $("#caseContainer").addClass("col-md-6");
-        $("#caseContainer").removeClass("col-md-12");
+     
         showWithTransition(".level2");
         $(".bd-level3").html(scenario);
         $(".bd-level3").show();
