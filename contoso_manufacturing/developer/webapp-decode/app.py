@@ -14,9 +14,16 @@ ovms_url = os.environ.get('OVMS_URL', '')
 influx_iframe_url = os.environ.get('INFLUX_URL', '')
 adx_iframe_url = os.environ.get('ADX_URL', '')
 
-# Init the config.file.json
-with open('./config/config_file.json') as config_file:
-    config = json.load(config_file)
+def reload_config():
+    """
+    Reloads the configuration file.
+
+    Returns:
+        dict: The reloaded configuration file.
+    """
+    print("Reloading configuration...")
+    with open('./config/template_config_file.json') as config_file:
+        return json.load(config_file)
 
 def init_yolo_detector():
     """
@@ -132,6 +139,10 @@ def gen_frames(video_name):
     if(latest_choice_detector is None or latest_choice_detector.model_name != video_name):
         # Call the destructor first
         del latest_choice_detector
+
+        # Reload configuration for changes with GitOps
+        config = reload_config()
+
         if video_name == "yolov8n":
             latest_choice_detector = init_yolo_detector()
         elif video_name == "safety-yolo8":
@@ -216,6 +227,7 @@ def get_iframe_url():
     return Response(iframe_url, status=200)
 
 if __name__ == '__main__':
+    config = reload_config()
     app.run(debug=False, host="0.0.0.0", port=5001)
 
 # Release the video capture object and close all windows
