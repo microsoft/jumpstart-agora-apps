@@ -11,12 +11,19 @@ app = Flask(__name__)
 
 latest_choice_detector = None # Global variable to keep track of the latest choice of the user
 ovms_url = os.environ.get('OVMS_URL', '')
-ai_metrics_iframe_url = os.environ.get('AI_METRICS_IFRAME_URL', '')
-infra_metrics_iframe_url = os.environ.get('INFRA_METRICS_IFRAME_URL', '')
+influx_iframe_url = os.environ.get('INFLUX_URL', '')
+adx_iframe_url = os.environ.get('ADX_URL', '')
 
-# Init the config.file.json
-with open('./config/config_file.json') as config_file:
-    config = json.load(config_file)
+def reload_config():
+    """
+    Reloads the configuration file.
+
+    Returns:
+        dict: The reloaded configuration file.
+    """
+    print("Reloading configuration...")
+    with open('./config/config_file.json') as config_file:
+        return json.load(config_file)
 
 def init_yolo_detector():
     """
@@ -129,9 +136,18 @@ def gen_frames(video_name):
     """
     global latest_choice_detector  
 
+    # Add a check in case of failed intit model
+    if 'latest_choice_detector' not in locals() and 'latest_choice_detector' not in globals():
+        latest_choice_detector = None
+
+    # Check if the video name is different from the current model name
     if(latest_choice_detector is None or latest_choice_detector.model_name != video_name):
         # Call the destructor first
         del latest_choice_detector
+
+        # Reload configuration for changes with GitOps
+        config = reload_config()
+
         if video_name == "yolov8n":
             latest_choice_detector = init_yolo_detector()
         elif video_name == "safety-yolo8":
@@ -206,9 +222,9 @@ def get_iframe_url():
         return Response('Iframe name parameter is missing', status=400)
     
     if iframe_name == 'aimetrics':
-        iframe_url = ai_metrics_iframe_url
+        iframe_url = influx_iframe_url
     elif iframe_name == 'infra_monitoring':
-        iframe_url = infra_metrics_iframe_url
+        iframe_url = adx_iframe_url
 
     if iframe_url is None:
         return Response(f'Iframe URL for {iframe_name} is not set', status=400)
@@ -216,6 +232,7 @@ def get_iframe_url():
     return Response(iframe_url, status=200)
 
 if __name__ == '__main__':
+    config = reload_config()
     app.run(debug=False, host="0.0.0.0", port=5001)
 
 # Release the video capture object and close all windows
