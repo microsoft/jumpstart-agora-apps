@@ -29,9 +29,11 @@ spec:
           - name: MQTT_PORT
             value: {{ .Values.mqBrokerEndpointPort | quote }}
           - name: MQTT_TOPIC1
-            value: "topic/productionline"
+            value: "topic/weldingrobot"
           - name: MQTT_TOPIC2
-            value: "topic/fryer"
+            value: "topic/assemblybatteries"
+          - name: MQTT_TOPIC3
+            value: "topic/assemblyline"
           - name: INFLUX_URL
             value: {{ .Values.influxDBEndpoint }}
           - name: INFLUX_TOKEN
