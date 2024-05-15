@@ -182,8 +182,7 @@ spec:
           - wget
           - "-O"
           - "/samples/pose.mp4"
-          # - https://jsfiles.blob.core.windows.net/video/agora/pose-estimation.mp4
-          - https://github.com/intel-iot-devkit/sample-videos/raw/master/worker-zone-detection.mp4
+          - https://jsfiles.blob.core.windows.net/video/agora/pose-estimation.mp4
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
@@ -299,3 +298,79 @@ spec:
       protocol: TCP  
   selector:
     app: virtual-rtsp-object
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-rtsp-bolt
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: virtual-rtsp-bolt
+    app.kubernetes.io/name: "rtsp"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtual-rtsp-bolt
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: virtual-rtsp-bolt
+    spec:
+      initContainers:
+        - name: init-samples
+          image: alpine
+          command:
+          - wget
+          - "-O"
+          - "/samples/bolt-detection.mp4"
+          - https://jsfiles.blob.core.windows.net/video/agora/bolt-detection.mp4
+          volumeMounts:
+          - name: tmp-samples
+            mountPath: /samples
+      containers:
+        - name: virtual-rtsp-bolt
+          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8554
+          env:
+            - name: SOURCE_URL
+              value: "file:///samples/bolt-detection.mp4"
+          volumeMounts:
+            - name: tmp-samples
+              mountPath: /samples
+      volumes:
+        - name: tmp-samples
+          emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtual-rtsp-bolt-svc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "rtsp"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app: virtual-rtsp-bolt
+spec:
+  ports:
+    - port: 8554
+      targetPort: 8554
+      name: rtsp
+      protocol: TCP  
+  selector:
+    app: virtual-rtsp-bolt
