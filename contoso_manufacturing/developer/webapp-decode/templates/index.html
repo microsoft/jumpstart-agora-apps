@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contoso Cars</title>
+    <title>Contoso Motors</title>
     <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/Index.css') }}">
     <script src="{{ url_for('static', filename='scripts/jquery.js') }}"></script>
@@ -17,7 +17,7 @@
     <!-- Navigation Bar -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item bd-level0"><a href="javascript:zoomToLevel(0)">Contoso Cars</a></li>
+            <li class="breadcrumb-item bd-level0"><a href="javascript:zoomToLevel(0)">Contoso Motors</a></li>
             <li class="breadcrumb-item bd-level1" style="display: none;"><a href="javascript:zoomToLevel(1)">Home</a>
             </li>
             <li class="breadcrumb-item bd-level2 site" style="display: none;"><a
@@ -54,9 +54,6 @@
             <div class="col-md-6 text-center" id="imgContainer" style="display: none;">
                 <img src="{{ url_for('static', filename='images/video_placeholder.png') }}" class="img-fluid"
                     id="imgVideoPreview" alt="Factory site" />
-            </div>
-            <div class="col-md-6 text-center" id="iframeContainer" style="display: none;">
-                <iframe src="http://localhost:3000/d-solo/fdjq7lv6jgphcf/test?orgId=1&from=1713972482331&to=1713994082331&panelId=1" width="450" height="600" frameborder="0"></iframe>
             </div>
         </div>
     </div>

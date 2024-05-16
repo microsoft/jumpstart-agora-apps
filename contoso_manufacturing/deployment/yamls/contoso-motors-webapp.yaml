@@ -17,9 +17,26 @@ spec:
     spec:
       containers:
       - name: contosowebapp
-        image: agoraarmbladev.azurecr.io/contosowebapp:latest
+        image: jumpstartprod.azurecr.io/ag_mfg_webui:latest
         ports:
         - containerPort: 5000
+        env:
+        - name: OVMS_URL
+          value: "10.0.0.52:8080"
+        - name: INFLUX_URL
+          value: "http://default-influx-url:port"
+        - name: ADX_URL
+          value: "http://default-adx-url:port"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/
+      volumes:
+      - name: config-volume
+        configMap:
+          name: model-configs
+          items:
+          - key: config_file.json
+            path: config_file.json
 ---
 apiVersion: v1
 kind: Service
@@ -34,4 +51,3 @@ spec:
     port: 80
     targetPort: 5000
   type: LoadBalancer
-
