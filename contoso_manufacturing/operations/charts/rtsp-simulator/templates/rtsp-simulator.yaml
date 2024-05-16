@@ -38,7 +38,7 @@ spec:
             mountPath: /samples
       containers:
         - name: virtual-rtsp-helmet
-          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          image: "jumpstartprod.azurecr.io/contoso-motors-rtsp:latest"
           imagePullPolicy: Always
           ports:
             - containerPort: 8554
@@ -113,7 +113,7 @@ spec:
             mountPath: /samples
       containers:
         - name: virtual-rtsp-welding
-          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          image: "jumpstartprod.azurecr.io/contoso-motors-rtsp:latest"
           imagePullPolicy: Always
           ports:
             - containerPort: 8554
@@ -188,7 +188,7 @@ spec:
             mountPath: /samples
       containers:
         - name: virtual-rtsp-pose
-          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          image: "jumpstartprod.azurecr.io/contoso-motors-rtsp:latest"
           imagePullPolicy: Always
           ports:
             - containerPort: 8554
@@ -264,7 +264,7 @@ spec:
             mountPath: /samples
       containers:
         - name: virtual-rtsp-object
-          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          image: "jumpstartprod.azurecr.io/contoso-motors-rtsp:latest"
           imagePullPolicy: Always
           ports:
             - containerPort: 8554
