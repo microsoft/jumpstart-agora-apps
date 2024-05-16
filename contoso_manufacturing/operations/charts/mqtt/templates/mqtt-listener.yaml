@@ -22,16 +22,18 @@ spec:
     spec:
       containers:
       - name: mqtt-listener
-        image: agoraarmbladev.azurecr.io/mqtt-listener:latest
+        image: jumpstartprod.azurecr.io/contoso-motors-mqtt-listener:latest
         env:
           - name: MQTT_BROKER
             value: {{ .Values.mqBrokerEndpoint }}
           - name: MQTT_PORT
             value: {{ .Values.mqBrokerEndpointPort | quote }}
           - name: MQTT_TOPIC1
-            value: "topic/productionline"
+            value: "topic/weldingrobot"
           - name: MQTT_TOPIC2
-            value: "topic/fryer"
+            value: "topic/assemblybatteries"
+          - name: MQTT_TOPIC3
+            value: "topic/assemblyline"
           - name: INFLUX_URL
             value: {{ .Values.influxDBEndpoint }}
           - name: INFLUX_TOKEN

@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: mqtt-simulator
-          image: agoraarmbladev.azurecr.io/mqtt-simulator:latest
+          image: jumpstartprod.azurecr.io/contoso-motors-mqtt-simulator:latest
           env:
             - name: MQTT_BROKER
               value: {{ .Values.mqBrokerEndpoint }} 

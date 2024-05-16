@@ -1,5 +1,5 @@
 # Use a base Python image
-FROM python:3.8
+FROM python:3.8-slim
 
 # Copy application files to the container
 COPY . /app
