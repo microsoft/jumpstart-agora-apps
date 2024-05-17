@@ -57,7 +57,7 @@ HISTORICAL_DATA_DAYS = (0-HISTORICAL_DATA_DAYS_ARG)  # This is to generate date 
 
 # Define common schema templates to generate telemetry data
 plant_details = [ 
-    { "plant_id": "PT-01", "location": "Detroit, MI" },
+    { "plant_id": "PT-01", "location": "Detroit, US" },
     { "plant_id": "PT-02", "location": "Monterrey, MX" },
     { "plant_id": "PT-03", "location": "Shanghai, CN" },
     { "plant_id": "PT-04", "location": "Hamburg, DE" }
@@ -213,7 +213,7 @@ def generate_dataWelding():
 def generate_batteriesdata():
     # Get the current time in ISO format
     current_time = datetime.datetime.utcnow().isoformat() + "Z"
-    waste_reasons = ["", "Overcooked", "Undercooked", "Machine Error"]
+    waste_reasons = ["", "Parts broken", "Wrong parts", "Machine Error"]
     lost_time_reasons = ["", "Machine Breakdown", "Raw Material Shortage", "Power Outage"]
     
     # Prepare the JSON payload
