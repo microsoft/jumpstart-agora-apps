@@ -24,7 +24,7 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - |
-          wget -O /models/ovms_config.sh https://raw.githubusercontent.com/microsoft/jumpstart-agora-apps/manufacturing/contoso_manufacturing/deployment/configs/ovms_config.sh 
+          wget -O /models/ovms_config.sh https://raw.githubusercontent.com/microsoft/jumpstart-agora-apps/main/contoso_manufacturing/deployment/configs/ovms_config.sh 
           chmod +x /models/ovms_config.sh
           /models/ovms_config.sh
         volumeMounts:
