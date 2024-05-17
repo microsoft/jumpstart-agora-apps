@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 ovmsURL: "ovms.contoso-motors.svc.cluster.local:8080"
-influxdbURL: "http://influxdb.contoso-motors.svc.cluster.local:8086"
+influxdbURL: "http://172.20.1.33:8888/"
 postRTSPURL: "virtual-rtsp-pose-svc.contoso-motors.svc.cluster.local:8554"
 weldingRTSPURL: "virtual-rtsp-welding-svc.contoso-motors.svc.cluster.local:8554"
 helmetRTSPURL: "virtual-rtsp-helmet-svc.contoso-motors.svc.cluster.local:8554"
