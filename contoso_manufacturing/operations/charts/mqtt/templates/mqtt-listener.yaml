@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-listener-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: mqtt-listener
+    app.kubernetes.io/name: "mqtt"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-listener
+  template:
+    metadata:
+      labels:
+        app: mqtt-listener
+    spec:
+      containers:
+      - name: mqtt-listener
+        image: jumpstartprod.azurecr.io/contoso-motors-mqtt-listener:latest
+        env:
+          - name: MQTT_BROKER
+            value: {{ .Values.mqBrokerEndpoint }}
+          - name: MQTT_PORT
+            value: {{ .Values.mqBrokerEndpointPort | quote }}
+          - name: MQTT_TOPIC1
+            value: "topic/weldingrobot"
+          - name: MQTT_TOPIC2
+            value: "topic/assemblybatteries"
+          - name: MQTT_TOPIC3
+            value: "topic/assemblyline"
+          - name: INFLUX_URL
+            value: {{ .Values.influxDBEndpoint }}
+          - name: INFLUX_TOKEN
+            value: "secret-token"
+          - name: INFLUX_ORG
+            value: "InfluxData"
+          - name: INFLUX_BUCKET
+            value: "manufacturing"

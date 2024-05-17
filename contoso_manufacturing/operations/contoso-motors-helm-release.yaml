@@ -1,0 +1,13 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: contoso-motors
+  namespace: contoso-motors
+  annotations:
+    clusterconfig.azure.com/use-managed-source: "true"
+spec:
+  interval: 1m
+  releaseName: contoso-motors
+  chart:
+    spec:
+      chart: ./contoso_manufacturing/operations/charts/contoso-motors

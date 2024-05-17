@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: model-downloader-job
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "ovms"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "10"
+spec:
+  template:
+    spec:
+      containers:
+      - name: model-downloader
+        image: alpine
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          wget -O /models/ovms_config.sh https://raw.githubusercontent.com/microsoft/jumpstart-agora-apps/main/contoso_manufacturing/deployment/configs/ovms_config.sh 
+          chmod +x /models/ovms_config.sh
+          /models/ovms_config.sh
+        volumeMounts:
+        - name: models-volume
+          mountPath: /models
+      volumes:
+      - name: models-volume
+        persistentVolumeClaim:
+          claimName: ovms-pvc
+      restartPolicy: Never
+  backoffLimit: 0

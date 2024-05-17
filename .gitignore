@@ -103,6 +103,7 @@ celerybeat.pid
 
 # Environments
 .env
+*.env
 .venv
 env/
 venv/
@@ -136,3 +137,7 @@ videos/
 helpers.txt
 flask_session/
 *.local
+*.cache
+*.editorconfig
+contoso_supermarket/developer/data_emulator/src/obj/
+/contoso_manufacturing/developer/webapp-decode/.vscode

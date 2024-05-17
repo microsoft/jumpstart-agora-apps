@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+  namespace: azure-iot-operations
+  labels:
+    app: contosowebapp
+spec:
+  replicas: 2  
+  selector:
+    matchLabels:
+      app: contosowebapp
+  template:
+    metadata:
+      labels:
+        app: contosowebapp
+    spec:
+      containers:
+      - name: contosowebapp
+        image: jumpstartprod.azurecr.io/ag_mfg_webui:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: OVMS_URL
+          value: "10.0.0.52:8080"
+        - name: INFLUX_URL
+          value: "http://default-influx-url:port"
+        - name: ADX_URL
+          value: "http://default-adx-url:port"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/
+      volumes:
+      - name: config-volume
+        configMap:
+          name: model-configs
+          items:
+          - key: config_file.json
+            path: config_file.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app-service
+  namespace: azure-iot-operations
+spec:
+  selector:
+    app: contosowebapp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+  type: LoadBalancer

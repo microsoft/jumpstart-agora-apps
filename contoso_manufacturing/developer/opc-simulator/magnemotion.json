@@ -1,0 +1,113 @@
+{
+    "DeviceTypes": [
+      {
+        "DeviceType": "MagneMotionDevice",
+        "Variables": [
+          {"Name": "CarriageClamp",       "Value":true,       "Type":"Boolean"},
+          {"Name": "EstopCounter",        "Value":2,          "Type":"Int32"},
+          {"Name": "FaultTime",           "Value":27519.26,   "Type":"Float"},
+          {"Name": "GeneralFault",        "Value":true,       "Type":"Boolean"},
+          {"Name": "LoadedCounter",       "Value":271,        "Type":"Int32"},
+          {"Name": "LoadingCycleTime",    "Value":50,         "Type":"Int32"},
+          {"Name": "PalletCounter",       "Value":172	,       "Type":"Int32"},
+          {"Name": "PowerOn",             "Value":true,       "Type":"Boolean"},
+          {"Name": "Quality",             "Value":3.0400999,  "Type":"Float"},
+          {"Name": "RobotFaultCounter",   "Value":0,	        "Type":"Int32"},
+          {"Name": "RobotPositionJ0",     "Value":-51.0694,	  "Type":"Float"},
+          {"Name": "RobotPositionJ1",     "Value":53.423878,	"Type":"Float"},
+          {"Name": "RobotPositionJ2",     "Value":-42.60897,	"Type":"Float"},
+          {"Name": "RobotPositionJ3",     "Value":0.036914,   "Type":"Float"},
+          {"Name": "RobotPositionJ4",     "Value":-84.00078,	"Type":"Float"},
+          {"Name": "RobotPositionJ5",     "Value":-129.27524,	"Type":"Float"},
+          {"Name": "RobotState",          "Value":true,       "Type":"Boolean"},
+          {"Name": "RobotVacuum",         "Value":false,      "Type":"Boolean"},
+          {"Name": "UnloadedCounter",     "Value":1483,       "Type":"Int32"},
+          {"Name": "UnloadingCycleTime",  "Value":111,        "Type":"Int32"},
+          {"Name": "VacuumAlert",         "Value":false,      "Type":"Boolean"},
+          {"Name": "VacuumPressure",      "Value":15.6,       "Type":"Float"}
+        ]
+      }
+    ],
+    "Devices": [
+      {
+        "Name": "MagneMotion.5583E.Hub",
+        "DeviceType": "MagneMotionDevice",
+        "UseStringNodeIds": true
+      }
+    ],
+    "Server": {
+      "Name": "MagneMotion simulated OPCUA server",
+      "Endpoint": "opc.tcp://0.0.0.0:4840",
+      "CustomNamespace": "http://microsoft.com/Opc/Simulator/"
+    },
+    "RunSettings": {
+      "PollIntervalSeconds": 1.0,
+      "ReportUsageIntervalSeconds": 5.0,
+      "AsyncuaLoggingLevel": "WARNING",
+      "StopSimulatorAfterFullLoop": false,
+      "SimulationSources": [{
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "CarriageClamp"],
+          "ValueSequence": [0, 1, 0, 1, 0, 1],
+          "UpdatePeriodSeconds": [ 45 ],
+          "RepeatForever": true
+        },
+        {
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "LoadedCounter"],
+          "ValueSequence": [121, 131, 141, 151, 161, 171],
+          "UpdatePeriodSeconds": [ 15 ],
+          "RepeatForever": true
+        },
+        {
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "Quality"],
+          "ValueSequence": [4.5, 4.8, 3.9, 2.1, 3.4, 5.0],
+          "UpdatePeriodSeconds": [ 30 ],
+          "RepeatForever": true
+        },
+        {
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "RobotPositionJ0"],
+          "ValueSequence": [-51.0694, -52.0694, -53.0694, -54.0694, -55.0694, -56.0694],
+          "UpdatePeriodSeconds": [ 2 ],
+          "RepeatForever": true
+        },
+        {
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "RobotPositionJ1"],
+          "ValueSequence": [53.423878, 54.423878, 56.423878, 57.423878, 58.423878, 59.423878],
+          "UpdatePeriodSeconds": [ 2 ],
+          "RepeatForever": true
+        },
+        {
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "RobotPositionJ2"],
+          "ValueSequence": [-42.60897, -41.60897, -40.60897, -39.60897, -38.60897, -37.60897],
+          "UpdatePeriodSeconds": [ 2 ],
+          "RepeatForever": true
+        },
+        {
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "RobotPositionJ3"],
+          "ValueSequence": [0.036914, 0.046914, 0.056914, 0.066914, 0.076914, 0.086914],
+          "UpdatePeriodSeconds": [ 2 ],
+          "RepeatForever": true
+        },
+        {
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "RobotPositionJ4"],
+          "ValueSequence": [-84.00078, 83.00078, 82.00078, 81.00078, 80.00078, 79.00078],
+          "UpdatePeriodSeconds": [ 2 ],
+          "RepeatForever": true
+        },
+        {
+          "TargetDevices": [ "MagneMotion.5583E.Hub" ],
+          "TargetVariables": [ "RobotPositionJ5"],
+          "ValueSequence": [-129.27524, -130.27524, -131.27524, -132.27524, -133.27524, -134.27524],
+          "UpdatePeriodSeconds": [ 2 ],
+          "RepeatForever": true
+        }    
+      ]
+    }
+  }

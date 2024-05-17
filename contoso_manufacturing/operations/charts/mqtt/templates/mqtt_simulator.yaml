@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-simulator-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "mqtt"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-simulator
+  template:
+    metadata:
+      labels:
+        app: mqtt-simulator
+    spec:
+      containers:
+        - name: mqtt-simulator
+          image: jumpstartprod.azurecr.io/contoso-motors-mqtt-simulator:latest
+          env:
+            - name: MQTT_BROKER
+              value: {{ .Values.mqBrokerEndpoint }} 
+            - name: MQTT_PORT
+              value: {{ .Values.mqBrokerEndpointPort | quote }}
+            - name: FRECUENCY
+              value: "10"

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opc-simulator
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "opc-simulator"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: opc-simulator
+  template:
+    metadata:
+      labels:
+        app: opc-simulator
+    spec:
+      containers:
+        - name: opc-simulator
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 4840
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: opc-simulator-config
+          items:
+          - key: config.json
+            path: simulator.json
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opc-simulator-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "opc-simulator"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+data:
+  config.json: |
+{{ .Files.Get .Values.configFilePath | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opcsimulator-service
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "opc-simulator"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  ports:
+    - port: 4840
+      targetPort: {{ .Values.service.port }}
+  selector:
+    app: opc-simulator

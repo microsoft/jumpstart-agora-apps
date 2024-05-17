@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bash-influx-setup-job
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "influxdb"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "15" 
+spec:
+  template:
+    spec:
+      containers:
+      - name: bash-job
+        image: influxdb:latest
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          #!/bin/bash
+
+          # Run the influx setup command and capture any output and error
+          output=$(influx setup --host http://influxdb.contoso-motors.svc.cluster.local:8086 --bucket manufacturing --org InfluxData --password ArcPassword123!! --username admin --token secret-token --force 2>&1)
+
+          # If the command was successful, print the output and exit
+          if [ $? -eq 0 ]; then
+            echo "$output"
+            exit 0
+          fi
+
+          # If the command failed, check if it's because the instance is already set up
+          if echo "$output" | grep -q "Error: instance has already been set up"; then
+            echo "InfluxDB is already set up."
+            exit 0
+          else
+            # If the command failed for any other reason, print the output and exit with a failure status
+            echo "$output"
+            exit 1
+          fi
+      restartPolicy: Never
+  backoffLimit: 4

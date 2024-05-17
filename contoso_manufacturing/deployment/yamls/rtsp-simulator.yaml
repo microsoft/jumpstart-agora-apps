@@ -1,0 +1,260 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-rtsp-helmet
+  namespace: azure-iot-operations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtual-rtsp-helmet
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: virtual-rtsp-helmet
+    spec:
+      initContainers:
+        - name: init-samples
+          image: alpine
+          command:
+          - wget
+          - "-O"
+          - "/samples/helmet.mp4"
+          - https://jsfiles.blob.core.windows.net/video/agora/helmet-detection.mp4
+          volumeMounts:
+          - name: tmp-samples
+            mountPath: /samples
+      containers:
+        - name: virtual-rtsp-helmet
+          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8554
+          env:
+            - name: SOURCE_URL
+              value: "file:///samples/helmet.mp4"
+          volumeMounts:
+            - name: tmp-samples
+              mountPath: /samples
+      volumes:
+        - name: tmp-samples
+          emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtual-rtsp-helmet-svc
+  namespace: azure-iot-operations
+  labels:
+    app: virtual-rtsp-helmet
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8554
+      targetPort: 8554
+      name: rtsp
+      protocol: TCP
+  selector:
+    app: virtual-rtsp-helmet
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-rtsp-welding
+  namespace: azure-iot-operations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtual-rtsp-welding
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: virtual-rtsp-welding
+    spec:
+      initContainers:
+        - name: init-samples
+          image: alpine
+          command:
+          - wget
+          - "-O"
+          - "/samples/welding.mp4"
+          - https://jsfiles.blob.core.windows.net/video/agora/welding.mp4
+          volumeMounts:
+          - name: tmp-samples
+            mountPath: /samples
+      containers:
+        - name: virtual-rtsp-welding
+          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8554
+          env:
+            - name: SOURCE_URL
+              value: "file:///samples/welding.mp4"
+          volumeMounts:
+            - name: tmp-samples
+              mountPath: /samples
+      volumes:
+        - name: tmp-samples
+          emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtual-rtsp-welding-svc
+  namespace: azure-iot-operations
+  labels:
+    app: virtual-rtsp-welding
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8554
+      targetPort: 8554
+      name: rtsp
+      protocol: TCP  
+  selector:
+    app: virtual-rtsp-welding
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-rtsp-pose
+  namespace: azure-iot-operations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtual-rtsp-pose
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: virtual-rtsp-pose
+    spec:
+      initContainers:
+        - name: init-samples
+          image: alpine
+          command:
+          - wget
+          - "-O"
+          - "/samples/pose.mp4"
+          - https://jsfiles.blob.core.windows.net/video/agora/pose-estimation.mp4
+          volumeMounts:
+          - name: tmp-samples
+            mountPath: /samples
+      containers:
+        - name: virtual-rtsp-pose
+          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8554
+          env:
+            - name: SOURCE_URL
+              value: "file:///samples/pose.mp4"
+          volumeMounts:
+            - name: tmp-samples
+              mountPath: /samples
+      volumes:
+        - name: tmp-samples
+          emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtual-rtsp-pose-svc
+  namespace: azure-iot-operations
+  labels:
+    app: virtual-rtsp-pose
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8554
+      targetPort: 8554
+      name: rtsp
+      protocol: TCP  
+  selector:
+    app: virtual-rtsp-pose
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: virtual-rtsp-object
+  namespace: azure-iot-operations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: virtual-rtsp-object
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: virtual-rtsp-object
+    spec:
+      initContainers:
+        - name: init-samples
+          image: alpine
+          command:
+          - wget
+          - "-O"
+          - "/samples/object-detection.mp4"
+          - https://jsfiles.blob.core.windows.net/video/agora/object-detection.mp4
+          volumeMounts:
+          - name: tmp-samples
+            mountPath: /samples
+      containers:
+        - name: virtual-rtsp-object
+          image: "agoraarmbladev.azurecr.io/kerberos/virtual-rtsp:latest"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8554
+          env:
+            - name: SOURCE_URL
+              value: "file:///samples/object-detection.mp4"
+          volumeMounts:
+            - name: tmp-samples
+              mountPath: /samples
+      volumes:
+        - name: tmp-samples
+          emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtual-rtsp-object-svc
+  namespace: azure-iot-operations
+  labels:
+    app: virtual-rtsp-object
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8554
+      targetPort: 8554
+      name: rtsp
+      protocol: TCP  
+  selector:
+    app: virtual-rtsp-object
+---

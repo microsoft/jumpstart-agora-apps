@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage-influxdb-app
+  namespace: azure-iot-operations  # Added the namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storage-influxdb-app
+  template:
+    metadata:
+      labels:
+        app: storage-influxdb-app
+    spec:
+      containers:
+      - name: storage-influxdb-app
+        image: agoraarmbladev.azurecr.io/storage-svc:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: INFLUXDB_URL
+          value: "http://10.211.55.5:8086"  # Replace this with your InfluxDB URL
+        - name: INFLUXDB_TOKEN
+          value: "secret-token"  # Replace this with your InfluxDB token
+        - name: INFLUXDB_ORG
+          value: "InfluxData"  # Replace this with your InfluxDB organization
+        - name: INFLUXDB_BUCKET
+          value: "manufacturing"  # Replace this with your InfluxDB bucket
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storage-influxdb-svc
+  namespace: azure-iot-operations
+spec:
+  selector:
+    app: storage-influxdb-svc
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      name: storagerestapi
+    

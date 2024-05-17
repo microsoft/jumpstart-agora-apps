@@ -1,0 +1,42 @@
+{
+  "DeviceTypes": [
+    {
+      "DeviceType": "Device1Type",
+      "Variables": [
+        {
+          "Name": "Var1",
+          "Type": "Double",
+          "Value": 1.0
+        },
+        {
+          "Name": "Var2",
+          "Type": "Int32",
+          "Value": 42
+        }
+      ]
+    }
+  ],
+  "Devices": [
+    {
+      "Name": "Device1",
+      "DeviceType": "Device1Type",
+      "Properties": [
+        {
+          "Name": "SerialNumber",
+          "Value": "42424242",
+          "Type": "String"
+        }
+      ]
+    }
+  ],
+  "Server": {
+    "Name": "A very cool OPCUA server",
+    "Endpoint": "opc.tcp://0.0.0.0:4840",
+    "CustomNamespace": "http://microsoft.com/Opc/Simulator/"
+  },
+  "RunSettings": {
+    "PollIntervalSeconds": 0.1,
+    "ReportUsageIntervalSeconds": 5.0,
+    "AsyncuaLoggingLevel": "WARNING"
+  }
+}

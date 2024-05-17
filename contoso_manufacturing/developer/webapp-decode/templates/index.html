@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contoso Motors</title>
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/Index.css') }}">
+    <script src="{{ url_for('static', filename='scripts/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item bd-level0"><a href="javascript:zoomToLevel(0)">Contoso Motors</a></li>
+            <li class="breadcrumb-item bd-level1" style="display: none;"><a href="javascript:zoomToLevel(1)">Home</a>
+            </li>
+            <li class="breadcrumb-item bd-level2 site" style="display: none;"><a
+                    href="javascript:zoomToLevel(2, 'site')">Site</a></li>
+            <li class="breadcrumb-item bd-level2 enterprise" style="display: none;"><a
+                    href="javascript:zoomToLevel(2, 'enterprise')">Enterprise</a></li>
+            <li class="breadcrumb-item bd-level3" style="display: none;"></li>
+        </ol>
+    </nav>
+
+    <!-- Site Level 0 - Factory -->
+    <div id="svg-container" class="level0 text-center">
+        <div onclick="zoomToLevel(1)">
+            {{ contoso | safe }}
+        </div>
+    </div>
+
+    <!-- Site Level 1 - Factory Floor Plant -->
+    <div id="svg-container-floor" class="level1 text-center" style="display: none;">
+        {{ site_enterprise | safe }}
+    </div>
+
+    <!-- Site Level 2 and 3 - Enterprise or Site Plant -->
+    <div class="level2 text-center" style="display: none;">
+        <div class="row">
+            <div class="col-md-12 text-center" id="caseContainer">
+                <div class="site">
+                    {{ site | safe }}
+                </div>
+                <div class="enterprise">
+                    {{ enterprise | safe }}
+                </div>
+            </div>
+            <div class="col-md-6 text-center" id="imgContainer" style="display: none;">
+                <img src="{{ url_for('static', filename='images/video_placeholder.png') }}" class="img-fluid"
+                    id="imgVideoPreview" alt="Factory site" />
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

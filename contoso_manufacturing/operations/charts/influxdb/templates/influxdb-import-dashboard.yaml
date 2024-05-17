@@ -1,0 +1,134 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: influxdb-import-dashboard-01
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "influxdb"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "20"
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: influxdb-import-dashboard-01
+          image: influxdb:latest
+          command:
+            - influx
+          args:
+            - apply 
+            - -f 
+            - "/etc/config/contoso_cars_-_assembly_car_line.json"
+            - --org 
+            - InfluxData 
+            - --token 
+            - secret-token 
+            - --host 
+            - {{ .Values.influxDBEndpoint }}
+            - --force
+            - "yes"
+          volumeMounts:
+          - name: config-volume
+            mountPath: "/etc/config"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dashboard-config
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: influxdb-import-dashboard-02
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "influxdb"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "20"
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: influxdb-import-dashboard-02
+          image: influxdb:latest
+          command:
+            - influx
+          args:
+            - apply 
+            - -f 
+            - "/etc/config/contoso_cars_-_welding_energy_consumption.json"
+            - --org 
+            - InfluxData 
+            - --token 
+            - secret-token 
+            - --host 
+            - {{ .Values.influxDBEndpoint }}
+            - --force
+            - "yes"
+          volumeMounts:
+          - name: config-volume
+            mountPath: "/etc/config"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dashboard-config
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: influxdb-import-dashboard-03
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "influxdb"
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "20"
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: influxdb-import-dashboard-03
+          image: influxdb:latest
+          command:
+            - influx
+          args:
+            - apply 
+            - -f 
+            - "/etc/config/contoso_cars_-_battery_line.json"
+            - --org 
+            - InfluxData 
+            - --token 
+            - secret-token 
+            - --host 
+            - {{ .Values.influxDBEndpoint }}
+            - --force
+            - "yes"
+          volumeMounts:
+          - name: config-volume
+            mountPath: "/etc/config"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dashboard-config
+
+

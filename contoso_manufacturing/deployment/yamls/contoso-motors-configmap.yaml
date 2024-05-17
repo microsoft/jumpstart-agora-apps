@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: model-configs
+  namespace: azure-iot-operations
+data:
+  config_file.json: |
+    {
+      "safety-yolo8": {
+        "rtsp_url": "rtsp://10.0.0.50:8554/stream",
+        "conf_thres": 0.5,
+        "iou_thres": 0.5,
+        "input_shape": [640, 640],
+        "class_names": ["helmet", "head", "person"]
+      },
+      "yolov8n": {
+        "rtsp_url": "rtsp://10.0.0.55:8554/stream",
+        "conf_thres": 0.5,
+        "iou_thres": 0.5,
+        "input_shape": [640, 640],
+        "class_names": ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
+      },
+      "weld-porosity-detection": {
+        "rtsp_url": "rtsp://10.0.0.53:32465/stream",
+        "conf_thres": 0.5,
+        "iou_thres": 0.5,
+        "input_shape": [224, 224],
+        "class_names": ["no weld", "normal weld", "porosity"]
+      },
+      "human-pose-estimation": {
+        "rtsp_url": "rtsp://10.0.0.54:8554/stream",
+        "conf_thres": 0.1,
+        "iou_thres": 0.5,
+        "input_shape": [448, 448],
+        "class_names": [],
+        "default_skeleton": [[15, 13], [13, 11], [16, 14], [14, 12], [11, 12], [5, 11], [6, 12], [5, 6], [5, 7], [6, 8], [7, 9], [8, 10], [1, 2], [0, 1], [0, 2], [1, 3], [2, 4], [3, 5], [4, 6]],
+        "colors": [[255, 0, 0], [255, 0, 255], [170, 0, 255], [255, 0, 85], [255, 0, 170], [85, 255, 0], [255, 170, 0], [0, 255, 0], [255, 255, 0], [0, 255, 85], [170, 255, 0], [0, 85, 255], [0, 255, 170], [0, 0, 255], [0, 255, 255], [85, 0, 255], [0, 170, 255]]
+      }
+    }   
+

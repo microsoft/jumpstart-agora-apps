@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-listener-deployment
+  namespace: azure-iot-operations
+  labels:
+    app: mqtt-listener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-listener
+  template:
+    metadata:
+      labels:
+        app: mqtt-listener
+    spec:
+      containers:
+      - name: mqtt-listener
+        image: agoraarmbladev.azurecr.io/mqtt-listener:latest
+        env:
+          - name: MQTT_BROKER
+            value: "10.211.55.5"
+          - name: MQTT_PORT
+            value: "1883"
+          - name: MQTT_TOPIC1
+            value: "topic/weldingrobot"
+          - name: MQTT_TOPIC2
+            value: "topic/assemblybatteries"
+          - name: MQTT_TOPIC3
+            value: "topic/assemblyline"
+          - name: INFLUX_URL
+            value: "http://10.211.55.5:8086"
+          - name: INFLUX_TOKEN
+            value: "secret-token"
+          - name: INFLUX_ORG
+            value: "InfluxData"
+          - name: INFLUX_BUCKET
+            value: "manufacturing"

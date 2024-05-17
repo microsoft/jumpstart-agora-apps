@@ -1,0 +1,107 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: influxdb-import-dashboard-01
+  namespace: azure-iot-operations
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: influxdb-import-dashboard-01
+          image: influxdb:latest
+          command:
+            - influx
+          args:
+            - apply 
+            - -f 
+            - "/etc/config/contoso_cars_-_assembly_car_line.json"
+            - --org 
+            - InfluxData 
+            - --token 
+            - secret-token 
+            - --host 
+            - http://10.211.55.5:8086
+            - --force
+            - "yes"
+          volumeMounts:
+          - name: config-volume
+            mountPath: "/etc/config"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dashboard-config
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: influxdb-import-dashboard-02
+  namespace: azure-iot-operations
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: influxdb-import-dashboard-02
+          image: influxdb:latest
+          command:
+            - influx
+          args:
+            - apply 
+            - -f 
+            - "/etc/config/contoso_cars_-_welding_energy_consumption.json"
+            - --org 
+            - InfluxData 
+            - --token 
+            - secret-token 
+            - --host 
+            - http://10.211.55.5:8086
+            - --force
+            - "yes"
+          volumeMounts:
+          - name: config-volume
+            mountPath: "/etc/config"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dashboard-config
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: influxdb-import-dashboard-03
+  namespace: azure-iot-operations
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: influxdb-import-dashboard-03
+          image: influxdb:latest
+          command:
+            - influx
+          args:
+            - apply 
+            - -f 
+            - "/etc/config/contoso_cars_-_battery_line.json"
+            - --org 
+            - InfluxData 
+            - --token 
+            - secret-token 
+            - --host 
+            - http://10.211.55.5:8086
+            - --force
+            - "yes"
+          volumeMounts:
+          - name: config-volume
+            mountPath: "/etc/config"
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dashboard-config
+
+

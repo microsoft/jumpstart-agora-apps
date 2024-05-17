@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opc-simulator-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opc-simulator
+  template:
+    metadata:
+      labels:
+        app: opc-simulator
+    spec:
+      containers:
+      - name: opc-simulator
+        image: jumpstartprod.azurecr.io/opc-simulator:latest
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+        ports:
+        - containerPort: 4840
+      volumes:
+      - name: config-volume
+        configMap:
+          name: opc-simulator-config
+          items:
+          - key: config.json
+            path: simulator.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opc-simulator-service
+spec:
+  selector:
+    app: opc-simulator
+  ports:
+    - protocol: TCP
+      port: 4840
+      targetPort: 4840

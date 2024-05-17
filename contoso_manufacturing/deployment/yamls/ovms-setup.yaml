@@ -1,0 +1,44 @@
+apiVersion: intel.com/v1alpha1
+kind: ModelServer
+metadata:
+  name: ovms
+spec:
+  image_name: openvino/model_server:latest
+  deployment_parameters:
+    replicas: 1
+    openshift_service_mesh: false
+    resources:
+      limits:
+        cpu: "1"
+        memory: "8192Mi"
+      requests:
+        cpu: "1"
+        memory: "8192Mi"
+  models_settings:
+    single_model_mode: false
+    config_configmap_name: "ovms-config"
+    config_path: ""
+    model_name: ""
+    model_path: ""
+    nireq: 0
+    plugin_config: '{"CPU_THROUGHPUT_STREAMS":"1"}'
+    batch_size: ""
+    shape: ""
+    model_version_policy: "{\"latest\": {\"num_versions\":1 }}"
+    layout: ""
+    target_device: "CPU"
+    is_stateful: false
+    idle_sequence_cleanup: false
+    low_latency_transformation: true
+    max_sequence_number: 0
+  server_settings:
+    file_system_poll_wait_seconds: 0
+    sequence_cleaner_poll_wait_minutes: 0
+    log_level: "INFO"
+  service_parameters:
+    grpc_port: 8080
+    rest_port: 8081
+    service_type: LoadBalancer
+  models_repository:
+    storage_type: "cluster"
+    models_volume_claim : "ovms-pvc"
