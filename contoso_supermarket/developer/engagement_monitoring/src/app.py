@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 model_xml = './models/person-detection-retail-0013.xml'
 model_bin = './models/person-detection-retail-0013.bin'
-video_path = 'https://agoravideos.blob.core.windows.net/videos/supermarket.mp4'
+video_path = 'https://jsfiles.blob.core.windows.net/video/agora/supermarket.mp4'
 
 # Load OpenVino model
 ie = IECore()
