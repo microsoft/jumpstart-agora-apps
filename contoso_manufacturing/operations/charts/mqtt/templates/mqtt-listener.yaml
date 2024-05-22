@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: mqtt-listener
-        image: jumpstartprod.azurecr.io/contoso-motors-mqtt-listener:msbuild
+        image: jumpstartprod.azurecr.io/contoso-motors-mqtt-listener:latest
         env:
           - name: MQTT_BROKER
             value: {{ .Values.mqBrokerEndpoint }}
