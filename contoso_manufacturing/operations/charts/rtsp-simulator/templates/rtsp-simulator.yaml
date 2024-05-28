@@ -32,7 +32,7 @@ spec:
           - wget
           - "-O"
           - "/samples/helmet.mp4"
-          - https://jsfiles.blob.core.windows.net/video/agora/helmet-detection.mp4
+          - https://jumpstartprodsg.blob.core.windows.net/video/agora/helmet-detection.mp4
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
@@ -107,7 +107,7 @@ spec:
           - wget
           - "-O"
           - "/samples/welding.mp4"
-          - https://jsfiles.blob.core.windows.net/video/agora/welding.mp4
+          - https://jumpstartprodsg.blob.core.windows.net/video/agora/welding.mp4
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
@@ -182,7 +182,7 @@ spec:
           - wget
           - "-O"
           - "/samples/pose.mp4"
-          - https://jsfiles.blob.core.windows.net/video/agora/pose-estimation.mp4
+          - https://jumpstartprodsg.blob.core.windows.net/video/agora/pose-estimation.mp4
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
@@ -258,7 +258,7 @@ spec:
           - wget
           - "-O"
           - "/samples/object-detection.mp4"
-          - https://jsfiles.blob.core.windows.net/video/agora/object-detection.mp4
+          - https://jumpstartprodsg.blob.core.windows.net/video/agora/object-detection.mp4
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
