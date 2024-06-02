@@ -20,5 +20,5 @@ spec:
   values:
     acr_name: agacr2bbcc
     branch_name: "production"
-    image_tag: v1.0
+    image_tag: v1.1
     github_user: __githubUser__
