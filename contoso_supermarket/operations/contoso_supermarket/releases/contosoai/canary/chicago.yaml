@@ -20,7 +20,7 @@ spec:
   values:
     acr_name: agacr2bbcc
     branch_name: "canary"
-    image_tag: v1.2
+    image_tag: v1.3
     github_User: saeid-adz
     postgres:
       username: "postgres"
