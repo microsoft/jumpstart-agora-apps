@@ -19,8 +19,7 @@
               <a class="nav-link z-index-1 p-0 fs-5 text-white fs-5 {% if active_page == 'cart' %}text-green{% endif %}" href="{{ url_for('cart') }}">Cart</a>
             </li>
           </ul>
-        </div>
-        <!-- Checkout button / Remove this comment to enable button 
+        </div> 
         <form class="d-flex z-index-1" role="checkout">
           <a href="{{ url_for('cart') }}" id="checkout-btn" class="btn border-radius-xs bg-green px-4 text-white d-flex justify-content-between" type="submit">
             <div class="me-5 d-flex flex-nowrap">
@@ -40,9 +39,7 @@
       </div>
     </div>
 </nav>
-
 <script>
-  // set the cart items on page load
   var items = '{% if session["cart"] %}{{ session["cart"]|tojson }}{% else %}[]{% endif %}';
   var cart = JSON.parse(items);
   var itemCount = cart.map(item => item.quantity).reduce((a, b) => a + b, 0);
