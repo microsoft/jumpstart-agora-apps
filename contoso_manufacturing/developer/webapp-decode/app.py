@@ -6,6 +6,7 @@ import numpy as np
 from yolov8 import YOLOv8OVMS
 from welding import WeldPorosity
 from pose_estimator import PoseEstimator
+from bolt_detection import BoltDetection
 
 app = Flask(__name__)
 
@@ -115,6 +116,25 @@ def init_pose_estimator():
         colors=model_config['colors']
     )
 
+def init_bolt_detector():
+    """
+    Initializes the welding detector.
+
+    Returns:
+        WeldPorosity: An instance of the WeldPorosity class representing the welding detector.
+    """
+    model_config = config["bolt-detection"]
+    return BoltDetection(
+        rtsp_url=model_config['rtsp_url'],
+        input_shape=model_config['input_shape'],
+        confidence_thres=model_config['conf_thres'],
+        iou_thres=model_config['iou_thres'],
+        model_name="bolt-detection", 
+        ovms_url=ovms_url, 
+        verbose=False,
+        skip_rate=10
+    )
+
 @app.route('/show_iframe')
 def show_iframe():
     print("show_iframe")
@@ -153,7 +173,7 @@ def gen_frames(video_name):
         elif video_name == "safety-yolo8":
             latest_choice_detector = init_yolo_safety_detector()
         elif video_name == "welding":
-            latest_choice_detector = init_welding_detector()
+            latest_choice_detector = init_bolt_detector()
         elif video_name == "human-pose-estimation":
               latest_choice_detector = init_pose_estimator()
 
