@@ -183,7 +183,6 @@ spec:
           - "-O"
           - "/samples/pose.mp4"
           - https://jsfiles.blob.core.windows.net/video/agora/pose-estimation.mp4
-          # - https://github.com/intel-iot-devkit/sample-videos/raw/master/worker-zone-detection.mp4
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
