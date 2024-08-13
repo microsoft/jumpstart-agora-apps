@@ -27,13 +27,13 @@ body {
 
 /* color overrides */
 .text-green {
-    color: #51b60d !important;
+    color: #FCE531 !important;
 }
 .bg-green {
-    background-color: #51b60d !important;
+    background-color: #FCE531 !important;
 }
 .bg-green.btn:hover {
-    background-color: #41940a !important;
+    background-color: #FCE531 !important;
 }
 .border-grey {
     border-color: #aeaeae !important;
