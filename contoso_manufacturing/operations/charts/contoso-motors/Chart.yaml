@@ -21,5 +21,5 @@ dependencies:
     version: 0.1.0
     repository: "file://../rtsp-simulator"
   - name: flask-app
-    version: 0.1.1
+    version: 0.1.5
     repository: "file://../flask-app"
