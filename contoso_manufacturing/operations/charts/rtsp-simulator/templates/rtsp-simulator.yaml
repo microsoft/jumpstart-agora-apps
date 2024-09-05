@@ -334,7 +334,7 @@ spec:
           - wget
           - "-O"
           - "/samples/bolt-detection.mp4"
-          - https://jsfiles.blob.core.windows.net/video/agora/bolt-detection.mp4
+          - https://jumpstartprodsg.blob.core.windows.net/video/agora/bolt-detection.mp4
           volumeMounts:
           - name: tmp-samples
             mountPath: /samples
