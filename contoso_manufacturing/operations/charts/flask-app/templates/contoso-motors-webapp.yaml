@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: contosowebapp
-        image: jumpstartprod.azurecr.io/ag_mfg_webui:latest
+        image: jumpstartprod.azurecr.io/ag_mfg_webui:msbuild
         imagePullPolicy: Always
         ports:
         - containerPort: 5001
