@@ -1,7 +1,7 @@
 broker:
   mqttBroker:
     image:
-      repository: jumpstartagora.azurecr.io/contoso-supermarket/mqtt-broker
+      repository: jumpstartprod.azurecr.io/contoso-supermarket-mqtt-broker
       tag: latest
     imagePullPolicy: Always
   ports:
@@ -14,7 +14,7 @@ kubernetesClusterDomain: cluster.local
 simulator:
   mqttSimulator:
     image:
-      repository: jumpstartagora.azurecr.io/contoso-supermarket/mqtt-simulator
+      repository: jumpstartprod.azurecr.io/contoso-supermarket-mqtt-simulator
       tag: latest
     imagePullPolicy: Always
   replicas: 1
