@@ -23,6 +23,13 @@ class YOLOv8OVMS:
         self.frame_number =0
         self.skip_rate=skip_rate
 
+        # Track frames and inference processing time for displaying FPS performance metrics 
+        self.total_inference_time = 0.0
+        self.inference_fps = 0.0
+        self.total_fps = 0.0
+        self.total_frames = 0
+        self.start_time = time.time()
+
         self.cap = cv2.VideoCapture(rtsp_url)
         self.grpc_client = make_grpc_client(ovms_url)
         
@@ -33,12 +40,12 @@ class YOLOv8OVMS:
             ret, frame = self.cap.read()
             if ret:
                 self.img_height, self.img_width = frame.shape[:2]
+                print(f"Image dimensions: {self.img_width}x{self.img_height}")
             else:
                 print("Failed to grab frame to set image dimensions")
   
     def preprocess(self):
-        if(self.verbose):
-            print("Preprocessing the frame...")
+        self.log("Preprocessing the frame...")
 
         ret, img = self.cap.read()
         if not ret:
@@ -53,8 +60,7 @@ class YOLOv8OVMS:
         return image_data
 
     def postprocess(self, input_image, output):
-        if(self.verbose):
-            print("Postprocessing the output...")
+        self.log("Postprocessing the output...")
 
         # Transpose and squeeze the output to match the expected shape
         outputs = np.transpose(np.squeeze(output[0]))
@@ -122,9 +128,12 @@ class YOLOv8OVMS:
             self.draw_detections(input_image, box, score, class_id)
             table_data.append([i, box, score, self.class_names[class_id]])
 
+        # Draw the FPS counter on the image
+        self.draw_fps(input_image)
+
         # Print the table
-        headers = ["Index", "Box", "Score", "Class"]
-        #self.log(self, str(tabulate(table_data, headers=headers, tablefmt="grid")))
+        # headers = ["Index", "Box", "Score", "Class"]
+        #self.log(str(tabulate(table_data, headers=headers, tablefmt="grid")))
         
         # Return the modified input image
         return input_image
@@ -145,30 +154,75 @@ class YOLOv8OVMS:
         # Calculate the dimensions of the label text
         (label_width, label_height), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 1.2, 1)
 
-        # Calculate the position of the label text
+        # Calculate the position of the label text; this is the bottom-left corner of the text string
         label_x = x1
         label_y = y1 - 10 if y1 - 10 > label_height else y1 + 20
 
-        # Draw a filled rectangle as the background for the label text
-        cv2.rectangle(img, (label_x, label_y - label_height - 10), (label_x + label_width, label_y + label_height), (0,0,255), cv2.FILLED)
+        # Draw a filled rectangle as the background for the label text, plus a 10 pixel border above and below
+        cv2.rectangle(img, (label_x, label_y - label_height - 10), (label_x + label_width, label_y + 10), (0,0,255), cv2.FILLED)
 
          # Draw the label text on the image
         cv2.putText(img, label, (label_x, label_y), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 0), 1, cv2.LINE_AA)
 
+    def draw_fps(self, img):
+
+        # Create an array of strings - one for each line of text to display on the image
+        label_array = [f"FPS: {self.total_fps:.02f}",
+                       f"FPS (inference): {self.inference_fps:.02f}",
+                       f"Input: {self.img_width}x{self.img_height}",
+                       f"Inferencing: {self.input_width}x{self.input_height}",
+                       f"Model: {self.model_name}"]
+        
+        # Define the font style and size
+        font_scale = 1.0
+        font_face = cv2.FONT_HERSHEY_SIMPLEX
+        font_thickness = 1
+        background_color = (0,0,255)    # red
+        font_color = (0, 0, 0)          # black
+        pixel_border = 10
+
+        # Define the starting position for the text (30 pixels from the top left corner)
+        (label_x, label_y) = (30, 30)
+
+        # Loop through each line of text in the label array and draw it on the image
+        for label in label_array:
+            # Calculate the dimensions of the label text
+            (label_width, label_height), _ = cv2.getTextSize(label, font_face, font_scale, font_thickness)
+            self.log(f"Label: {label}, Width: {label_width}, Height: {label_height}")
+
+            # Draw a filled rectangle as the background for the label text, including a border on all sides
+            # Draw the label text on the image
+            # Update the starting position for the next line, including a pixel_border pixel margin between lines
+            cv2.rectangle(img, (label_x - pixel_border, label_y - pixel_border), (label_x + label_width + pixel_border, label_y + label_height + pixel_border), background_color, cv2.FILLED)
+            cv2.putText(img, label, (label_x, label_y + label_height), font_face, font_scale, font_color, font_thickness, cv2.LINE_AA)
+            label_y += (label_height + 2 * pixel_border)
+
     def run(self):
-        if(self.verbose):
-            print("Running detection...")
+        self.log("Running detection...")
 
         self.frame_number += 1
         # If mod = 0, i will get the frame and skip it
-        if self.frame_number % self.skip_rate == 0:
+        if ((self.skip_rate > 0) and (self.frame_number % self.skip_rate == 0)):
             self.cap.read()
             return None
         
+        # Pre-process the image
+        # Perform inference on the preprocessed image; capture the start and end times
+        # Post-processing including drawing bounding boxes
         image_data = self.preprocess()
-
+        time1 = time.time()
         outputs = self.grpc_client.predict({"images": image_data}, self.model_name)
+        time2 = time.time()
         frame = self.postprocess(self.cap.read()[1], outputs)
+
+        # Update metrics used for FPS calculations
+        self.total_inference_time += (time2 - time1)
+        self.total_frames += 1
+
+        # Calculate FPS for both the inferencing step and the final feed  
+        self.inference_fps = self.total_frames / self.total_inference_time
+        self.total_fps = self.total_frames / (time.time() - self.start_time)    # This includes e.g. JPEG encoding in the parent method outside of self.run()
+        self.log(f"FPS={self.total_fps} Inference={self.inference_fps:.03f} ({self.total_frames} frames)")
 
         return frame
 
@@ -177,7 +231,7 @@ class YOLOv8OVMS:
         if self.verbose:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"{timestamp} - {message}")
-            
+
     def __del__(self):
         print("Releasing resources...")
         self.cap.release()
